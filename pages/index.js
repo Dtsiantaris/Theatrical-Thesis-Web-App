@@ -15,11 +15,14 @@ import Head from "next/head";
 import NewsCard from "../src/components/NewsCard";
 import { v2 as cloudinary } from "cloudinary";
 import { newsFetcher } from "../src/utils/AxiosInstances";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import { useRouter } from "next/router";
 import ScrollPrompt from "../src/components/ScrollPrompt";
 import HeroGraph from "../src/components/HeroGraph";
+import { getHomeData } from "./api/getHomeData";
+
+// process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 export const getStaticProps = async () => {
   cloudinary.config({
@@ -42,27 +45,29 @@ export const getStaticProps = async () => {
     });
   });
 
-  const artistIDs = [
-    5555, 6846, 4770, 4791, 8158, 5047, 5233, 5428, 4691, 5192, 4962, 6643,
-    4659, 6104,
-  ];
-  let artists = await Promise.all(
-    artistIDs.map(async (id) => {
-      const artist = await mainFetcher(`/people/${id}`);
-      return artist;
-    })
-  );
+  //const { getArtists, getLatestShows } = getHomeData();
 
-  artists = artists.filter(Boolean);
+  let artists = (await getHomeData()).getArtists;
+  let latestShows = (await getHomeData()).getLatestShows;
+  console.log("Static Artists: ", artists);
+  console.log("Static shows: ", latestShows);
+
+  // try {
+  //   console.log(artists);
+  //   console.log(latestShows);
+  // } catch (error) {
+  //   console.error(error);
+  // }
+
+  //let artists = getArtists.filter(Boolean);
 
   // ffffff
-  let latestShows = await mainFetcher(`/productions?page=0&size=10`);
-
-  latestShows = latestShows?.content?.map((show) => ({
-    id: show.id,
-    title: show.title,
-    image: getShowImage(show.mediaURL),
-  }));
+  // Check latestShowsResponse.
+  // const latestShows = getLatestShows?.map((show) => ({
+  //   id: show.id,
+  //   title: show.title,
+  //   image: getShowImage(show.mediaURL),
+  // }));
 
   return {
     props: { artists, latestShows, articles },
@@ -85,6 +90,17 @@ function Home({ artists, latestShows, articles }) {
     event.preventDefault();
     if (searchValue) router.push(`/results?search_query=${searchValue}`);
   };
+
+  async function handleRes() {
+    // const latestShows = await mainFetcher(`/Productions?page=1&size=4`);
+    // const artists = await mainFetcher(`/People/8158`);
+    console.log("Artists inside useEffect:", artists);
+    console.log("LatestShows inside useEffect:", latestShows);
+  }
+
+  useEffect(() => {
+    handleRes();
+  }, []);
 
   return (
     <>

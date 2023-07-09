@@ -6,7 +6,9 @@ import axios from "axios";
 // })
 
 //export const baseURL = "http://195.251.123.174:8080/api";
-export const baseURL = "https://theatricalportal.azurewebsites.net/api";
+//export const baseURL = "https://theatricalportal.azurewebsites.net/api";
+export const baseURL = "https://localhost:7042/api";
+// export const baseURL = "https://127.0.0.1:7042/api";
 
 export const mainAxios = axios.create({
   baseURL,
@@ -15,7 +17,7 @@ export const mainAxios = axios.create({
 mainAxios.interceptors.request.use((config) => {
   config.headers = {
     ...config.headers,
-    Authorization: `Bearer ${process.env.JWT_TOKEN}`,
+    Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
   };
 
   return config;
@@ -41,11 +43,12 @@ export const newsFetcher = async (url) => {
     const data = response.data;
     return data;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
 export const mainFetcher = async (url) => {
+  console.log("MAIN FETCHER CALLED!!!!!!!!!", url);
   try {
     const response = await mainAxios.get(url);
     const data = response.data.data;
