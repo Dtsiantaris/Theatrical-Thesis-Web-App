@@ -19,7 +19,7 @@ import useWatchlist from "../hooks/useWatchlist";
 
 const useStyles = makeStyles(style);
 
-interface ShowCardProps {
+export interface ShowCardProps {
   id: string;
   title: string;
   media: string;

@@ -15,7 +15,7 @@ import { FC } from "react";
 
 const useStyles = makeStyles(style);
 
-interface VenueCardProps {
+export interface VenueCardProps {
   id: string;
   title: string;
 }

@@ -13,7 +13,7 @@ import Link from "next/link";
 const useStyles = makeStyles(style);
 
 // Define the prop types for ArtistCard component
-interface ArtistCardProps {
+export interface ArtistCardProps {
   id: string; // Assuming it's a string, update the type accordingly if it's different
   fullName: string;
   image?: string; // Optional image URL, indicated by "?"
