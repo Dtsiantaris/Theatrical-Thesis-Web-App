@@ -9,7 +9,7 @@ import VenueCard, { VenueCardProps } from "./VenueCard";
 
 const useStyles = makeStyles(style);
 
-interface ItemsListProps {
+export interface ItemsListProps {
   items?: (ArtistCardProps | ShowCardProps | VenueCardProps)[];
   type: "/artists" | "/shows" | "/venues";
 }
