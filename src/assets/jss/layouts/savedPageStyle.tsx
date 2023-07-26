@@ -1,4 +1,5 @@
-const savedPageStyle = theme => ({
+import { Theme } from "@material-ui/core";
+const savedPageStyle = (theme: Theme) => ({
   container: {
     border: `1px solid ${theme.palette.primary.light}`,
     borderRadius: 20,
@@ -9,27 +10,27 @@ const savedPageStyle = theme => ({
       padding: "20px 40px 15px",
     },
     marginBottom: "5em",
-    marginTop: "3em"
+    marginTop: "3em",
   },
   items: {
     display: "flex",
     justifyContent: "space-evenly",
     margin: "20px 0",
     flexWrap: "wrap",
-    gap: 10
+    gap: 10,
   },
   divider: {
     width: "100%",
-    marginBottom: 15
+    marginBottom: 15,
   },
   link: {
     color: theme.palette.secondary.main,
     textDecoration: "underline",
     cursor: "pointer",
     "&:active": {
-      color: theme.palette.secondary.light
-    }
-  }
-})
+      color: theme.palette.secondary.light,
+    },
+  },
+});
 
-export default savedPageStyle
+export default savedPageStyle;

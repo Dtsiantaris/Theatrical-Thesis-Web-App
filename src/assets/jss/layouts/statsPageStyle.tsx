@@ -1,9 +1,11 @@
-const statsPageStyle = theme => ({
+import { Theme } from "@material-ui/core";
+
+const statsPageStyle = (theme: Theme) => ({
   picker: {
     display: "inline-flex",
     flexDirection: "column",
     gap: 20,
-    margin: "20px 0"
+    margin: "20px 0",
   },
   calendarContainer: {
     width: "100%",
@@ -12,8 +14,8 @@ const statsPageStyle = theme => ({
     overflowY: "hidden",
     position: "relative",
     [theme.breakpoints.up(1040)]: {
-      overflowY: "unset"
-    }
+      overflowY: "unset",
+    },
   },
   weekdaysLegendContainer: {
     position: "absolute",
@@ -21,47 +23,47 @@ const statsPageStyle = theme => ({
     left: 0,
     fontSize: 12,
     "& span": {
-      position: "absolute"
+      position: "absolute",
     },
     "& span:nth-child(1)": {
-      top: 67
+      top: 67,
     },
     "& span:nth-child(2)": {
-      top: 101
+      top: 101,
     },
     "& span:nth-child(3)": {
-      top: 136
-    }
+      top: 136,
+    },
   },
   tooltip: {
-    backgroundColor: theme.palette.background.paper2,
+    backgroundColor: theme.palette.background.paper,
     fontSize: 12,
     padding: 5,
-    borderRadius: "30"
+    borderRadius: "30",
   },
   flexChartContainer: {
     display: "flex",
     marginTop: 100,
     gap: 80,
     flexWrap: "wrap",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   chartContainer: {
     width: "100%",
     height: 430,
     [theme.breakpoints.up(970)]: {
-      width: 400
-    }
+      width: 400,
+    },
   },
   loadingContainer: {
     height: "100%",
     display: "flex",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   list: {
     "& li": {
-      marginBottom: 10
+      marginBottom: 10,
     },
     paddingLeft: 30,
   },
@@ -80,24 +82,24 @@ const statsPageStyle = theme => ({
             transparent 40%, 
             ${theme.palette.background.default} 95%
         )`,
-      pointerEvents: "none"
-    }
+      pointerEvents: "none",
+    },
   },
   listContainer: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   expandButton: {
     alignSelf: "center",
     padding: 8,
     marginTop: 16,
     "&:hover": {
-      color: theme.palette.secondary.main
-    }
+      color: theme.palette.secondary.main,
+    },
   },
   collapseButton: {
-    transform: "rotate(180deg)"
-  }
-})
+    transform: "rotate(180deg)",
+  },
+});
 
 export default statsPageStyle;

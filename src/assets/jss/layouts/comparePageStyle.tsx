@@ -1,28 +1,29 @@
-const comparePageStyle = theme => ({
+import { Theme } from "@material-ui/core";
+const comparePageStyle = (theme: Theme) => ({
   form: {
     display: "flex",
     flexDirection: "column",
     margin: "40px 0",
-    gap: 20
+    gap: 20,
   },
   pickersContainer: {
     display: "flex",
     flexWrap: "wrap",
-    gap: 40
+    gap: 40,
   },
   button: {
     padding: "12px 20px",
     borderRadius: 12,
     textTransform: "none",
-    alignSelf: "flex-start"
+    alignSelf: "flex-start",
   },
   graphContainer: {
     width: "100%",
     margin: "4em 0",
-    display: "flex", 
+    display: "flex",
     flexDirection: "column",
-    gap: 30
-  }
-})
+    gap: 30,
+  },
+});
 
 export default comparePageStyle;

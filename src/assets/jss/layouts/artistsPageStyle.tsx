@@ -1,11 +1,13 @@
-const artistsPageStyle = theme => ({
+import { Theme } from "@material-ui/core";
+
+const artistsPageStyle = (theme: Theme) => ({
   artistsContainer: {
     maxWidth: 1250,
     margin: "0px auto",
     display: "flex",
     padding: 15,
     [theme.breakpoints.up("md")]: {
-      paddingLeft: 70
+      paddingLeft: 70,
     },
   },
   filtersContainer: {
@@ -16,17 +18,17 @@ const artistsPageStyle = theme => ({
     display: "flex",
     flexDirection: "column",
     gap: 20,
-    alignItems: "flex-start"
+    alignItems: "flex-start",
   },
   drawer: {
-    overflow: "hidden"
+    overflow: "hidden",
   },
   fab: {
     position: "fixed",
     bottom: 20,
     right: 20,
-    zIndex: 5
-  }
-})
+    zIndex: 5,
+  },
+});
 
-export default artistsPageStyle
+export default artistsPageStyle;

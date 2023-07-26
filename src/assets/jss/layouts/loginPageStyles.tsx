@@ -1,4 +1,5 @@
-const loginPageStyle = theme => ({
+import { Theme } from "@material-ui/core";
+const loginPageStyle = (theme: Theme) => ({
   outerContainer: {
     minHeight: "calc(100vh - 64px)",
     display: "grid",
@@ -10,11 +11,11 @@ const loginPageStyle = theme => ({
     gap: 20,
     margin: "auto",
     maxWidth: 380,
-    width: "100%"
+    width: "100%",
   },
   errorText: {
     color: "#f44336",
-  }
-})
+  },
+});
 
 export default loginPageStyle;
