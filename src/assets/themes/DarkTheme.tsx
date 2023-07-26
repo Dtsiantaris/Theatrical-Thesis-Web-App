@@ -1,7 +1,7 @@
 import { createMuiTheme, responsiveFontSizes, Theme } from "@material-ui/core";
 
 // Define interface for custom color object used in the theme
-interface CustomColor {
+export interface CustomColor {
   light: string;
   main: string;
   dark: string;
