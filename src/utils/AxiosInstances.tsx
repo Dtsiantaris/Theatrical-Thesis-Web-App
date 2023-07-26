@@ -38,7 +38,7 @@ const newsAxios = axios.create({
   },
 });
 
-export const newsFetcher = async (url) => {
+export const newsFetcher = async (url: string) => {
   try {
     const response = await newsAxios.get(url);
     const data = response.data;
@@ -48,7 +48,7 @@ export const newsFetcher = async (url) => {
   }
 };
 
-export const mainFetcher = async (url) => {
+export const mainFetcher = async (url: string) => {
   console.log("MAIN FETCHER CALLED!!!!!!!!!", url);
   try {
     const response = await mainAxios.get(url);
@@ -59,7 +59,7 @@ export const mainFetcher = async (url) => {
   }
 };
 
-export const internalFetcher = async (url, data) => {
+export const internalFetcher = async (url: string, data: any) => {
   try {
     const response = await axios.post(url, data);
     const responseData = response.data;
@@ -69,7 +69,11 @@ export const internalFetcher = async (url, data) => {
   }
 };
 
-export const internalFetcherGet = async (url, path, id) => {
+export const internalFetcherGet = async (
+  url: string,
+  path: string,
+  id: string
+) => {
   try {
     const response = await axios.get(url, {
       params: {
@@ -84,7 +88,7 @@ export const internalFetcherGet = async (url, path, id) => {
   }
 };
 
-export const tmdbFetcher = async (url) => {
+export const tmdbFetcher = async (url: string) => {
   try {
     const response = await tmdbAxios.get(url);
     const data = response.data;
