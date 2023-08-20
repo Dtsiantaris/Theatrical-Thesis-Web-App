@@ -14,12 +14,13 @@ const useStyles = makeStyles(style);
 
 // Define the prop types for ArtistCard component
 export interface ArtistCardProps {
-  id: string; // Assuming it's a string, update the type accordingly if it's different
-  fullName: string;
+  id: number; // Assuming it's a string, update the type accordingly if it's different
+  fullname: string;
+  systemId: number;
   image?: string; // Optional image URL, indicated by "?"
 }
 
-const ArtistCard: React.FC<ArtistCardProps> = ({ id, fullName, image }) => {
+const ArtistCard: React.FC<ArtistCardProps> = ({ id, fullname, image }) => {
   const classes = useStyles();
   const theme = useTheme();
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
@@ -43,7 +44,7 @@ const ArtistCard: React.FC<ArtistCardProps> = ({ id, fullName, image }) => {
               ) : null}
             </Avatar>
             <Typography variant="body1" component="p" className={classes.name}>
-              {fullName}
+              {fullname}
             </Typography>
           </div>
         </a>

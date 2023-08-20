@@ -9,8 +9,19 @@ import { useRouter } from "next/router";
 import { makeStyles, Hidden, Drawer, Fab, Button } from "@material-ui/core";
 import style from "../../src/assets/jss/layouts/artistsPageStyle";
 import FilterListIcon from "@material-ui/icons/FilterList";
+import { GetServerSideProps } from "next";
+import { Person } from "../../src/types/apiTypes";
+import { ArtistCardProps } from "../../src/components/ArtistCard";
 
-export const getServerSideProps = async ({ query }) => {
+interface ArtistsPaginationProps {
+  artists: Person[];
+  pageCount: number;
+  size: number;
+}
+
+export const getServerSideProps: GetServerSideProps<
+  ArtistsPaginationProps
+> = async ({ query }) => {
   if (!query.page) {
     return {
       redirect: {
@@ -52,7 +63,7 @@ export const getServerSideProps = async ({ query }) => {
     props: {
       artists,
       pageCount,
-      page,
+      size: page,
     },
   };
 };
@@ -88,7 +99,11 @@ const roles = [
   "Ερμηνεία",
 ];
 
-const ArtistsPagination = ({ artists, pageCount, page }) => {
+const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
+  artists,
+  pageCount,
+  size,
+}) => {
   const classes = useStyles();
   const router = useRouter();
   const [letterValue, setLetterValue] = useState(router.query.letter);
@@ -141,7 +156,7 @@ const ArtistsPagination = ({ artists, pageCount, page }) => {
       <Autocomplete
         value={letterValue}
         onChange={(event, newValue) => {
-          setLetterValue(newValue);
+          if (newValue != null) setLetterValue(newValue);
         }}
         id="controllable-states-demo"
         options={letters}
@@ -158,7 +173,7 @@ const ArtistsPagination = ({ artists, pageCount, page }) => {
       <Autocomplete
         value={roleValue}
         onChange={(event, newValue) => {
-          setRoleValue(newValue);
+          if (newValue != null) setRoleValue(newValue);
         }}
         id="controllable-states-demo"
         options={roles}
@@ -204,7 +219,7 @@ const ArtistsPagination = ({ artists, pageCount, page }) => {
           title="Καλλιτέχνες"
           items={artists}
           pageCount={pageCount}
-          page={page}
+          page={size}
           path="/artists"
         />
       </div>

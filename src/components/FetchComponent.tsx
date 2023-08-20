@@ -48,7 +48,7 @@ const FetchComponent: React.FC<FetchComponentProps> = ({ path, id }) => {
 
   if (path === "people" && props.fullName && props.image) {
     component = (
-      <ArtistCard id={props.id} fullName={props.fullName} image={props.image} />
+      <ArtistCard id={props.id} fullname={props.fullName} image={props.image} />
     );
   } else if (path === "productions" && props.title && props.mediaURL) {
     component = (

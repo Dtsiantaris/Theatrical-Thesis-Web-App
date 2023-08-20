@@ -29,7 +29,7 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
             return (
               <ArtistCard
                 id={item.id}
-                fullName={item.fullName}
+                fullname={item.fullname}
                 image={item.image}
                 key={index}
               />

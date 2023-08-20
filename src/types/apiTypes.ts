@@ -32,6 +32,7 @@ export interface Person {
   id: number;
   fullname: string;
   systemId: number;
+  image?: string;
 }
 
 export interface Production {
