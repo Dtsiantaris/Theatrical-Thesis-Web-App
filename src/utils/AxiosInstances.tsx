@@ -53,7 +53,7 @@ export const mainFetcher = async (url: string) => {
   console.log("MAIN FETCHER CALLED!!!!!!!!!", url);
   try {
     const response = await mainAxios.get(url);
-    const data = response.data.data.results;
+    const data = response.data.data;
     return data;
   } catch (error) {
     console.log(error);

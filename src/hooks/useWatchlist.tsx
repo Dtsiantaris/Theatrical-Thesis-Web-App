@@ -5,7 +5,7 @@ interface WatchlistHook {
   setInWatchlist: (value: boolean) => void;
 }
 
-export default function useWatchlist(id: string): WatchlistHook {
+export default function useWatchlist(id: number): WatchlistHook {
   const [inWatchlist, setInWatchlist] = useState(false);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function useWatchlist(id: string): WatchlistHook {
     if (inWatchlist) {
       watchlist.push(id);
     } else {
-      watchlist = watchlist.filter((item: string) => item !== id);
+      watchlist = watchlist.filter((item: number) => item !== id);
     }
     localStorage.watchlist = JSON.stringify(watchlist);
   }, [inWatchlist, id]);

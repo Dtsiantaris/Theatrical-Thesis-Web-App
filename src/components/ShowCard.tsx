@@ -20,7 +20,7 @@ import useWatchlist from "../hooks/useWatchlist";
 const useStyles = makeStyles(style);
 
 export interface ShowCardProps {
-  id: string;
+  id: number;
   title: string;
   media: string;
 }
@@ -32,11 +32,11 @@ const ShowCard: React.FC<ShowCardProps> = ({ id, title, media }) => {
   const { inWatchlist, setInWatchlist } = useWatchlist(id);
 
   const handleFavorite = () => {
-    setIsFavorite((prev) => !prev);
+    setIsFavorite(!isFavorite);
   };
 
   const handleWatchlist = () => {
-    setInWatchlist((prev) => !prev);
+    setInWatchlist(!inWatchlist);
   };
 
   return (

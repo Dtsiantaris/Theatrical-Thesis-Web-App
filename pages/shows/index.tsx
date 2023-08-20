@@ -1,9 +1,12 @@
+import { GetServerSideProps } from "next";
 import PaginationPage from "../../src/components/PaginationPage";
 import { mainFetcher } from "../../src/utils/AxiosInstances";
 import getShowImage from "../../src/utils/getShowImage";
 import Head from "next/head";
+import { Production } from "../../src/types/apiTypes";
+import { ShowCardProps } from "../../src/components/ShowCard";
 
-export const getServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   if (!query.page) {
     return {
       redirect: {
@@ -24,26 +27,41 @@ export const getServerSideProps = async ({ query }) => {
     };
   }
 
-  let shows = data;
+  let shows = data as Production[];
   shows = shows.map((show) => ({
-    id: show.id,
-    title: show.title,
-    image: getShowImage(show.mediaURL),
+    ...show,
+    image: getShowImage(show.mediaUrl),
   }));
 
-  //const pageCount = data.pageSize;
+  const pageCount = data.pageSize;
   //TODO: pagination
 
   return {
     props: {
       shows,
-      //pageCount,
+      pageCount,
       page,
     },
   };
 };
 
-const ArtistsPagination = ({ shows, page }) => {
+interface ArtistsPaginationProps {
+  shows: Production[]; // Assuming Production is the correct type for shows
+  page: number;
+}
+
+const mapProductionToShowCardProps = (
+  production: Production
+): ShowCardProps => {
+  return {
+    id: production.id,
+    title: production.title,
+    media: getShowImage(production.mediaUrl),
+  };
+};
+
+const ArtistsPagination = ({ shows, page }: ArtistsPaginationProps) => {
+  const showCardPropsArray = shows.map(mapProductionToShowCardProps);
   return (
     <>
       <Head>
@@ -51,8 +69,8 @@ const ArtistsPagination = ({ shows, page }) => {
       </Head>
       <PaginationPage
         title="Παραστάσεις"
-        items={shows}
-        //pageCount={pageCount}
+        items={showCardPropsArray}
+        // pageCount={pageCount}
         page={page}
         path="/shows"
       />

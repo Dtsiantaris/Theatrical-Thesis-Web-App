@@ -5,7 +5,7 @@ interface FavoriteShowHook {
   setIsFavorite: (value: boolean) => void;
 }
 
-export default function useFavoriteShow(id: string): FavoriteShowHook {
+export default function useFavoriteShow(id: number): FavoriteShowHook {
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function useFavoriteShow(id: string): FavoriteShowHook {
     if (isFavorite) {
       favoriteShows.push(id);
     } else {
-      favoriteShows = favoriteShows.filter((item: string) => item !== id);
+      favoriteShows = favoriteShows.filter((item: number) => item !== id);
     }
     localStorage.favoriteShows = JSON.stringify(favoriteShows);
   }, [isFavorite, id]);

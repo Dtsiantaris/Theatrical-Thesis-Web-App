@@ -26,7 +26,7 @@ const VenueCard: FC<VenueCardProps> = ({ id, title }) => {
   const { isFavorite, setIsFavorite } = useFavoriteVenue(id);
 
   const handleFavorite = () => {
-    setIsFavorite((prev) => !prev);
+    setIsFavorite(!isFavorite);
   };
 
   return (
