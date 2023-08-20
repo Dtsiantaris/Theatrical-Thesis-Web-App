@@ -7,7 +7,8 @@ import axios from "axios";
 
 //export const baseURL = "http://195.251.123.174:8080/api";
 //export const baseURL = "https://theatricalportal.azurewebsites.net/api";
-export const baseURL = "https://localhost:7042/api";
+// export const baseURL = "https://localhost:7042/api";
+export const baseURL = "https://theatricalportalv2.azurewebsites.net/api/";
 // export const baseURL = "https://0.0.0.0:7042/api";
 // export const baseURL = "https://127.0.0.1:7042/api";
 
@@ -52,7 +53,7 @@ export const mainFetcher = async (url: string) => {
   console.log("MAIN FETCHER CALLED!!!!!!!!!", url);
   try {
     const response = await mainAxios.get(url);
-    const data = response.data.data;
+    const data = response.data.data.results;
     return data;
   } catch (error) {
     console.log(error);

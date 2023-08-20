@@ -34,6 +34,7 @@ import {
   Cell,
   LabelList,
 } from "recharts";
+import { Person } from "../../src/types/apiTypes";
 
 const placeHolderBio =
   "Quisque tincidunt porta neque, vitae aliquet quam hendrerit id. Nulla facilisi. Sed hendrerit elit eu vulputate auctor. Mauris ac tincidunt dui. Suspendisse nec sagittis neque, et efficitur nisl. Proin molestie mollis tortor, id sodales risus. Phasellus mi ante, viverra vel euismod eget, vulputate vel libero. Curabitur sem tellus, posuere id est eu, auctor imperdiet mauris. Morbi euismod facilisis dolor, in vestibulum mauris mattis non. Donec sit amet tempor augue, a elementum nisl.";
@@ -48,9 +49,9 @@ const COLORS = [
 ];
 
 export const getStaticPaths = async () => {
-  const artists = await mainFetcher("/productions?page=0&size=10");
+  const artists: Person[] = await mainFetcher("/People");
 
-  const paths = artists.content.map((artist) => ({
+  const paths = artists.map((artist) => ({
     params: { id: artist.id.toString() },
   }));
 
@@ -60,122 +61,22 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async ({ params }) => {
-  const artist = await mainFetcher(`/people/${params.id}`);
-
-  if (!artist) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const productions = await mainFetcher(`/people/${params.id}/productions`);
-
-  const URI = encodeURI(`/search/person?query=${artist.fullName}`);
-  const tmdbSearch = await tmdbFetcher(URI);
-  const tmdbResults = tmdbSearch.results;
-  tmdbResults.sort((a, b) => b.popularity - a.popularity);
-
-  let images = [];
-
-  if (tmdbResults.length > 0) {
-    artist.image = `https://image.tmdb.org/t/p/w300${tmdbResults[0].profile_path}`;
-
-    images = await tmdbFetcher(`/person/${tmdbResults[0].id}/images`);
-    images = images.profiles;
-    images = images.map((image) => {
-      const imagePath = `https://image.tmdb.org/t/p/w300${image.file_path}`;
-      return imagePath;
-    });
-    images = images.slice(0, 6);
-
-    const details = await tmdbFetcher(`/person/${tmdbResults[0].id}`);
-
-    if (details.birthday) {
-      artist.birthday = details.birthday;
-    }
-
-    const translations = await tmdbFetcher(
-      `/person/${tmdbResults[0].id}/translations`
-    );
-
-    if (translations.translations.length > 0) {
-      translations.translations.forEach((translation) => {
-        if (translation.english_name === "Greek") {
-          artist.biography = translation.data.biography;
-        }
-      });
-    }
-  }
-
-  const getProductionsByRole = (productions) => {
-    let productionGroups = {};
-
-    if (productions) {
-      productionGroups = productions.content.reduce((r, a) => {
-        r[a.role] = [...(r[a.role] || []), a];
-        return r;
-      }, {});
-    }
-
-    const {
-      Ηθοποιός: actorsTemp,
-      Ηθοποιοί: actorsTemp2,
-      Παίζουν: actorsTemp3,
-      Ερμηνεύουν: actorsTemp4,
-      "Παίζουν οι": actorsTemp5,
-      "Παίζουν αλφαβητικά": actorsTemp6,
-      ...rest
-    } = productionGroups;
-
-    const acting = [
-      ...(actorsTemp || []),
-      ...(actorsTemp2 || []),
-      ...(actorsTemp3 || []),
-      ...(actorsTemp4 || []),
-      ...(actorsTemp5 || []),
-      ...(actorsTemp6 || []),
-    ];
-
-    return { acting, rest };
-  };
-
-  const getProductionsByRoleStats = (productionGroups) => {
-    const productionsByRoleObject = {
-      Ηθοποιός: productionGroups.acting,
-      ...productionGroups.rest,
-    };
-    const productionsByRoleArray = Object.keys(productionsByRoleObject).map(
-      (productionKey) => ({
-        name: productionKey,
-        value: productionsByRoleObject[productionKey].length,
-      })
-    );
-    return productionsByRoleArray;
-  };
-
-  const productionGroups = getProductionsByRole(productions);
-  const productionsByRole = getProductionsByRoleStats(productionGroups);
-
-  return {
-    props: {
-      artist,
-      productionGroups,
-      productionsByRole,
-      images,
-    },
-    revalidate: 900,
-  };
-};
+//FIXME: wtf
+interface ArtistDetailsProps {
+  artist: any; // Update the type based on your data structure
+  // productionGroups: any; // Update the type based on your data structure
+  // productionsByRole: any[]; // Update the type based on your data structure
+  images: string[]; // Update the type based on your data structure
+}
 
 const useStyles = makeStyles(style);
 
-function ArtistDetails({
+const ArtistDetails: React.FC<ArtistDetailsProps> = ({
   artist,
-  productionGroups,
-  productionsByRole,
+  // productionGroups,
+  // productionsByRole,
   images,
-}) {
+}) => {
   const router = useRouter();
   const theme = useTheme();
 
@@ -184,9 +85,11 @@ function ArtistDetails({
 
   const [mediaViewerOpen, setMediaViewerOpen] = useState(false);
   const [mediaIndex, setMediaIndex] = useState(0);
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState<string | false>(false);
 
-  const { isFavorite, setIsFavorite } = useFavoriteArtist(artist && artist.id);
+  const { isFavorite, setIsFavorite } = useFavoriteArtist(
+    artist && artist.id.toString()
+  );
 
   const stringBirthday = useMemo(() => {
     if (artist && artist.birthday) {
@@ -204,22 +107,26 @@ function ArtistDetails({
   }
 
   const handleFavorite = () => {
-    setIsFavorite((prev) => !prev);
+    setIsFavorite(!isFavorite);
   };
 
-  const handleImageClick = (event) => {
-    setMediaIndex(Number(event.currentTarget.getAttribute("index")));
+  const handleImageClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    const index = Number(event.currentTarget.getAttribute("index"));
+    setMediaIndex(index);
     setMediaViewerOpen(true);
   };
 
-  const handleChange = (panel) => (event, isExpanded) => {
-    setExpanded(isExpanded ? panel : false);
-  };
+  const handleChange =
+    (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
 
   return (
     <>
       <Head>
-        <title>{artist.fullName} | Theatrica</title>
+        <title>{artist.fullname} | Theatrica</title>
       </Head>
       <div className={`pageWrapper ${classes.wrapper}`}>
         <div className={`pageContent ${classes.container}`}>
@@ -279,7 +186,7 @@ function ArtistDetails({
                       return (
                         <div
                           key={index}
-                          index={index}
+                          data-index={index}
                           className={classes.photograph}
                           onClick={handleImageClick}
                         >
@@ -301,7 +208,7 @@ function ArtistDetails({
               )}
             </div>
           </section>
-          <section>
+          {/* <section>
             <Typography
               variant="h4"
               component="h3"
@@ -326,23 +233,40 @@ function ArtistDetails({
                   </Typography>
                 </AccordionSummary>
                 <List className={classes.list}>
-                  {productionGroups.acting.map((play, index) => (
-                    <ListItem key={index} className={classes.listItem}>
-                      <Link href={`/shows/${play.productionId}`}>
-                        <a className={classes.link}>
-                          <ListItemText primary={play.title} />
-                        </a>
-                      </Link>
-                      <Link href="/stats/2022">
-                          <a style={{marginLeft: "auto"}} className={classes.link}>
+                  {productionGroups.acting.map(
+                    (
+                      play: {
+                        productionId: any;
+                        title:
+                          | boolean
+                          | React.ReactChild
+                          | React.ReactFragment
+                          | React.ReactPortal
+                          | null
+                          | undefined;
+                      },
+                      index: React.Key | null | undefined
+                    ) => (
+                      <ListItem key={index} className={classes.listItem}>
+                        <Link href={`/shows/${play.productionId}`}>
+                          <a className={classes.link}>
+                            <ListItemText primary={play.title} />
+                          </a>
+                        </Link>
+                        <Link href="/stats/2022">
+                          <a
+                            style={{ marginLeft: "auto" }}
+                            className={classes.link}
+                          >
                             <ListItemText
                               className={classes.year}
                               primary="2022"
                             />
                           </a>
                         </Link>
-                    </ListItem>
-                  ))}
+                      </ListItem>
+                    )
+                  )}
                 </List>
               </Accordion>
             )}
@@ -364,23 +288,34 @@ function ArtistDetails({
                     </Typography>
                   </AccordionSummary>
                   <List className={classes.list}>
-                    {value.map((play, index) => (
-                      <ListItem key={index} className={classes.listItem}>
-                        <Link href={`/shows/${play.productionId}`}>
-                          <a className={classes.link}>
-                            <ListItemText primary={play.title} />
-                          </a>
-                        </Link>
-                        <Link href="/stats/2022">
-                          <a style={{marginLeft: "auto"}} className={classes.link}>
-                            <ListItemText
-                              className={classes.year}
-                              primary="2022"
-                            />
-                          </a>
-                        </Link>
-                      </ListItem>
-                    ))}
+                    {value.map(
+                      (
+                        play: {
+                          productionId: any;
+                          title: React.ReactNode; // Specify the type here
+                        },
+                        index: React.Key | null | undefined
+                      ) => (
+                        <ListItem key={index} className={classes.listItem}>
+                          <Link href={`/shows/${play.productionId}`}>
+                            <a className={classes.link}>
+                              <ListItemText primary={play.title} />
+                            </a>
+                          </Link>
+                          <Link href="/stats/2022">
+                            <a
+                              style={{ marginLeft: "auto" }}
+                              className={classes.link}
+                            >
+                              <ListItemText
+                                className={classes.year}
+                                primary="2022"
+                              />
+                            </a>
+                          </Link>
+                        </ListItem>
+                      )
+                    )}
                   </List>
                 </Accordion>
               )
@@ -473,11 +408,11 @@ function ArtistDetails({
                 <Typography variant="body1">Instagram</Typography>
               </a>
             </div>
-          </section>
+          </section> */}
         </div>
       </div>
     </>
   );
-}
+};
 
 export default ArtistDetails;
