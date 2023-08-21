@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
 import style from "../src/assets/jss/layouts/loginPageStyles";
 import { baseURL } from "../src/utils/AxiosInstances";
 
@@ -26,13 +26,13 @@ const ColorPage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
 
   const signUp = () => {
     setLoading(true);
 
     axios
-      .post(`${baseURL}/users/register`, {
+      .post(`${baseURL}/User/register`, {
         email,
         password,
         authorities: ["USER"],
@@ -41,7 +41,7 @@ const ColorPage = () => {
         router.push("/");
       })
       .catch((error) => {
-        setError(error);
+        setError(error.message);
       })
       .finally(() => setLoading(false));
   };
@@ -50,17 +50,20 @@ const ColorPage = () => {
     setLoading(true);
 
     axios
-      .get(`${baseURL}/users/login?email=${email}&password=${password}`)
+      .post(`${baseURL}/User/login`, {
+        email,
+        password
+      })
       .then(() => {
         router.push("/");
       })
       .catch((error) => {
-        setError(error);
+        setError(error.message);
       })
       .finally(() => setLoading(false));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit: FormEventHandler = (event) => {
     event.preventDefault();
     if (isLogin) {
       login();
@@ -84,7 +87,7 @@ const ColorPage = () => {
           <Typography variant="h3" component="h1">
             {isLogin ? "Login" : "Sign Up"}
           </Typography>
-          {error.message && <Typography className={classes.errorText}>{error.message}</Typography>}
+          {error && <Typography className={classes.errorText}>{error}</Typography>}
           <TextField
             InputLabelProps={{ required: false }}
             value={email}

@@ -1,5 +1,5 @@
-import { Theme } from "@material-ui/core";
-const loginPageStyle = (theme: Theme) => ({
+import { Theme, createStyles } from "@material-ui/core";
+const loginPageStyle = (theme: Theme) => createStyles({
   outerContainer: {
     minHeight: "calc(100vh - 64px)",
     display: "grid",
