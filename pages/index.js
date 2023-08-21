@@ -180,7 +180,7 @@ function Home({ artists, latestShows, articles }) {
           </Hidden>
           <section>
             <ContentSlider title="Παραστάσεις" description="Νέες Κυκλοφορίες">
-              {latestShows.map((item) => (
+              {latestShows.results.map((item) => (
                 <ShowCard
                   id={item.id}
                   title={item.title}
