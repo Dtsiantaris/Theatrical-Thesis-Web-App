@@ -32,6 +32,12 @@ const navbarStyle = (theme: Theme) =>
     appbar: {
       zIndex: theme.zIndex.drawer + 1,
     },
+    loginButton: {
+      backgroundColor: theme.palette.primary.main,
+      "&:hover": {
+        backgroundColor: theme.palette.secondary.dark, // Border on focus
+      },
+    },
   });
 
 export default navbarStyle;

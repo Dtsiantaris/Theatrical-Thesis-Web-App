@@ -36,6 +36,10 @@ const Navbar: FC = () => {
     setSearchValue(event.target.value);
   };
 
+  const redirectLogin = () => {
+    router.push("/login");
+  };
+
   return (
     <>
       <AppBar className={classes.appbar} id="navbar">
@@ -55,6 +59,9 @@ const Navbar: FC = () => {
               <SearchIcon />
             </Button>
           </form>
+          <Button onClick={redirectLogin} className={classes.loginButton}>
+            Σύνδεση / Εγγραφή
+          </Button>
         </Toolbar>
         <NextNprogress color={theme.palette.secondary.main} />
       </AppBar>
