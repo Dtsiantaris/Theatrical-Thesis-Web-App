@@ -11,6 +11,7 @@ import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEventHandler, useState } from "react";
+import { useUserContext } from "../src/contexts/UserContext";
 import style from "../src/assets/jss/layouts/loginPageStyles";
 import { baseURL } from "../src/utils/AxiosInstances";
 
@@ -27,8 +28,9 @@ const ColorPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState(false);
+  const { setIsLoggedIn, setUser } = useUserContext();
 
-  const signUp = () => {
+  const handleSignUp = () => {
     setLoading(true);
 
     axios
@@ -38,6 +40,8 @@ const ColorPage = () => {
         authorities: ["USER"],
       })
       .then(() => {
+        setIsLoggedIn(true);
+        setUser({ email: email });
         router.push("/");
       })
       .catch((error) => {
@@ -46,15 +50,17 @@ const ColorPage = () => {
       .finally(() => setLoading(false));
   };
 
-  const login = () => {
+  const handleLogin = () => {
     setLoading(true);
 
     axios
       .post(`${baseURL}/User/login`, {
         email,
-        password
+        password,
       })
       .then(() => {
+        setIsLoggedIn(true);
+        setUser({ email: email });
         router.push("/");
       })
       .catch((error) => {
@@ -66,10 +72,10 @@ const ColorPage = () => {
   const handleSubmit: FormEventHandler = (event) => {
     event.preventDefault();
     if (isLogin) {
-      login();
+      handleLogin();
     } else {
       if (password !== confirmPassword) setPasswordError(true);
-      else signUp();
+      else handleSignUp();
     }
   };
 
@@ -87,7 +93,9 @@ const ColorPage = () => {
           <Typography variant="h3" component="h1">
             {isLogin ? "Login" : "Sign Up"}
           </Typography>
-          {error && <Typography className={classes.errorText}>{error}</Typography>}
+          {error && (
+            <Typography className={classes.errorText}>{error}</Typography>
+          )}
           <TextField
             InputLabelProps={{ required: false }}
             value={email}

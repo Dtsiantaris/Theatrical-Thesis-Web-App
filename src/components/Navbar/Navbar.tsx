@@ -9,12 +9,14 @@ import {
   Theme,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import PersonIcon from "@material-ui/icons/Person";
 import style from "../../assets/jss/components/navbarStyle";
 import SearchIcon from "@material-ui/icons/Search";
 import { DrawerContext } from "../../contexts/DrawerContext";
 import NextNprogress from "nextjs-progressbar";
 import { useTheme } from "@material-ui/core/styles";
 import { useRouter } from "next/router";
+import { useUserContext } from "../../contexts/UserContext";
 
 const useStyles = makeStyles(style);
 
@@ -24,6 +26,8 @@ const Navbar: FC = () => {
   const theme = useTheme();
 
   const [searchValue, setSearchValue] = useState<string>("");
+
+  const { isLoggedIn, user } = useUserContext();
 
   const router = useRouter();
 
@@ -59,9 +63,15 @@ const Navbar: FC = () => {
               <SearchIcon />
             </Button>
           </form>
-          <Button onClick={redirectLogin} className={classes.loginButton}>
-            Σύνδεση / Εγγραφή
-          </Button>
+          {isLoggedIn ? (
+            <IconButton>
+              <PersonIcon />
+            </IconButton>
+          ) : (
+            <Button onClick={redirectLogin} className={classes.loginButton}>
+              Σύνδεση / Εγγραφή
+            </Button>
+          )}
         </Toolbar>
         <NextNprogress color={theme.palette.secondary.main} />
       </AppBar>
