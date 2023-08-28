@@ -7,6 +7,9 @@ import {
   makeStyles,
   Button,
   Theme,
+  Popover,
+  ListItem,
+  ListItemText,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import PersonIcon from "@material-ui/icons/Person";
@@ -44,6 +47,20 @@ const Navbar: FC = () => {
     router.push("/login");
   };
 
+  //profile icon
+  // Dropdown state
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  // Handle opening the dropdown
+  const handleIconClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Handle closing the dropdown
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <>
       <AppBar className={classes.appbar} id="navbar">
@@ -64,9 +81,33 @@ const Navbar: FC = () => {
             </Button>
           </form>
           {isLoggedIn ? (
-            <IconButton>
-              <PersonIcon />
-            </IconButton>
+            <>
+              <IconButton onClick={handleIconClick}>
+                <PersonIcon />
+              </IconButton>
+              <Popover
+                className={classes.popOverModal}
+                open={Boolean(anchorEl)}
+                anchorEl={anchorEl}
+                onClose={handleClose}
+                disableScrollLock={true}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+              >
+                <ListItem>
+                  <ListItemText primary={user?.email} />
+                </ListItem>
+                <ListItem>
+                  <Button onClick={handleClose}>Logout</Button>
+                </ListItem>
+              </Popover>
+            </>
           ) : (
             <Button onClick={redirectLogin} className={classes.loginButton}>
               Σύνδεση / Εγγραφή

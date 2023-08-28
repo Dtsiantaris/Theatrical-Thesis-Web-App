@@ -38,6 +38,10 @@ const navbarStyle = (theme: Theme) =>
         backgroundColor: theme.palette.secondary.dark, // Border on focus
       },
     },
+    popOverModal: {
+      //TODO: styles not applying??
+      marginRight: "20px",
+    },
   });
 
 export default navbarStyle;
