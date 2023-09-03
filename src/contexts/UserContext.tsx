@@ -1,4 +1,10 @@
-import React, { ReactNode, createContext, useContext, useState } from "react";
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface User {
   email: string;
@@ -20,8 +26,23 @@ const UserContext = createContext<UserContextData | undefined>(undefined);
 export const UserContextProvider: React.FC<UserProviderProps> = ({
   children,
 }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!localStorage.getItem("authToken")
+  );
+  const userItem = localStorage.getItem("user");
+  const [user, setUser] = useState<User | null>(
+    userItem ? JSON.parse(userItem) : null
+  );
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      localStorage.setItem("authToken", "yourAuthTokenHere");
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
+    }
+  }, [isLoggedIn, user]);
 
   const contextValue: UserContextData = {
     isLoggedIn,
