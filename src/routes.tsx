@@ -14,6 +14,7 @@ export interface Route {
   name: string;
   icon: JSX.Element;
   pathOnClick?: string;
+  condition?: (isLoggedIn: boolean) => boolean;
 }
 
 const routes: Route[] = [
@@ -46,11 +47,6 @@ const routes: Route[] = [
     icon: <FaMapMarkedAlt fontSize={24} />,
   },
   {
-    path: "/saved",
-    name: "Αποθηκευμένα",
-    icon: <BookmarksIcon fontSize="default" />,
-  },
-  {
     path: "/stats",
     pathOnClick: "/stats/2022",
     name: "Στατιστικά",
@@ -60,6 +56,12 @@ const routes: Route[] = [
     path: "/compare",
     name: "Σύκριση",
     icon: <CompareArrowsIcon fontSize="default" />,
+  },
+  {
+    path: "/saved",
+    name: "Αποθηκευμένα",
+    icon: <BookmarksIcon fontSize="default" />,
+    condition: (isLoggedIn) => isLoggedIn,
   },
   {
     path: "/color",

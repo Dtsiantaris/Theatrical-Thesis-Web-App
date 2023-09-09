@@ -15,6 +15,7 @@ interface UserContextData {
   setIsLoggedIn: (loggedIn: boolean) => void;
   user: User | null;
   setUser: (user: User | null) => void;
+  handleLogout: () => void;
 }
 
 interface UserProviderProps {
@@ -34,6 +35,14 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
     userItem ? JSON.parse(userItem) : null
   );
 
+  const handleLogout = () => {
+    // Clear the authToken and reset the user state
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user");
+    setIsLoggedIn(false);
+    setUser(null);
+  };
+
   useEffect(() => {
     if (isLoggedIn) {
       localStorage.setItem("authToken", "yourAuthTokenHere");
@@ -49,6 +58,7 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
     setIsLoggedIn,
     user,
     setUser,
+    handleLogout,
   };
 
   return (

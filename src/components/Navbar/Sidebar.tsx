@@ -17,6 +17,7 @@ import { DrawerContext } from "../../contexts/DrawerContext";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Route } from "../../routes";
+import { useUserContext } from "../../contexts/UserContext";
 
 const useStyles = makeStyles(style);
 
@@ -27,6 +28,11 @@ const Sidebar: FC = () => {
 
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
+  const { isLoggedIn } = useUserContext();
+
+  const filteredRoutes: Route[] = routes.filter((route) =>
+    route.condition ? route.condition(isLoggedIn) : true
+  );
 
   return (
     <Drawer
@@ -49,7 +55,7 @@ const Sidebar: FC = () => {
         <div className={classes.toolbar} />
       </Hidden>
       <List>
-        {routes.map((route: Route) => {
+        {filteredRoutes.map((route: Route) => {
           return (
             <Link href={route.pathOnClick || route.path} key={route.name}>
               <a className="linksNoDecoration">

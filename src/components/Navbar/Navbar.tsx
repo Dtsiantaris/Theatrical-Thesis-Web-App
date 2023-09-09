@@ -30,7 +30,7 @@ const Navbar: FC = () => {
 
   const [searchValue, setSearchValue] = useState<string>("");
 
-  const { isLoggedIn, user } = useUserContext();
+  const { isLoggedIn, user, handleLogout } = useUserContext();
 
   const router = useRouter();
 
@@ -57,6 +57,12 @@ const Navbar: FC = () => {
   };
 
   // Handle closing the dropdown
+  const handleLogoutAndRedirect = () => {
+    handleClose();
+    handleLogout(); // Call the logout function from the context
+    router.push("/"); // Redirect to the home page
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -104,7 +110,7 @@ const Navbar: FC = () => {
                   <ListItemText primary={user?.email} />
                 </ListItem>
                 <ListItem>
-                  <Button onClick={handleClose}>Logout</Button>
+                  <Button onClick={handleLogoutAndRedirect}>Logout</Button>
                 </ListItem>
               </Popover>
             </>
