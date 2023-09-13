@@ -35,26 +35,27 @@ export const getServerSideProps: GetServerSideProps<
 
   const page = Number(query.page);
   //FIXME: this doesnt work
-  //FIXME: roles do not exist at the test db. 
-  
+  //FIXME: roles do not exist at the test db.
+
   if (query.letter) {
     data = await mainFetcher(
-      encodeURI(`/People/initials/letter?value=${query.letter}&page=${page - 1}&size=12`)
+      encodeURI(
+        `/People/initials/letter?value=${query.letter}&page=${page - 1}&size=12`
+      )
     );
     console.log("WTF IS THIS DATA FAM?? 1", data);
-    console.log('QUERY IS:'+query);
+    console.log("QUERY IS:" + query);
   } else if (query.role) {
     data = await mainFetcher(
       encodeURI(`/people/role?value=${query.role}&page=${page - 1}&size=12`)
     );
     console.log("WTF IS THIS DATA FAM?? 2", data);
-    console.log('QUERY IS:'+query);
+    console.log("QUERY IS:" + query);
   } else {
     data = await mainFetcher(`/people?page=${page - 1}&size=12`);
     console.log("WTF IS THIS DATA FAM?? 3", data);
-    console.log('QUERY IS:'+query);
+    console.log("QUERY IS:" + query);
   }
-
 
   //FIXME: always returns 404
   if (!data) {

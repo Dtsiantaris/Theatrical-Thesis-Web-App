@@ -64,8 +64,8 @@ export const getStaticPaths = async () => {
 //FIXME: wtf
 interface ArtistDetailsProps {
   artist: any; // Update the type based on your data structure
-  // productionGroups: any; // Update the type based on your data structure
-  // productionsByRole: any[]; // Update the type based on your data structure
+  productionGroups: any; // Update the type based on your data structure
+  productionsByRole: any[]; // Update the type based on your data structure
   images: string[]; // Update the type based on your data structure
 }
 
@@ -73,8 +73,8 @@ const useStyles = makeStyles(style);
 
 const ArtistDetails: React.FC<ArtistDetailsProps> = ({
   artist,
-  // productionGroups,
-  // productionsByRole,
+  productionGroups,
+  productionsByRole,
   images,
 }) => {
   const router = useRouter();
@@ -208,7 +208,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
               )}
             </div>
           </section>
-          {/* <section>
+          <section>
             <Typography
               variant="h4"
               component="h3"
@@ -408,7 +408,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
                 <Typography variant="body1">Instagram</Typography>
               </a>
             </div>
-          </section> */}
+          </section>
         </div>
       </div>
     </>

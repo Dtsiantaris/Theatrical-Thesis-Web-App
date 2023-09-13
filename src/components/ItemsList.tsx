@@ -15,6 +15,7 @@ export interface ItemsListProps {
 }
 
 const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
+  console.log("ItemsList Props:", items, type);
   const classes = useStyles();
 
   return (
@@ -25,16 +26,20 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
     >
       {items ? (
         items.map((item, index) => {
-          if (type === "/artists" && "fullName" in item && "image" in item)
+          console.log("Item in loop:", item);
+          if (type === "/artists" && "fullname" in item) {
+            console.log("Item in loop checked:", item);
+
             return (
               <ArtistCard
                 id={item.id}
                 fullname={item.fullname}
                 image={item.image}
                 key={index}
+                systemId={item.systemId}
               />
             );
-          else if (type === "/shows" && "title" in item && "media" in item)
+          } else if (type === "/shows" && "title" in item && "media" in item)
             return (
               <ShowCard
                 id={item.id}
@@ -44,7 +49,13 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
               />
             );
           else if (type === "/venues" && "title" in item)
-            return <VenueCard id={item.id} title={item.title} key={index} />;
+            return (
+              <VenueCard
+                id={item.id.toString()}
+                title={item.title}
+                key={index}
+              />
+            );
           return null;
         })
       ) : (

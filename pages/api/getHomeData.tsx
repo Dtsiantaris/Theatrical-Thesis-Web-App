@@ -1,7 +1,7 @@
 import { mainFetcher } from "../../src/utils/AxiosInstances";
 
 export const getHomeData = async () => {
-  const artistIDs = [1];
+  const artistIDs = [4659];
   const getArtists = await Promise.all(
     artistIDs.map(async (id) => {
       try {
