@@ -38,22 +38,29 @@ export const getServerSideProps: GetServerSideProps<
   //FIXME: roles do not exist at the test db.
 
   if (query.letter) {
+    console.log(
+      "TESTING",
+      query.letter,
+      `/people/initials/${query.letter}?page=${page - 1}&size=12`
+    );
     data = await mainFetcher(
-      encodeURI(
-        `/People/initials/letter?value=${query.letter}&page=${page - 1}&size=12`
-      )
+      encodeURI(`/people/initials/${query.letter}?page=${page - 1}&size=12`)
     );
     console.log("WTF IS THIS DATA FAM?? 1", data);
     console.log("QUERY IS:" + query);
   } else if (query.role) {
     data = await mainFetcher(
-      encodeURI(`/people/role?value=${query.role}&page=${page - 1}&size=12`)
+      encodeURI(`/People/role/${query.role}?page=${page - 1}&size=12`)
     );
+    // data = {
+    //   results: [{ id: 4659, fullname: "Γιώργος Καπουτζίδης", systemID: 2 }],
+    //   pageSize: 1,
+    // };
     console.log("WTF IS THIS DATA FAM?? 2", data);
     console.log("QUERY IS:" + query);
   } else {
     data = await mainFetcher(`/people?page=${page - 1}&size=12`);
-    console.log("WTF IS THIS DATA FAM?? 3", data);
+    console.log("WTF IS THIS DATA FAM?? 3", data.results);
     console.log("QUERY IS:" + query);
   }
 
