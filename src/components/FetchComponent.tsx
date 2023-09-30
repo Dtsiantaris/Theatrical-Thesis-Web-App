@@ -12,7 +12,7 @@ interface FetchComponentProps {
 }
 
 interface DataProps {
-  id: string;
+  id: number;
   fullName?: string;
   image?: string;
   title?: string;
@@ -20,7 +20,7 @@ interface DataProps {
 }
 
 const FetchComponent: React.FC<FetchComponentProps> = ({ path, id }) => {
-  const [props, setProps] = useState<DataProps>({ id: "" });
+  const [props, setProps] = useState<DataProps>({ id: -1 });
   const { data } = useSWR<DataProps>(
     path ? ["/api/fetchMask", path, id] : null,
     internalFetcherGet

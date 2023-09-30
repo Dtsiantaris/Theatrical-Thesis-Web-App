@@ -5,11 +5,11 @@ import axios from "axios";
 //     baseURL: process.env.NODE_ENV === "development" ? "http://192.168.2.14:5000/api" : "http://46.177.145.22:53239/api"
 // })
 
-//export const baseURL = "http://195.251.123.174:8080/api";
+export const baseURL = "http://195.251.123.174:8080/api";
 //export const baseURL = "https://theatricalportal.azurewebsites.net/api";
 // export const baseURL = "https://theatricalportalv2.azurewebsites.net/api/";
 // export const baseURL = "https://0.0.0.0:7042/api";
-export const baseURL = "http://127.0.0.1:7042/api";
+// export const baseURL = "http://127.0.0.1:7042/api";
 // export const baseURL = "http://localhost:7042/api";
 
 export const mainAxios = axios.create({

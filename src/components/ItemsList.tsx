@@ -35,7 +35,7 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
                 id={item.id}
                 fullname={item.fullname}
                 image={item.image}
-                key={index}
+                key={item.id}
                 systemId={item.systemId}
               />
             );
@@ -45,17 +45,11 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
                 id={item.id}
                 title={item.title}
                 media={item.media}
-                key={index}
+                key={item.id}
               />
             );
           else if (type === "/venues" && "title" in item)
-            return (
-              <VenueCard
-                id={item.id.toString()}
-                title={item.title}
-                key={index}
-              />
-            );
+            return <VenueCard id={item.id} title={item.title} key={item.id} />;
           return null;
         })
       ) : (

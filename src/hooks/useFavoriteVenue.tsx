@@ -5,7 +5,7 @@ interface FavoriteVenueHook {
   setIsFavorite: (value: boolean) => void;
 }
 
-export default function useFavoriteVenue(id: string): FavoriteVenueHook {
+export default function useFavoriteVenue(id: number): FavoriteVenueHook {
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ export default function useFavoriteVenue(id: string): FavoriteVenueHook {
     if (isFavorite) {
       favoriteVenues.push(id);
     } else {
-      favoriteVenues = favoriteVenues.filter((item: string) => item !== id);
+      favoriteVenues = favoriteVenues.filter((item: number) => item !== id);
     }
     localStorage.favoriteVenues = JSON.stringify(favoriteVenues);
   }, [isFavorite, id]);
