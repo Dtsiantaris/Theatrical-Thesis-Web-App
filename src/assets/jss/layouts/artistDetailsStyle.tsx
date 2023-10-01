@@ -27,6 +27,8 @@ const artistDetailsStyle = (theme: Theme) =>
       },
     },
     avatar: {
+      backgroundColor: "transparent",
+      color: "white",
       width: 150,
       height: 225,
       marginTop: 5,

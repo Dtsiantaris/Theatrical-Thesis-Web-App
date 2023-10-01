@@ -35,6 +35,8 @@ import {
   LabelList,
 } from "recharts";
 import { Person } from "../../src/types/apiTypes";
+import { GetServerSideProps } from "next";
+import ArtistCard from "../../src/components/ArtistCard";
 
 const placeHolderBio =
   "Quisque tincidunt porta neque, vitae aliquet quam hendrerit id. Nulla facilisi. Sed hendrerit elit eu vulputate auctor. Mauris ac tincidunt dui. Suspendisse nec sagittis neque, et efficitur nisl. Proin molestie mollis tortor, id sodales risus. Phasellus mi ante, viverra vel euismod eget, vulputate vel libero. Curabitur sem tellus, posuere id est eu, auctor imperdiet mauris. Morbi euismod facilisis dolor, in vestibulum mauris mattis non. Donec sit amet tempor augue, a elementum nisl.";
@@ -48,18 +50,48 @@ const COLORS = [
   "#fff9f9",
 ];
 
-export const getStaticPaths = async () => {
-  const artists: Person[] = await mainFetcher("/People");
+export const getServerSideProps: GetServerSideProps<
+  ArtistDetailsProps
+> = async ({ params }) => {
+  try {
+    const artistId = params?.id; // Extract artist ID from route parameters
+    if (!artistId) {
+      throw new Error("Artist ID not provided in route");
+    }
 
-  const paths = artists.map((artist) => ({
-    params: { id: artist.id.toString() },
-  }));
+    // Fetch artist data based on the artistId (e.g., using mainFetcher)
+    const artist = await mainFetcher(`/people/${artistId}`);
 
-  return {
-    paths,
-    fallback: true,
-  };
+    // Fetch other data needed for the page, such as images, productionGroups, etc.
+
+    return {
+      props: {
+        artist,
+      },
+    };
+  } catch (error) {
+    // Handle errors here, e.g., by redirecting to an error page
+    return {
+      redirect: {
+        destination: "/error", // Replace with your error page
+        permanent: false,
+      },
+    };
+  }
 };
+
+// export const getStaticPaths = async () => {
+//   const artists: Person[] = await mainFetcher("/People");
+
+//   const paths = artists.map((artist) => ({
+//     params: { id: artist.id.toString() },
+//   }));
+
+//   return {
+//     paths,
+//     fallback: true,
+//   };
+// };
 
 //FIXME: wtf
 interface ArtistDetailsProps {
@@ -131,23 +163,15 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
       <div className={`pageWrapper ${classes.wrapper}`}>
         <div className={`pageContent ${classes.container}`}>
           <section className={classes.overview}>
+            {/* <ArtistCard {...artist} /> */}
             <Avatar
               alt="Artist Photo"
               variant="square"
               className={classes.avatar}
             >
-              {artist.image ? (
-                <Image
-                  src={artist.image}
-                  alt="Artist Photo"
-                  width={300}
-                  height={450}
-                />
-              ) : null}
+              <ArtistCard {...artist} />
             </Avatar>
-            <Typography variant="h2" component="h1" className={classes.name}>
-              {artist.fullName}
-            </Typography>
+
             <IconButton
               size="small"
               className={classes.favoriteIcon}
@@ -178,7 +202,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
             >
               Φωτογραφίες
             </Typography>
-            <div className={classes.photographsContainer}>
+            {/* <div className={classes.photographsContainer}>
               {images.length > 0 ? (
                 <>
                   {images.map((url, index) => {
@@ -206,7 +230,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
                   Δεν υπάρχουν φωτογραφίες
                 </Typography>
               )}
-            </div>
+            </div> */}
           </section>
           <section>
             <Typography
@@ -217,7 +241,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
             >
               Παραστάσεις
             </Typography>
-            {productionGroups.acting.length > 0 && (
+            {/* {productionGroups.acting.length > 0 && (
               <Accordion
                 square
                 expanded={expanded === "acting"}
@@ -319,7 +343,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
                   </List>
                 </Accordion>
               )
-            )}
+            )} */}
           </section>
           <section>
             <Typography
@@ -331,7 +355,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
             </Typography>
             <ResponsiveContainer width="100%" height={400}>
               <PieChart>
-                <Pie data={productionsByRole} dataKey="value">
+                {/* <Pie data={productionsByRole} dataKey="value">
                   {productionsByRole.map((prod, index) => (
                     <Cell
                       key={prod.name}
@@ -346,7 +370,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
                     strokeWidth={2}
                   />
                   <LabelList dataKey="value" strokeWidth={0} fill="#000" />
-                </Pie>
+                </Pie> */}
                 <Tooltip
                   contentStyle={{ backgroundColor: "#373737", border: 0 }}
                   itemStyle={{ color: "#fff" }}
