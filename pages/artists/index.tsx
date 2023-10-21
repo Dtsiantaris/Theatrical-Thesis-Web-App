@@ -16,7 +16,7 @@ import { ArtistCardProps } from "../../src/components/ArtistCard";
 interface ArtistsPaginationProps {
   artists: Person[];
   pageCount: number;
-  size: number;
+  page: number;
 }
 
 export const getServerSideProps: GetServerSideProps<
@@ -34,6 +34,7 @@ export const getServerSideProps: GetServerSideProps<
   let data;
 
   const page = Number(query.page);
+  console.log("page my nigga: ", query.page);
   //FIXME: this doesnt work
   //FIXME: roles do not exist at the test db.
 
@@ -41,16 +42,16 @@ export const getServerSideProps: GetServerSideProps<
     console.log(
       "TESTING",
       query.letter,
-      `/people/initials/${query.letter}?page=${page - 1}&size=12`
+      `/people/initials/${query.letter}?page=${page}&size=12`
     );
     data = await mainFetcher(
-      encodeURI(`/people/initials/${query.letter}?page=${page - 1}&size=12`)
+      encodeURI(`/people/initials/${query.letter}?page=${page}&size=12`)
     );
     console.log("WTF IS THIS DATA FAM?? 1", data);
     console.log("QUERY IS:" + query);
   } else if (query.role) {
     data = await mainFetcher(
-      encodeURI(`/People/role/${query.role}?page=${page - 1}&size=12`)
+      encodeURI(`/People/role/${query.role}?page=${page}&size=12`)
     );
     // data = {
     //   results: [{ id: 4659, fullname: "Γιώργος Καπουτζίδης", systemID: 2 }],
@@ -59,7 +60,7 @@ export const getServerSideProps: GetServerSideProps<
     console.log("WTF IS THIS DATA FAM?? 2", data);
     console.log("QUERY IS:" + query);
   } else {
-    data = await mainFetcher(`/people?page=${page - 1}&size=12`);
+    data = await mainFetcher(`/people?page=${page}&size=12`);
     console.log("WTF IS THIS DATA FAM?? 3", data.results);
     console.log("QUERY IS:" + query);
   }
@@ -72,13 +73,13 @@ export const getServerSideProps: GetServerSideProps<
   }
 
   const artists = data.results;
-  const pageCount = data.pageSize;
+  const pageCount = data.totalPages;
 
   return {
     props: {
       artists,
       pageCount,
-      size: page,
+      page,
     },
   };
 };
@@ -117,7 +118,7 @@ const roles = [
 const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
   artists,
   pageCount,
-  size,
+  page,
 }) => {
   const classes = useStyles();
   const router = useRouter();
@@ -234,7 +235,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
           title="Καλλιτέχνες"
           items={artists}
           pageCount={pageCount}
-          page={size}
+          page={page}
           path="/artists"
         />
       </div>

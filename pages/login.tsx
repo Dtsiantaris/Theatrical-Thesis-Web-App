@@ -41,7 +41,7 @@ const ColorPage = () => {
       })
       .then(() => {
         setIsLoggedIn(true);
-        setUser({ email: email });
+        setUser({ email: email, emailVerified: false });
         router.push("/");
       })
       .catch((error) => {
@@ -58,9 +58,18 @@ const ColorPage = () => {
         email,
         password,
       })
-      .then(() => {
+      .then((data) => {
+        localStorage.setItem(
+          "authToken",
+          JSON.stringify(data.data.access_token)
+        );
+        //TODO: use fetcher for these calls that will have the access token as bearer
+        //TODO: setAuthToken at localStorage??
+        axios.post(`${baseURL}/User/info`, {
+          headers: `Bearer:${data.data.access_token}`,
+        });
         setIsLoggedIn(true);
-        setUser({ email: email });
+        setUser({ email: email, emailVerified: data.data.emailVerified });
         router.push("/");
       })
       .catch((error) => {

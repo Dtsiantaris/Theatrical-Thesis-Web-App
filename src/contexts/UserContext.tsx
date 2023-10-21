@@ -5,9 +5,12 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { toast } from "react-toastify";
+import EmailIcon from "@material-ui/icons/Email";
 
 interface User {
   email: string;
+  emailVerified: boolean;
 }
 
 interface UserContextData {
@@ -35,6 +38,36 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
     userItem ? JSON.parse(userItem) : null
   );
 
+  useEffect(() => {
+    // If user is not verified and we haven't shown the toast in this session
+    console.log("test this my nigga,", user);
+    if (
+      user &&
+      !user.emailVerified &&
+      !sessionStorage.getItem("emailVerificationToastShown")
+    ) {
+      toast(
+        <div style={{ color: "black" }}>
+          <div
+            style={{
+              fontWeight: "bold",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <EmailIcon style={{ marginRight: "10px" }} />
+            <div>Please verify your email!</div>
+          </div>
+          <div style={{ fontStyle: "italic" }}>
+            We have send you a link in your email address.
+          </div>
+        </div>
+      );
+      // Mark toast as shown for this session
+      sessionStorage.setItem("emailVerificationToastShown", "true");
+    }
+  }, [user]);
+
   const handleLogout = () => {
     // Clear the authToken and reset the user state
     localStorage.removeItem("authToken");
@@ -45,7 +78,7 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
 
   useEffect(() => {
     if (isLoggedIn) {
-      localStorage.setItem("authToken", "yourAuthTokenHere");
+      // localStorage.setItem("authToken", "yourAuthTokenHere");
       localStorage.setItem("user", JSON.stringify(user));
     } else {
       localStorage.removeItem("authToken");
