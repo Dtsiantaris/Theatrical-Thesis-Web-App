@@ -11,6 +11,8 @@ import {
   ListItem,
   ListItemText,
 } from "@material-ui/core";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import MenuIcon from "@material-ui/icons/Menu";
 import PersonIcon from "@material-ui/icons/Person";
 import style from "../../assets/jss/components/navbarStyle";
@@ -45,6 +47,10 @@ const Navbar: FC = () => {
 
   const redirectLogin = () => {
     router.push("/login");
+  };
+
+  const redirectProfile = () => {
+    router.push("/user");
   };
 
   //profile icon
@@ -92,7 +98,6 @@ const Navbar: FC = () => {
                 <PersonIcon />
               </IconButton>
               <Popover
-                className={classes.popOverModal}
                 open={Boolean(anchorEl)}
                 anchorEl={anchorEl}
                 onClose={handleClose}
@@ -106,16 +111,30 @@ const Navbar: FC = () => {
                   horizontal: "left",
                 }}
               >
-                <ListItem>
-                  <ListItemText primary={user?.email} />
-                </ListItem>
-                <ListItem>
-                  <Button onClick={handleLogoutAndRedirect}>Logout</Button>
-                </ListItem>
+                <div className={classes.popOverModal}>
+                  <ListItem style={{ width: "100%" }}>
+                    <Button
+                      className={classes.profileButton}
+                      onClick={redirectProfile}
+                    >
+                      {user?.email}
+                      <AccountCircleIcon style={{ marginLeft: "4px" }} />
+                    </Button>
+                  </ListItem>
+                  <ListItem style={{ width: "100%" }}>
+                    <Button
+                      onClick={handleLogoutAndRedirect}
+                      className={classes.logoutButton}
+                    >
+                      Αποσύνδεση
+                      <ExitToAppIcon style={{ marginLeft: "4px" }} />
+                    </Button>
+                  </ListItem>
+                </div>
               </Popover>
             </>
           ) : (
-            <Button onClick={redirectLogin} className={classes.loginButton}>
+            <Button className={classes.loginButton} onClick={redirectLogin}>
               Σύνδεση / Εγγραφή
             </Button>
           )}

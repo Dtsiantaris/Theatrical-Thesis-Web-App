@@ -33,14 +33,20 @@ const navbarStyle = (theme: Theme) =>
       zIndex: theme.zIndex.drawer + 1,
     },
     loginButton: {
+      textTransform: "none",
       backgroundColor: theme.palette.primary.main,
       "&:hover": {
         backgroundColor: theme.palette.secondary.dark, // Border on focus
       },
     },
+    profileButton: {
+      textTransform: "none",
+    },
+    logoutButton: {
+      textTransform: "none",
+    },
     popOverModal: {
-      //TODO: styles not applying??
-      marginRight: "20px",
+      padding: "5px",
     },
   });
 
