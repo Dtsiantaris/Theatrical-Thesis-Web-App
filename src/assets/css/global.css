@@ -4,11 +4,11 @@
 }
 
 .dotSeparator {
-  position: relative
+  position: relative;
 }
 
 .dotSeparator::before {
-  content: '';
+  content: "";
   position: relative;
   padding: 1.5px;
   background-color: currentColor;
@@ -34,12 +34,16 @@
 
 @media only screen and (min-width: 600px) {
   .pageWrapper {
-    margin-left: 55px
+    margin-left: 55px;
   }
 }
 
 @media only screen and (min-width: 1000px) {
   .pageWrapper {
-    margin-top: 35px
+    margin-top: 35px;
   }
 }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

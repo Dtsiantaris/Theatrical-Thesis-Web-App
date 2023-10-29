@@ -112,7 +112,7 @@ const Navbar: FC = () => {
                 }}
               >
                 <div className={classes.popOverModal}>
-                  <ListItem style={{ width: "100%" }}>
+                  <ListItem>
                     <Button
                       className={classes.profileButton}
                       onClick={redirectProfile}
@@ -121,7 +121,7 @@ const Navbar: FC = () => {
                       <AccountCircleIcon style={{ marginLeft: "4px" }} />
                     </Button>
                   </ListItem>
-                  <ListItem style={{ width: "100%" }}>
+                  <ListItem>
                     <Button
                       onClick={handleLogoutAndRedirect}
                       className={classes.logoutButton}

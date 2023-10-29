@@ -5,6 +5,7 @@ import {
   Typography,
   InputBase,
 } from "@material-ui/core";
+import "../src/assets/css/tailwind.css";
 import style from "../src/assets/jss/layouts/homeStyle";
 import ContentSlider from "../src/components/ContentSlider";
 import ArtistCard from "../src/components/ArtistCard";

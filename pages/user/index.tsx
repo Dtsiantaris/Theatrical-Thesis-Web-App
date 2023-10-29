@@ -11,7 +11,9 @@ const UserProfile = () => {
 
   return (
     <div>
-      <Typography variant="h1">{user.email}</Typography>
+      <Typography variant="h1" className="text-red-500">
+        {user.email}
+      </Typography>
       {/* Render other user properties here */}
     </div>
   );
