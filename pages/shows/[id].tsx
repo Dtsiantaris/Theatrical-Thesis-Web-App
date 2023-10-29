@@ -43,7 +43,7 @@ import {
   LabelList,
 } from "recharts";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Production } from "../../src/types/apiTypes";
+import { Production } from "../../src/types/Production";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const latestShows = await mainFetcher(`/productions?page=0&size=10`);

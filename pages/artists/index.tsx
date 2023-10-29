@@ -10,7 +10,7 @@ import { makeStyles, Hidden, Drawer, Fab, Button } from "@material-ui/core";
 import style from "../../src/assets/jss/layouts/artistsPageStyle";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { GetServerSideProps } from "next";
-import { Person } from "../../src/types/apiTypes";
+import { Person } from "../../src/types/Person";
 import { ArtistCardProps } from "../../src/components/ArtistCard";
 
 interface ArtistsPaginationProps {
