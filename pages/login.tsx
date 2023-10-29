@@ -55,8 +55,8 @@ const ColorPage = () => {
         email,
         password,
       })
-      .then((data) => {
-        mainAxios.post("/User/info").then((data) => {
+      .then(() => {
+        mainAxios.get("/User/info").then((data) => {
           setIsLoggedIn(true);
           setUser(data.data.data as User);
           router.push("/");

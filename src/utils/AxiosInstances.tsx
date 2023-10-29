@@ -1,18 +1,7 @@
 import axios from "axios";
 
-// local server
-// export const mainAxios = axios.create({
-//     baseURL: process.env.NODE_ENV === "development" ? "http://192.168.2.14:5000/api" : "http://46.177.145.22:53239/api"
-// })
-
-// export const baseURL = "http://195.251.123.174:8080/api";
 export const baseURL =
   "https://theatricalapi.jollybay-0ad0b06b.germanywestcentral.azurecontainerapps.io/api";
-//export const baseURL = "https://theatricalportal.azurewebsites.net/api";
-// export const baseURL = "https://theatricalportalv2.azurewebsites.net/api/";
-// export const baseURL = "https://0.0.0.0:7042/api";
-// export const baseURL = "http://127.0.0.1:7042/api";
-// export const baseURL = "http://localhost:7042/api";
 
 export const mainAxios = axios.create({
   baseURL,
@@ -30,9 +19,9 @@ mainAxios.interceptors.request.use((config) => {
 
 mainAxios.interceptors.response.use(
   (response) => {
-    console.log("response MY NIGGER", response);
-    if (typeof window !== "undefined" && response.data.data.data.access_token) {
-      const token = response.data.data.data.access_token;
+    // console.log("response print interceptor", response);
+    if (typeof window !== "undefined" && response.data.data.access_token) {
+      const token = response.data.data.access_token;
       localStorage.setItem("authToken", token);
     }
     return response;

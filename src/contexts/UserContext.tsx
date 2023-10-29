@@ -36,7 +36,6 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
 
   useEffect(() => {
     // If user is not verified and we haven't shown the toast in this session
-    console.log("test this my nigga,", user);
     if (
       user &&
       !user.emailVerified &&
@@ -68,13 +67,13 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
     // Clear the authToken and reset the user state
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
+    sessionStorage.removeItem("emailVerificationToastShown");
     setIsLoggedIn(false);
     setUser(null);
   };
 
   useEffect(() => {
     if (isLoggedIn) {
-      // localStorage.setItem("authToken", "yourAuthTokenHere");
       localStorage.setItem("user", JSON.stringify(user));
     } else {
       localStorage.removeItem("authToken");
