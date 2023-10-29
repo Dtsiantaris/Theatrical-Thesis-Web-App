@@ -7,13 +7,13 @@ import {
   Container,
   CircularProgress,
 } from "@material-ui/core";
-import axios from "axios";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { FormEventHandler, useState } from "react";
 import { useUserContext } from "../src/contexts/UserContext";
 import style from "../src/assets/jss/layouts/loginPageStyles";
-import { baseURL } from "../src/utils/AxiosInstances";
+import { mainAxios } from "../src/utils/AxiosInstances";
+import { User } from "../src/types/User";
 
 const useStyles = makeStyles(style);
 
@@ -33,44 +33,34 @@ const ColorPage = () => {
   const handleSignUp = () => {
     setLoading(true);
 
-    axios
-      .post(`${baseURL}/User/register`, {
+    mainAxios
+      .post("User/register", {
         email,
         password,
-        authorities: ["USER"],
+        role: 0,
       })
       .then(() => {
-        setIsLoggedIn(true);
-        setUser({ email: email, emailVerified: false });
-        router.push("/");
+        handleLogin();
       })
       .catch((error) => {
         setError(error.message);
-      })
-      .finally(() => setLoading(false));
+      });
   };
 
   const handleLogin = () => {
     setLoading(true);
 
-    axios
-      .post(`${baseURL}/User/login`, {
+    mainAxios
+      .post("User/login", {
         email,
         password,
       })
       .then((data) => {
-        localStorage.setItem(
-          "authToken",
-          JSON.stringify(data.data.access_token)
-        );
-        //TODO: use fetcher for these calls that will have the access token as bearer
-        //TODO: setAuthToken at localStorage??
-        axios.post(`${baseURL}/User/info`, {
-          headers: `Bearer:${data.data.access_token}`,
+        mainAxios.post("/User/info").then((data) => {
+          setIsLoggedIn(true);
+          setUser(data.data.data as User);
+          router.push("/");
         });
-        setIsLoggedIn(true);
-        setUser({ email: email, emailVerified: data.data.emailVerified });
-        router.push("/");
       })
       .catch((error) => {
         setError(error.message);

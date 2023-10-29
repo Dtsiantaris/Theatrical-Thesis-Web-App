@@ -19,13 +19,29 @@ export const mainAxios = axios.create({
 });
 
 mainAxios.interceptors.request.use((config) => {
-  config.headers = {
-    ...config.headers,
-    Authorization: `Bearer ${process.env.NEXT_PUBLIC_JWT_TOKEN}`,
-  };
-
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
   return config;
 });
+
+mainAxios.interceptors.response.use(
+  (response) => {
+    console.log("response MY NIGGER", response);
+    if (typeof window !== "undefined" && response.data.data.data.access_token) {
+      const token = response.data.data.data.access_token;
+      localStorage.setItem("authToken", token);
+    }
+    return response;
+  },
+  (error) => {
+    // You can handle errors here if necessary
+    return Promise.reject(error);
+  }
+);
 
 const tmdbAxios = axios.create({
   baseURL: "https://api.themoviedb.org/3",

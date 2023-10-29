@@ -7,11 +7,7 @@ import React, {
 } from "react";
 import { toast } from "react-toastify";
 import EmailIcon from "@material-ui/icons/Email";
-
-interface User {
-  email: string;
-  emailVerified: boolean;
-}
+import { User } from "../types/User";
 
 interface UserContextData {
   isLoggedIn: boolean;
