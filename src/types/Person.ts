@@ -1,6 +1,6 @@
 export interface Person {
   id: number;
-  fullname?: string;
+  fullname: string;
   systemID?: string;
   birthdate?: string;
   bio?: string;
@@ -10,4 +10,5 @@ export interface Person {
   height?: string;
   eyeColor?: string;
   hairColor?: string;
+  roles?: string[];
 }

@@ -1,5 +1,5 @@
 // pages/user/profile.tsx
-import React from "react";
+import React, { useState } from "react";
 import { useUserContext } from "../../src/contexts/UserContext";
 import {
   Card,
@@ -11,6 +11,8 @@ import {
   ListItemText,
   ListItemIcon,
   Chip,
+  ListItemSecondaryAction,
+  Switch,
 } from "@material-ui/core";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import EnhancedEncryptionIcon from "@material-ui/icons/EnhancedEncryption";
@@ -19,9 +21,23 @@ import MonetizationOnIcon from "@material-ui/icons/MonetizationOn";
 import EmailIcon from "@material-ui/icons/Email";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
+import CheckIcon from "@material-ui/icons/Check";
+import CloseIcon from "@material-ui/icons/Close";
+import { useUserMutations } from "../../src/hooks/userMutations/useUserMutations";
 
 const UserProfile = () => {
   const { user } = useUserContext();
+  const { toggle2FA } = useUserMutations();
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(
+    user ? user.twoFactorEnabled : false
+  );
+
+  const handleTwoFactorSwitch = async () => {
+    const newTwoFactorStatus = !twoFactorEnabled;
+    const res = await toggle2FA(newTwoFactorStatus);
+    if (!res) return;
+    setTwoFactorEnabled(newTwoFactorStatus);
+  };
 
   if (!user) {
     return <p>Loading user data...</p>;
@@ -57,7 +73,21 @@ const UserProfile = () => {
                 <EnhancedEncryptionIcon />
               </ListItemIcon>
               <ListItemText primary="Two Factor" />
-              <VerifiedChip isVerified={user.twoFactorEnabled} />
+              {/* <VerifiedChip isVerified={user.twoFactorEnabled} />
+               */}
+              <ListItemSecondaryAction>
+                <Switch
+                  edge="end"
+                  size="medium"
+                  //TODO: add post to backend for enabling/ disabling
+                  onChange={handleTwoFactorSwitch}
+                  checked={twoFactorEnabled}
+                  checkedIcon={
+                    <EnhancedEncryptionIcon style={{ fontSize: 16 }} />
+                  }
+                  icon={<CloseIcon style={{ fontSize: 16 }} />}
+                />
+              </ListItemSecondaryAction>
             </ListItem>
             <ListItem>
               <ListItemIcon>
