@@ -1,13 +1,16 @@
 import React, { ReactNode } from "react";
-import { DrawerContextProvider } from "../contexts/DrawerContext";
 import { SWRConfig } from "swr";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { mainFetcher } from "../utils/AxiosInstances";
+// components
+import { DrawerContextProvider } from "../contexts/DrawerContext";
 import Navbar from "./Navbar/Navbar";
 import Sidebar from "./Navbar/Sidebar";
 import { ToastContainer } from "react-toastify";
+// themes & styles
+import CssBaseline from "@material-ui/core/CssBaseline";
 import { Theme, createStyles } from "@material-ui/core/styles";
 import "react-toastify/dist/ReactToastify.css";
+//utils
+import { mainFetcher } from "../utils/AxiosInstances";
 
 interface LayoutProps {
   children: ReactNode;
@@ -32,7 +35,7 @@ const Layout: React.FC<LayoutProps> = ({ children }, theme: Theme) => {
         <div>
           <ToastContainer
             theme="colored"
-            toastStyle={{ backgroundColor: "gray" }}
+            // toastStyle={{ backgroundColor: "gray" }}
             position="top-center"
             autoClose={5000} // The toast will close after 5 seconds
             progressStyle={{ backgroundColor: "#30608d" }}

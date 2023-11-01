@@ -5,9 +5,11 @@ import React, {
   useEffect,
   useState,
 } from "react";
+// interfaces
+import { User } from "../types/User";
+//utils & icons
 import { toast } from "react-toastify";
 import EmailIcon from "@material-ui/icons/Email";
-import { User } from "../types/User";
 
 interface UserContextData {
   isLoggedIn: boolean;

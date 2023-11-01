@@ -1,6 +1,9 @@
 // pages/user/profile.tsx
 import React, { useState } from "react";
+//hooks
 import { useUserContext } from "../../src/contexts/UserContext";
+import { useUserMutations } from "../../src/hooks/userMutations/useUserMutations";
+// utils & icons
 import {
   Card,
   CardContent,
@@ -23,24 +26,40 @@ import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 import HighlightOffIcon from "@material-ui/icons/HighlightOff";
 import CheckIcon from "@material-ui/icons/Check";
 import CloseIcon from "@material-ui/icons/Close";
-import { useUserMutations } from "../../src/hooks/userMutations/useUserMutations";
 
 const UserProfile = () => {
   const { user } = useUserContext();
   const { toggle2FA } = useUserMutations();
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(
-    user ? user.twoFactorEnabled : false
+    user ? user.twoFactorEnabled || false : false
   );
 
   const handleTwoFactorSwitch = async () => {
+    console.log("handle", twoFactorEnabled);
     const newTwoFactorStatus = !twoFactorEnabled;
-    const res = await toggle2FA(newTwoFactorStatus);
-    if (!res) return;
-    setTwoFactorEnabled(newTwoFactorStatus);
+
+    try {
+      const res = await toggle2FA(newTwoFactorStatus);
+      console.log("toggle2FA result:", res);
+
+      if (res) {
+        setTwoFactorEnabled(newTwoFactorStatus);
+      } else {
+        setTwoFactorEnabled(!newTwoFactorStatus);
+        // If the request fails, set the switch back to its previous state.
+        console.error("Failed to toggle 2FA");
+      }
+    } catch (error) {
+      console.error("Error toggling 2FA:", error);
+      // If there is an error, set the switch back to its previous state.
+      setTwoFactorEnabled(!newTwoFactorStatus);
+    }
   };
 
   if (!user) {
     return <p>Loading user data...</p>;
+  } else {
+    console.log("user is already", user.twoFactorEnabled);
   }
 
   const VerifiedChip: React.FC<{ isVerified: boolean }> = ({ isVerified }) => (
@@ -79,7 +98,6 @@ const UserProfile = () => {
                 <Switch
                   edge="end"
                   size="medium"
-                  //TODO: add post to backend for enabling/ disabling
                   onChange={handleTwoFactorSwitch}
                   checked={twoFactorEnabled}
                   checkedIcon={
