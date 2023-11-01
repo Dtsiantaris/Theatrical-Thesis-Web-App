@@ -8,4 +8,7 @@ export interface User {
   role: string;
   transactions?: Transaction[];
   balance: number;
+  facebook?: string;
+  instagram?: string;
+  youtube?: string;
 }

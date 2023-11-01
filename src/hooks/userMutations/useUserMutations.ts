@@ -11,9 +11,32 @@ export const useUserMutations = () => {
       return result;
     } catch (error) {
       console.log(error);
-      return undefined;
+      return false;
     }
   };
 
-  return { toggle2FA };
+  const updateSocial = async (
+    link: string,
+    type: "facebook" | "instagram" | "youtube"
+  ) => {
+    try {
+      let result = false;
+      switch (type) {
+        case "facebook":
+          result = await mainAxios.put("User/@/facebook", link);
+          break;
+        case "instagram":
+          result = await mainAxios.put("User/@/instagram", link);
+          break;
+        case "youtube":
+          result = await mainAxios.put("User/@/youtube", link);
+      }
+      return result;
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  };
+
+  return { toggle2FA, updateSocial };
 };
