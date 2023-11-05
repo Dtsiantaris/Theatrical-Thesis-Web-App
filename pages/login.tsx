@@ -1,3 +1,6 @@
+import { FormEventHandler, useState } from "react";
+import Head from "next/head";
+import { useRouter } from "next/router";
 import {
   Typography,
   makeStyles,
@@ -7,17 +10,20 @@ import {
   Container,
   CircularProgress,
 } from "@material-ui/core";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { FormEventHandler, useState } from "react";
-import { useUserContext } from "../src/contexts/UserContext";
-import style from "../src/assets/jss/layouts/loginPageStyles";
-import { mainAxios } from "../src/utils/AxiosInstances";
+// interfaces
 import { User } from "../src/types/User";
+// hooks
+import { useUserContext } from "../src/contexts/UserContext";
+import { useUserQueries } from "../src/hooks/queries/useUserQueries";
+// utils and icons
+import { mainAxios } from "../src/utils/AxiosInstances";
+import style from "../src/assets/jss/layouts/loginPageStyles";
 
 const useStyles = makeStyles(style);
 
-const ColorPage = () => {
+const LoginPage = () => {
+  const { fetchUserInfo } = useUserQueries();
+
   const classes = useStyles();
   const router = useRouter();
 
@@ -28,7 +34,7 @@ const ColorPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState(false);
-  const { setIsLoggedIn, setUser } = useUserContext();
+  const { setIsLoggedIn } = useUserContext();
 
   const handleSignUp = () => {
     setLoading(true);
@@ -56,9 +62,8 @@ const ColorPage = () => {
         password,
       })
       .then(() => {
-        mainAxios.get("/User/info").then((data) => {
-          setIsLoggedIn(true);
-          setUser(data.data.data as User);
+        setIsLoggedIn(true);
+        fetchUserInfo().then(() => {
           router.push("/");
         });
       })
@@ -164,4 +169,4 @@ const ColorPage = () => {
   );
 };
 
-export default ColorPage;
+export default LoginPage;

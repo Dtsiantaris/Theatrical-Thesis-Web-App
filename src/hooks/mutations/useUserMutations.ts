@@ -1,8 +1,12 @@
 //hooks
+import { useState } from "react";
 import { mainAxios } from "../../utils/AxiosInstances";
 
 export const useUserMutations = () => {
+  const [loading, setLoading] = useState(false);
+
   const toggle2FA = async (enable: boolean) => {
+    setLoading(true);
     try {
       let result = false;
       result = enable
@@ -12,6 +16,8 @@ export const useUserMutations = () => {
     } catch (error) {
       console.log(error);
       return false;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -19,24 +25,21 @@ export const useUserMutations = () => {
     link: string,
     type: "facebook" | "instagram" | "youtube"
   ) => {
+    setLoading(true);
     try {
       let result = false;
-      switch (type) {
-        case "facebook":
-          result = await mainAxios.put("User/@/facebook", link);
-          break;
-        case "instagram":
-          result = await mainAxios.put("User/@/instagram", link);
-          break;
-        case "youtube":
-          result = await mainAxios.put("User/@/youtube", link);
-      }
+      result = await mainAxios.put(
+        `User/@/${type}?link=${encodeURIComponent(link)}`
+      );
+
       return result;
     } catch (error) {
       console.log(error);
       return false;
+    } finally {
+      setLoading(false);
     }
   };
 
-  return { toggle2FA, updateSocial };
+  return { toggle2FA, updateSocial, loading };
 };

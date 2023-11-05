@@ -1,8 +1,8 @@
 // pages/user/profile.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 //hooks
 import { useUserContext } from "../../src/contexts/UserContext";
-import { useUserMutations } from "../../src/hooks/userMutations/useUserMutations";
+import { useUserMutations } from "../../src/hooks/mutations/useUserMutations";
 // utils & icons
 import {
   Card,
@@ -18,6 +18,7 @@ import {
   Switch,
   TextField,
   Button,
+  CircularProgress,
 } from "@material-ui/core";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import EnhancedEncryptionIcon from "@material-ui/icons/EnhancedEncryption";
@@ -33,19 +34,67 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import SaveIcon from "@material-ui/icons/Save";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import { useUserQueries } from "../../src/hooks/queries/useUserQueries";
 
 const UserProfile = () => {
   const { user } = useUserContext();
-  const { toggle2FA, updateSocial } = useUserMutations();
+  const { fetchUserInfo, loading } = useUserQueries();
+  const {
+    toggle2FA,
+    updateSocial,
+    loading: loadingMutation,
+  } = useUserMutations();
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(
     user ? user.twoFactorEnabled || false : false
   );
 
-  const [facebookLink, setFacebookLink] = useState(user ? user.facebook : "");
-  const [instagramLink, setInstagramLink] = useState(
-    user ? user.instagram : ""
-  );
-  const [youtubeLink, setYoutubeLink] = useState(user ? user.youtube : "");
+  const [facebookLink, setFacebookLink] = useState("");
+  const [instagramLink, setInstagramLink] = useState("");
+  const [youtubeLink, setYoutubeLink] = useState("");
+
+  // State to track if any changes have been made to the input fields
+  const [changesMade, setChangesMade] = useState(false);
+
+  // Initial state values for input fields
+  const [initialFacebookLink, setInitialFacebookLink] = useState("");
+  const [initialInstagramLink, setInitialInstagramLink] = useState("");
+  const [initialYoutubeLink, setInitialYoutubeLink] = useState("");
+
+  // set inputs fields as controlled components
+  useEffect(() => {
+    if (user) {
+      setFacebookLink(user.facebook || "");
+      setInstagramLink(user.instagram || "");
+      setYoutubeLink(user.youtube || "");
+      console.log("fb link changed", user);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    // Set initial input field values
+    if (user) {
+      setInitialFacebookLink(user.facebook || "");
+      setInitialInstagramLink(user.instagram || "");
+      setInitialYoutubeLink(user.youtube || "");
+      console.log("initial called");
+    }
+  }, [user]); // This effect runs only once when the component mounts or when the user changes
+
+  // Check if there have been changes to the input fields
+  useEffect(() => {
+    setChangesMade(
+      initialFacebookLink !== facebookLink ||
+        initialInstagramLink !== instagramLink ||
+        initialYoutubeLink !== youtubeLink
+    );
+  }, [
+    facebookLink,
+    instagramLink,
+    youtubeLink,
+    initialFacebookLink,
+    initialInstagramLink,
+    initialYoutubeLink,
+  ]);
 
   const handleTwoFactorSwitch = async () => {
     const newTwoFactorStatus = !twoFactorEnabled;
@@ -54,6 +103,7 @@ const UserProfile = () => {
       const res = await toggle2FA(newTwoFactorStatus);
       if (res) {
         setTwoFactorEnabled(newTwoFactorStatus);
+        await fetchUserInfo();
       } else {
         setTwoFactorEnabled(!newTwoFactorStatus);
         // If the request fails, set the switch back to its previous state.
@@ -67,13 +117,27 @@ const UserProfile = () => {
   };
 
   const handleSave = async () => {
-    // use initial value for @social links??
+    const facebookFlag = initialFacebookLink !== facebookLink;
+    const instagramFlag = initialInstagramLink !== instagramLink;
+    const youtubeFlag = initialYoutubeLink !== youtubeLink;
+
+    try {
+      if (facebookFlag) {
+        await updateSocial(facebookLink, "facebook");
+      }
+      if (instagramFlag) {
+        await updateSocial(instagramLink, "instagram");
+      }
+      if (youtubeFlag) {
+        await updateSocial(youtubeLink, "youtube");
+      }
+    } finally {
+      await fetchUserInfo();
+    }
   };
 
   if (!user) {
     return <p>Loading user data...</p>;
-  } else {
-    console.log("user is already", user.twoFactorEnabled);
   }
 
   const VerifiedChip: React.FC<{ isVerified: boolean }> = ({ isVerified }) => (
@@ -102,11 +166,13 @@ const UserProfile = () => {
             <Button
               variant="contained"
               color="secondary"
-              //TODO: TRUE MAKE THIS DISBALED WHEN NO CHANGES HAVE APPLIED
-              disabled={true}
+              disabled={!changesMade}
               startIcon={<SaveIcon />}
+              endIcon={
+                (loading || loadingMutation) && <CircularProgress size={24} />
+              }
               onClick={handleSave}
-              className="mt-4"
+              className="mt-4 w-[12rem]"
             >
               Save Changes
             </Button>

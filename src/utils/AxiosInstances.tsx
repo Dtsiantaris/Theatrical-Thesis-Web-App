@@ -20,7 +20,12 @@ mainAxios.interceptors.request.use((config) => {
 
 mainAxios.interceptors.response.use(
   (response) => {
-    // console.log("response print interceptor", response);
+    // If the response comes from a POST or PUT request
+    if (response.config.method === "post" || response.config.method === "put") {
+      // Display success toast notification
+      toast.success("Operation successful!", { theme: "colored" });
+    }
+    // If a new token is provided in the response, update it in localStorage
     if (typeof window !== "undefined" && response.data.data.access_token) {
       const token = response.data.data.access_token;
       localStorage.setItem("authToken", token);
