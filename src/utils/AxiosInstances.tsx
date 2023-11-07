@@ -33,6 +33,16 @@ mainAxios.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (
+      error.response.status === 409 &&
+      error.response.data.errorCode === "_2FaEnabled"
+    ) {
+      // Handle the 409 error for two-factor authentication enabled
+      const customError = new Error("Two-factor authentication is enabled.");
+      customError.message = "twoFactorEnabled";
+      return Promise.reject(customError);
+    }
+
     // Handle errors globally and show a notification
     const message =
       error.response && error.response.data && error.response.data.message
