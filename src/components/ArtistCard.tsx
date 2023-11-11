@@ -5,11 +5,14 @@ import {
   Avatar,
   useMediaQuery,
   useTheme,
+  Button,
 } from "@material-ui/core";
 import style from "../assets/jss/components/artistCardStyle";
 import Image from "next/image";
 import Link from "next/link";
 import { mainFetcher } from "../utils/AxiosInstances";
+import CopyrightIcon from "@mui/icons-material/Copyright";
+import ClaimPersonDialog from "./ClaimPersonDialog";
 
 const useStyles = makeStyles(style);
 
@@ -18,10 +21,18 @@ export interface ArtistCardProps {
   id: number; // Assuming it's a string, update the type accordingly if it's different
   fullname: string;
   systemId: number;
+  isDetails?: boolean;
   image?: string; // Optional image URL, indicated by "?"
+  isClaimed?: boolean;
 }
 
-const ArtistCard: React.FC<ArtistCardProps> = ({ id, fullname, image }) => {
+const ArtistCard: React.FC<ArtistCardProps> = ({
+  id,
+  fullname,
+  image,
+  isClaimed,
+  isDetails,
+}) => {
   console.log("ArtistCard Props:", id, fullname, image);
   const classes = useStyles();
   const theme = useTheme();
@@ -30,6 +41,16 @@ const ArtistCard: React.FC<ArtistCardProps> = ({ id, fullname, image }) => {
   const [fetchedImage, setFetchedImage] = useState<string | undefined>(
     undefined
   );
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
 
   useEffect(() => {
     // Fetch the image URL only if it's not provided as a prop
@@ -59,30 +80,38 @@ const ArtistCard: React.FC<ArtistCardProps> = ({ id, fullname, image }) => {
   const imageToRender = fetchedImage || image;
   return (
     <React.Fragment>
-      <Link href={`/artists/${id}`}>
-        <a className="linksNoDecoration">
-          <div className={classes.container}>
-            <Avatar
-              className={`${classes.avatar} ${
-                imageToRender && classes.transparent
-              }`}
+      <div className={classes.container}>
+        <Avatar
+          className={`${classes.avatar} ${
+            imageToRender && classes.transparent
+          }`}
+          alt="Artist Photo"
+        >
+          {imageToRender ? (
+            <Image
+              src={imageToRender}
               alt="Artist Photo"
-            >
-              {imageToRender ? (
-                <Image
-                  src={imageToRender}
-                  alt="Artist Photo"
-                  width={300}
-                  height={450}
-                />
-              ) : null}
-            </Avatar>
-            <Typography variant="body1" component="p" className={classes.name}>
-              {fullname}
-            </Typography>
-          </div>
-        </a>
-      </Link>
+              width={300}
+              height={450}
+            />
+          ) : null}
+        </Avatar>
+        <Typography variant="body1" component="p" className={classes.name}>
+          {fullname}
+        </Typography>
+        {!isClaimed && isDetails && (
+          <Button
+            style={{ textTransform: "none" }}
+            variant="outlined"
+            color="secondary"
+            onClick={handleOpenDialog}
+            endIcon={<CopyrightIcon />}
+          >
+            Claim profile
+          </Button>
+        )}
+      </div>
+      <ClaimPersonDialog isOpen={isDialogOpen} onClose={handleCloseDialog} />
     </React.Fragment>
   );
 };

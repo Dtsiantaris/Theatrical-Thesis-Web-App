@@ -61,6 +61,7 @@ export const getServerSideProps: GetServerSideProps<
 
     // Fetch artist data based on the artistId (e.g., using mainFetcher)
     const artist = await mainFetcher(`/people/${artistId}`);
+    console.log("ATTENTION: ", artist);
 
     // Fetch other data needed for the page, such as images, productionGroups, etc.
 
@@ -169,7 +170,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
               variant="square"
               className={classes.avatar}
             >
-              <ArtistCard {...artist} />
+              <ArtistCard {...{ ...artist, isDetails: true }} />
             </Avatar>
 
             <IconButton

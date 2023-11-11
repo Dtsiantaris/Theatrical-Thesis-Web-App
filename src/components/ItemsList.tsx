@@ -6,6 +6,7 @@ import LoadingScene from "./LoadingScene";
 import clsx from "clsx";
 import ShowCard, { ShowCardProps } from "./ShowCard";
 import VenueCard, { VenueCardProps } from "./VenueCard";
+import Link from "next/link";
 
 const useStyles = makeStyles(style);
 
@@ -31,25 +32,39 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
             console.log("Item in loop checked:", item);
 
             return (
-              <ArtistCard
-                id={item.id}
-                fullname={item.fullname}
-                image={item.image}
-                key={item.id}
-                systemId={item.systemId}
-              />
+              <Link href={`/artists/${item.id}`}>
+                <a className="linksNoDecoration">
+                  <ArtistCard
+                    id={item.id}
+                    fullname={item.fullname}
+                    image={item.image}
+                    key={item.id}
+                    systemId={item.systemId}
+                  />
+                </a>
+              </Link>
             );
           } else if (type === "/shows" && "title" in item && "media" in item)
             return (
-              <ShowCard
-                id={item.id}
-                title={item.title}
-                media={item.media}
-                key={item.id}
-              />
+              <Link href={`/shows/${item.id}`}>
+                <a className="linksNoDecoration">
+                  <ShowCard
+                    id={item.id}
+                    title={item.title}
+                    media={item.media}
+                    key={item.id}
+                  />
+                </a>
+              </Link>
             );
           else if (type === "/venues" && "title" in item)
-            return <VenueCard id={item.id} title={item.title} key={item.id} />;
+            return (
+              <Link href={`/venues/${item.id}`}>
+                <a className="linksNoDecoration">
+                  <VenueCard id={item.id} title={item.title} key={item.id} />
+                </a>
+              </Link>
+            );
           return null;
         })
       ) : (

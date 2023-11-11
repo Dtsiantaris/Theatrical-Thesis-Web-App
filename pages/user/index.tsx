@@ -252,7 +252,7 @@ const UserProfile = () => {
                 }
                 className="mt-4 w-[12rem]"
               >
-                Add Credits{" "}
+                Add Credits
               </Button>
             </ListItem>
             <ListItem>
