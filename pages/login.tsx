@@ -67,13 +67,17 @@ const LoginPage = () => {
   const handleTwoFactorSubmit = () => {
     if (!twoFactorValue) return;
     mainAxios
-      .post(`User/login/2fa?code=${encodeURIComponent(twoFactorValue)}`)
+      .post(`User/login/2fa/${encodeURIComponent(twoFactorValue)}`)
       .then((d) => {
         if (!d) {
           setPasswordError(true);
           return;
         }
-        router.push("/");
+      })
+      .then(() => {
+        fetchUserInfo().then(() => {
+          router.push("/");
+        });
       });
   };
 

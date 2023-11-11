@@ -7,14 +7,16 @@ import { useUserContext } from "../../contexts/UserContext";
 
 export const useUserQueries = () => {
   const [loading, setLoading] = useState(false);
-  const { setUser } = useUserContext();
+  const { setUser, setIsLoggedIn } = useUserContext();
 
   const fetchUserInfo = async () => {
     setLoading(true);
     try {
       const res = await mainAxios.get("User/info");
       const user = res.data.data as User;
+      setIsLoggedIn(true);
       setUser(user);
+      console.log("user", user);
       return user;
     } catch (error) {
       console.log(error);

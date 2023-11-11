@@ -4,7 +4,7 @@ export interface User {
   id: number;
   email: string;
   emailVerified: boolean;
-  twoFactorEnabled: boolean;
+  _2FA_enabled: boolean;
   role: string;
   transactions?: Transaction[];
   balance: number;

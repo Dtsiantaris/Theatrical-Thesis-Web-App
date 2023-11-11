@@ -19,6 +19,14 @@ import {
   TextField,
   Button,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@material-ui/core";
 import VerifiedUserIcon from "@material-ui/icons/VerifiedUser";
 import EnhancedEncryptionIcon from "@material-ui/icons/EnhancedEncryption";
@@ -34,6 +42,11 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 import SaveIcon from "@material-ui/icons/Save";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
+import LocalParkingIcon from "@mui/icons-material/LocalParking";
+import AddCard from "@mui/icons-material/AddCard";
+import CreditCardIcon from "@mui/icons-material/CreditCard";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+
 import { useUserQueries } from "../../src/hooks/queries/useUserQueries";
 
 const UserProfile = () => {
@@ -44,9 +57,7 @@ const UserProfile = () => {
     updateSocial,
     loading: loadingMutation,
   } = useUserMutations();
-  const [twoFactorEnabled, setTwoFactorEnabled] = useState(
-    user ? user.twoFactorEnabled || false : false
-  );
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
 
   const [facebookLink, setFacebookLink] = useState("");
   const [instagramLink, setInstagramLink] = useState("");
@@ -54,6 +65,8 @@ const UserProfile = () => {
 
   // State to track if any changes have been made to the input fields
   const [changesMade, setChangesMade] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("paypal");
 
   // Initial state values for input fields
   const [initialFacebookLink, setInitialFacebookLink] = useState("");
@@ -63,16 +76,31 @@ const UserProfile = () => {
   // set inputs fields as controlled components
   useEffect(() => {
     if (user) {
+      setTwoFactorEnabled(user._2FA_enabled);
       setFacebookLink(user.facebook || "");
       setInstagramLink(user.instagram || "");
       setYoutubeLink(user.youtube || "");
       console.log("fb link changed", user);
     }
-  }, [user]);
+  }, [user, twoFactorEnabled]);
+
+  useEffect(() => {
+    async function fetchData() {
+      await fetchUserInfo();
+    }
+    // You can use fetchData directly if it doesn't change, or include it in the dependency array.
+    fetchData();
+
+    if (user) {
+      setTwoFactorEnabled(user._2FA_enabled);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [twoFactorEnabled]);
 
   useEffect(() => {
     // Set initial input field values
     if (user) {
+      console.log("hi there", user);
       setInitialFacebookLink(user.facebook || "");
       setInitialInstagramLink(user.instagram || "");
       setInitialYoutubeLink(user.youtube || "");
@@ -100,15 +128,9 @@ const UserProfile = () => {
     const newTwoFactorStatus = !twoFactorEnabled;
 
     try {
-      const res = await toggle2FA(newTwoFactorStatus);
-      if (res) {
-        setTwoFactorEnabled(newTwoFactorStatus);
-        await fetchUserInfo();
-      } else {
-        setTwoFactorEnabled(!newTwoFactorStatus);
-        // If the request fails, set the switch back to its previous state.
-        console.error("Failed to toggle 2FA");
-      }
+      await toggle2FA(newTwoFactorStatus);
+      setTwoFactorEnabled(newTwoFactorStatus);
+      await fetchUserInfo();
     } catch (error) {
       console.error("Error toggling 2FA:", error);
       // If there is an error, set the switch back to its previous state.
@@ -134,6 +156,14 @@ const UserProfile = () => {
     } finally {
       await fetchUserInfo();
     }
+  };
+
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
   };
 
   if (!user) {
@@ -202,7 +232,6 @@ const UserProfile = () => {
                   icon={
                     <CloseIcon className="text-red-500 rounded-full border !text-[20px]" />
                   }
-                  className="rounded-3xl !w-[4.5rem]"
                 />
               </ListItemSecondaryAction>
             </ListItem>
@@ -224,6 +253,18 @@ const UserProfile = () => {
                 primary="Balance"
                 secondary={`$${user.balance.toFixed(2)}`}
               />
+              <Button
+                variant="contained"
+                color="secondary"
+                startIcon={<AddCard />}
+                onClick={handleOpenDialog}
+                endIcon={
+                  (loading || loadingMutation) && <CircularProgress size={24} />
+                }
+                className="mt-4 w-[12rem]"
+              >
+                Add Credits{" "}
+              </Button>
             </ListItem>
             <ListItem>
               <ListItemIcon>
@@ -284,6 +325,70 @@ const UserProfile = () => {
           </List>
         </CardContent>
       </Card>
+      <Dialog
+        open={isDialogOpen}
+        onClose={handleCloseDialog}
+        className="!text-black"
+      >
+        <DialogTitle className="!text-black bg-white text-base">
+          {<AddCard className="mr-2" />}Add Credits
+        </DialogTitle>
+        <DialogContent className="!text-black bg-white text-base">
+          <DialogContentText className="!text-black">
+            Select your payment method.
+          </DialogContentText>
+          <RadioGroup
+            aria-label="payment method"
+            aria-labelledby="demo-radio-buttons-group-label"
+            name="payment-method"
+            value={selectedPaymentMethod}
+            className="flex flex-col items-start"
+            onChange={(e) => setSelectedPaymentMethod(e.target.value)}
+          >
+            <FormControlLabel
+              labelPlacement="start"
+              label={
+                <div className="flex items-center">
+                  <LocalParkingIcon className="mr-2" /> PayPal
+                </div>
+              }
+              value="paypal"
+              control={<Radio style={{ color: "cadetblue" }} />}
+            />
+            <FormControlLabel
+              labelPlacement="start"
+              label={
+                <div className="flex items-center">
+                  <CreditCardIcon className="mr-2" />{" "}
+                  {/* Replace with your icon */}
+                  Visa
+                </div>
+              }
+              value="visa"
+              control={<Radio style={{ color: "cadetblue" }} />}
+            />
+            <FormControlLabel
+              labelPlacement="start"
+              label={
+                <div className="flex items-center">
+                  <AccountBalanceIcon className="mr-2" />{" "}
+                  {/* Replace with your icon */}
+                  Debit Card
+                </div>
+              }
+              value="debit"
+              control={<Radio style={{ color: "cadetblue" }} />}
+            />
+            {/* Add more options as needed */}
+          </RadioGroup>
+        </DialogContent>
+        <DialogActions style={{ backgroundColor: "white" }}>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+          <Button color="primary">Proceed</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
