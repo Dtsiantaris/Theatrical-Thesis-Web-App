@@ -1,46 +1,154 @@
-import React from "react";
-// utils && icons
+import React, { useState } from "react";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
+  TextField,
+  Box,
+  Typography,
 } from "@material-ui/core";
-import LocalParkingIcon from "@mui/icons-material/LocalParking";
-import AddCard from "@mui/icons-material/AddCard";
-import CreditCardIcon from "@mui/icons-material/CreditCard";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import Dropzone from "react-dropzone";
+// utils & icons
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import EmailIcon from "@mui/icons-material/Email";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import Copyright from "@mui/icons-material/Copyright";
+import DownloadIcon from "@mui/icons-material/Download";
 
 interface ClaimPersonDialogProps {
   isOpen: boolean;
-  onClose: () => void; // Adjust the type if your function has a different signature
+  onClose: () => void;
 }
 
 const ClaimPersonDialog: React.FC<ClaimPersonDialogProps> = ({
   isOpen,
   onClose,
 }) => {
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [dragAndDropError, setDragAndDropError] = useState(false);
+
+  const onDrop = (acceptedFiles: File[]) => {
+    if (acceptedFiles[0].type === "application/pdf") {
+      setDragAndDropError(false);
+      setSelectedFile(acceptedFiles[0]);
+    } else {
+      setDragAndDropError(true);
+      setSelectedFile(null);
+    }
+  };
+
+  const handleProceed = async () => {
+    if (selectedFile) {
+      const base64 = await convertToBase64(selectedFile);
+      // Now you have the file in base64 format, you can proceed with further actions
+      console.log(base64); // Replace this with your action
+    }
+  };
+
+  const convertToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64Data = result.split(",")[1]; // Split the result and get the part after the comma
+        resolve(base64Data);
+      };
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
+
   return (
-    //TODO: make this bigger, input for files, general info to the user about this dialog
-    <Dialog open={isOpen} onClose={onClose} className="!text-black">
-      <DialogTitle className="!text-black bg-white text-base">
-        {<AddCard className="mr-2" />}Add Credits
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      open={isOpen}
+      onClose={onClose}
+      className="!text-black"
+    >
+      <DialogTitle className="!text-black bg-gray-100 text-base">
+        <Copyright className="mr-2" />
+        Claim Profile
       </DialogTitle>
-      <DialogContent className="!text-black bg-white text-base">
-        <DialogContentText className="!text-black">
-          This is a claim dialog
-        </DialogContentText>
+      <DialogContent className="!text-black bg-gray-100 text-base !p-0">
+        <div className="border rounded w-full">
+          <Box
+            component="div"
+            bgcolor="#E3F2FD"
+            className="flex flex-col items-center p-4"
+          >
+            <CloudUploadIcon className="mr-3" />{" "}
+            <strong>Confirm Identity:</strong>
+            <Dropzone onDrop={onDrop} multiple={false}>
+              {({ getRootProps, getInputProps }) => (
+                <section className="dropzone">
+                  <div
+                    {...getRootProps()}
+                    className="dropzone-area border !border-gray-400 p-4 flex flex-col items-center hover:cursor-pointer"
+                  >
+                    <DownloadIcon />
+                    <input {...getInputProps()} type="application/pdf" />
+
+                    <p>Drag n drop some files here, or click to select files</p>
+                    <em>(Only *.pdf files will be accepted)</em>
+                    {dragAndDropError && (
+                      <em className="text-red-500">Wrong type of file</em>
+                    )}
+                  </div>
+                </section>
+              )}
+            </Dropzone>
+            {selectedFile && (
+              <Typography variant="subtitle1" className="mt-2">
+                File selected: {selectedFile.name}
+              </Typography>
+            )}
+          </Box>
+
+          <Box
+            component="div"
+            bgcolor="#FFF3E0"
+            className="flex flex-col items-center p-4"
+          >
+            <div>
+              <VerifiedUserIcon style={{ marginRight: "10px" }} />
+              <strong>Profile Ownership:</strong>
+            </div>
+            <span>
+              Ensure that the profile you are claiming belongs to you.
+            </span>
+          </Box>
+
+          <Box
+            component="div"
+            bgcolor="#E8F5E9"
+            className="flex flex-col items-center p-4"
+          >
+            <div>
+              <EmailIcon style={{ marginRight: "10px" }} />
+              <strong>Email Notification:</strong>
+            </div>
+            <span>
+              You will receive a confirmation email after successful submission.
+            </span>
+          </Box>
+        </div>
       </DialogContent>
-      <DialogActions style={{ backgroundColor: "white" }}>
-        <Button onClick={onClose} color="primary">
+      <DialogActions className="border-t bg-gray-100">
+        <Button
+          onClick={onClose}
+          className="!bg-red-800 !normal-case !text-base"
+        >
           Cancel
         </Button>
-        <Button color="primary">Proceed</Button>
+        <Button
+          onClick={handleProceed}
+          className="!bg-sky-800 !normal-case !text-base"
+        >
+          Proceed
+        </Button>
       </DialogActions>
     </Dialog>
   );

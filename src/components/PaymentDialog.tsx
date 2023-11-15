@@ -30,7 +30,13 @@ const PaymentDialog: React.FC<PaymentDialogProps> = ({
   setSelectedPaymentMethod,
 }) => {
   return (
-    <Dialog open={isOpen} onClose={onClose} className="!text-black">
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      open={isOpen}
+      onClose={onClose}
+      className="!text-black"
+    >
       <DialogTitle className="!text-black bg-white text-base">
         {<AddCard className="mr-2" />}Add Credits
       </DialogTitle>

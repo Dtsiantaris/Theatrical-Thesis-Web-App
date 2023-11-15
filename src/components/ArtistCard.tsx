@@ -52,30 +52,30 @@ const ArtistCard: React.FC<ArtistCardProps> = ({
     setIsDialogOpen(false);
   };
 
-  useEffect(() => {
-    // Fetch the image URL only if it's not provided as a prop
-    if (!image) {
-      const fetchImage = async () => {
-        try {
-          const response = await mainFetcher(`/people/${id}/photos`);
+  // useEffect(() => {
+  //   // Fetch the image URL only if it's not provided as a prop
+  //   if (!image) {
+  //     const fetchImage = async () => {
+  //       try {
+  //         const response = await mainFetcher(`/people/${id}/photos`);
 
-          // Assuming the response is an array of image URLs, you can update the logic here based on your API response
-          console.log(response[0].imageUrl);
-          const fetchedImage = response[0].imageUrl; // Get the fetched image URL
+  //         // Assuming the response is an array of image URLs, you can update the logic here based on your API response
+  //         console.log(response[0].imageUrl);
+  //         const fetchedImage = response[0].imageUrl; // Get the fetched image URL
 
-          // You can use a state management library like Redux to update the image prop globally across components,
-          // or you can lift the state up to a common parent component and pass the fetched image URL as a prop to all child components that need it.
-          // For simplicity, I'm updating the image prop directly here, but this may not work well for a complex application.
-          // Update the image prop with the fetched image URL
-          if (fetchedImage) setFetchedImage(fetchedImage as string);
-        } catch (error) {
-          console.error("Error fetching image:", error);
-        }
-      };
+  //         // You can use a state management library like Redux to update the image prop globally across components,
+  //         // or you can lift the state up to a common parent component and pass the fetched image URL as a prop to all child components that need it.
+  //         // For simplicity, I'm updating the image prop directly here, but this may not work well for a complex application.
+  //         // Update the image prop with the fetched image URL
+  //         if (fetchedImage) setFetchedImage(fetchedImage as string);
+  //       } catch (error) {
+  //         console.error("Error fetching image:", error);
+  //       }
+  //     };
 
-      fetchImage(); // Call the fetchImage function
-    }
-  }, [id, image]);
+  //     fetchImage(); // Call the fetchImage function
+  //   }
+  // }, [id, image]);
 
   const imageToRender = fetchedImage || image;
   return (
