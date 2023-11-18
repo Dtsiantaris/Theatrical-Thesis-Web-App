@@ -20,18 +20,18 @@ const DarkTheme = (secondaryColor?: CustomColor): Theme => {
     },
     palette: {
       background: {
-        default: "#191919",
-        paper: "#2A2A2A",
+        default: "#212121", // Slightly lighter than before
+        paper: "#323232", // Slightly lighter than before
       },
       primary: {
-        light: "#303030",
-        main: "#1D1D1D",
-        dark: "#212121",
+        light: "#424242", // Slightly lighter than before
+        main: "#2B2B2B", // Slightly lighter than before
+        dark: "#292929", // Slightly lighter than before
       },
       secondary: {
-        light: secondaryColor ? secondaryColor.light : "#AAFFFF",
-        main: secondaryColor ? secondaryColor.main : "#71FFFA",
-        dark: secondaryColor ? secondaryColor.dark : "#2ECBC7",
+        light: secondaryColor ? secondaryColor.light : "#BBFFFF", // Slightly lighter than before
+        main: secondaryColor ? secondaryColor.main : "#81FFFF", // Slightly lighter than before
+        dark: secondaryColor ? secondaryColor.dark : "#3EDCDC", // Slightly lighter than before
       },
       type: "dark",
     },

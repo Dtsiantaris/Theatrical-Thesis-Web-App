@@ -19,7 +19,7 @@ export const useUserMutations = () => {
         : await mainAxios.post("User/disable2fa");
       return result;
     } catch (error) {
-      console.log(error);
+      console.log("Error toggling 2fa", error);
       return false;
     } finally {
       setLoading(false);
@@ -39,7 +39,7 @@ export const useUserMutations = () => {
 
       return result;
     } catch (error) {
-      console.log(error);
+      console.log("Error updating social", error);
       return false;
     } finally {
       setLoading(false);
@@ -73,5 +73,27 @@ export const useUserMutations = () => {
     }
   };
 
-  return { toggle2FA, updateSocial, loginUser, loading };
+  const claimAccount = async (
+    personId: number,
+    identificationDocument: string
+  ) => {
+    setLoading(true);
+    try {
+      return (await mainAxios.post("AccountRequests/RequestAccount", {
+        personId,
+        identificationDocument,
+      })) as AxiosResponse<{
+        success: boolean;
+        message: string;
+        errorCode: string;
+      }>;
+    } catch (error) {
+      console.log("Error in claiming account:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { toggle2FA, updateSocial, loginUser, claimAccount, loading };
 };

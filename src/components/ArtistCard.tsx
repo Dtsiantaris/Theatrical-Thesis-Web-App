@@ -111,7 +111,11 @@ const ArtistCard: React.FC<ArtistCardProps> = ({
           </Button>
         )}
       </div>
-      <ClaimPersonDialog isOpen={isDialogOpen} onClose={handleCloseDialog} />
+      <ClaimPersonDialog
+        personId={id}
+        isOpen={isDialogOpen}
+        onClose={handleCloseDialog}
+      />
     </React.Fragment>
   );
 };

@@ -8,8 +8,11 @@ import {
   TextField,
   Box,
   Typography,
+  CircularProgress,
 } from "@material-ui/core";
 import Dropzone from "react-dropzone";
+//hooks
+import { useUserMutations } from "../hooks/mutations/useUserMutations";
 // utils & icons
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import EmailIcon from "@mui/icons-material/Email";
@@ -18,14 +21,17 @@ import Copyright from "@mui/icons-material/Copyright";
 import DownloadIcon from "@mui/icons-material/Download";
 
 interface ClaimPersonDialogProps {
+  personId: number;
   isOpen: boolean;
   onClose: () => void;
 }
 
 const ClaimPersonDialog: React.FC<ClaimPersonDialogProps> = ({
+  personId,
   isOpen,
   onClose,
 }) => {
+  const { claimAccount, loading } = useUserMutations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragAndDropError, setDragAndDropError] = useState(false);
 
@@ -39,12 +45,22 @@ const ClaimPersonDialog: React.FC<ClaimPersonDialogProps> = ({
     }
   };
 
+  const [isShaking, setIsShaking] = useState(false);
+
   const handleProceed = async () => {
     if (selectedFile) {
       const base64 = await convertToBase64(selectedFile);
       // Now you have the file in base64 format, you can proceed with further actions
       console.log(base64); // Replace this with your action
+      await claimAccount(personId, base64);
+    } else {
+      setDragAndDropError(true);
+      setIsShaking(true);
+      // Remove the shaking effect after some time
+      setTimeout(() => setIsShaking(false), 1000);
+      return;
     }
+    // Your existing code...
   };
 
   const convertToBase64 = (file: File): Promise<string> => {
@@ -66,7 +82,7 @@ const ClaimPersonDialog: React.FC<ClaimPersonDialogProps> = ({
       maxWidth="sm"
       open={isOpen}
       onClose={onClose}
-      className="!text-black"
+      className={`!text-black ${isShaking ? "animate-shake" : ""}`}
     >
       <DialogTitle className="!text-black bg-gray-100 text-base">
         <Copyright className="mr-2" />
@@ -146,6 +162,7 @@ const ClaimPersonDialog: React.FC<ClaimPersonDialogProps> = ({
         <Button
           onClick={handleProceed}
           className="!bg-sky-800 !normal-case !text-base"
+          endIcon={loading && <CircularProgress size={24} />}
         >
           Proceed
         </Button>
