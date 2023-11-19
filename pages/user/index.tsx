@@ -5,6 +5,7 @@ import { useUserContext } from "../../src/contexts/UserContext";
 import { useUserMutations } from "../../src/hooks/mutations/useUserMutations";
 // components
 import PaymentDialog from "../../src/components/PaymentDialog";
+import UserPhotoCarousel from "../../src/components/UserPhotoCarousel";
 // utils & icons
 import {
   Card,
@@ -35,6 +36,8 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import SaveIcon from "@material-ui/icons/Save";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AddCard from "@mui/icons-material/AddCard";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 import { useUserQueries } from "../../src/hooks/queries/useUserQueries";
 
@@ -54,7 +57,7 @@ const UserProfile = () => {
 
   // State to track if any changes have been made to the input fields
   const [changesMade, setChangesMade] = useState(false);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("paypal");
 
   // Initial state values for input fields
@@ -147,12 +150,12 @@ const UserProfile = () => {
     }
   };
 
-  const handleOpenDialog = () => {
-    setIsDialogOpen(true);
+  const handleOpenPaymentDialog = () => {
+    setIsPaymentDialogOpen(true);
   };
 
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
+  const handleClosePaymentDialog = () => {
+    setIsPaymentDialogOpen(false);
   };
 
   if (!user) {
@@ -171,152 +174,165 @@ const UserProfile = () => {
 
   return (
     <div className="flex justify-center mt-10">
-      <Card className="w-96">
-        <CardContent>
-          <Typography
-            variant="h5"
-            gutterBottom
-            className="flex items-center justify-between"
-          >
-            <div>
-              <AccountBoxIcon className="mr-1" />
-              User Profile
-            </div>
-            <Button
-              variant="contained"
-              color="secondary"
-              disabled={!changesMade}
-              startIcon={<SaveIcon />}
-              endIcon={
-                (loading || loadingMutation) && <CircularProgress size={24} />
-              }
-              onClick={handleSave}
-              className="mt-4 w-[12rem]"
+      <div className="flex flex-wrap pl-16 pr-2 md:no-wrap md:p-0 justify-center gap-4 md:mt-10">
+        {/* Personal Information Card */}
+        <Card className="w-full md:w-96">
+          <CardContent>
+            <Typography
+              variant="h5"
+              gutterBottom
+              className="flex items-center justify-between mb-4"
             >
-              Save Changes
-            </Button>
-          </Typography>
-          <List>
-            <ListItem>
-              <ListItemIcon>
-                <EmailIcon />
-              </ListItemIcon>
-              <ListItemText primary="Email" secondary={user.email} />
-              <VerifiedChip isVerified={user.emailVerified} />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <EnhancedEncryptionIcon />
-              </ListItemIcon>
-              <ListItemText primary="Two Factor" />
-              <ListItemSecondaryAction>
-                <Switch
-                  edge="start"
-                  size="medium"
-                  onChange={handleTwoFactorSwitch}
-                  checked={twoFactorEnabled}
-                  checkedIcon={
-                    <EnhancedEncryptionIcon style={{ fontSize: 16 }} />
-                  }
-                  icon={
-                    <CloseIcon className="text-red-500 rounded-full border !text-[20px]" />
-                  }
-                />
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <PermIdentity />
-              </ListItemIcon>
-              <ListItemText
-                primary="Role"
-                secondary={user.role}
-                className="capitalize"
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <AccountBalanceWalletIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary="Balance"
-                secondary={`$${user.balance.toFixed(2)}`}
-              />
+              <div>
+                <AccountBoxIcon className="mr-1" />
+                User Profile
+              </div>
               <Button
                 variant="contained"
                 color="secondary"
-                startIcon={<AddCard />}
-                onClick={handleOpenDialog}
+                disabled={!changesMade}
+                startIcon={<SaveIcon />}
                 endIcon={
                   (loading || loadingMutation) && <CircularProgress size={24} />
                 }
+                onClick={handleSave}
                 className="mt-4 w-[12rem]"
               >
-                Add Credits
+                Save Changes
               </Button>
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <FacebookIcon />
-              </ListItemIcon>
-              <TextField
-                label="Facebook"
-                variant="outlined"
-                value={facebookLink}
-                onChange={(e) => setFacebookLink(e.target.value)}
-                fullWidth
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <InstagramIcon />
-              </ListItemIcon>
-              <TextField
-                label="Instagram"
-                variant="outlined"
-                value={instagramLink}
-                onChange={(e) => setInstagramLink(e.target.value)}
-                fullWidth
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemIcon>
-                <YouTubeIcon />
-              </ListItemIcon>
-              <TextField
-                label="YouTube"
-                variant="outlined"
-                value={youtubeLink}
-                onChange={(e) => setYoutubeLink(e.target.value)}
-                fullWidth
-              />
-            </ListItem>
-          </List>
-          <Divider className="my-2" />
-          <Typography variant="h6" gutterBottom>
-            Transactions
-          </Typography>
-          <List dense>
-            {user.transactions && user.transactions.length > 0 ? (
-              user.transactions.map((transaction, index) => (
-                <ListItem key={index}>
-                  <ListItemText
-                    primary={transaction.reason}
-                    secondary={`$${transaction.creditAmount.toFixed(2)}`}
-                  />
-                </ListItem>
-              ))
-            ) : (
+            </Typography>
+            <List>
               <ListItem>
-                <ListItemText primary="No transactions available" />
+                <ListItemIcon>
+                  <EmailIcon />
+                </ListItemIcon>
+                <ListItemText primary="Email" secondary={user.email} />
+                <VerifiedChip isVerified={user.emailVerified} />
               </ListItem>
-            )}
-          </List>
-        </CardContent>
-      </Card>
+              <ListItem>
+                <ListItemIcon>
+                  <EnhancedEncryptionIcon />
+                </ListItemIcon>
+                <ListItemText primary="Two Factor" />
+                <ListItemSecondaryAction>
+                  <Switch
+                    edge="start"
+                    size="medium"
+                    onChange={handleTwoFactorSwitch}
+                    checked={twoFactorEnabled}
+                    checkedIcon={
+                      <EnhancedEncryptionIcon style={{ fontSize: 16 }} />
+                    }
+                    icon={
+                      <CloseIcon className="text-red-500 rounded-full border !text-[20px]" />
+                    }
+                  />
+                </ListItemSecondaryAction>
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <PermIdentity />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Role"
+                  secondary={user.role}
+                  className="capitalize"
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <AccountBalanceWalletIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Balance"
+                  secondary={`$${user.balance.toFixed(2)}`}
+                />
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  startIcon={<AddCard />}
+                  onClick={handleOpenPaymentDialog}
+                  endIcon={
+                    (loading || loadingMutation) && (
+                      <CircularProgress size={24} />
+                    )
+                  }
+                  className="mt-4 w-[12rem]"
+                >
+                  Add Credits
+                </Button>
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <FacebookIcon />
+                </ListItemIcon>
+                <TextField
+                  label="Facebook"
+                  variant="outlined"
+                  value={facebookLink}
+                  onChange={(e) => setFacebookLink(e.target.value)}
+                  fullWidth
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <InstagramIcon />
+                </ListItemIcon>
+                <TextField
+                  label="Instagram"
+                  variant="outlined"
+                  value={instagramLink}
+                  onChange={(e) => setInstagramLink(e.target.value)}
+                  fullWidth
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <YouTubeIcon />
+                </ListItemIcon>
+                <TextField
+                  label="YouTube"
+                  variant="outlined"
+                  value={youtubeLink}
+                  onChange={(e) => setYoutubeLink(e.target.value)}
+                  fullWidth
+                />
+              </ListItem>
+            </List>
+          </CardContent>
+        </Card>
+
+        {/* Professional Details Card */}
+        <Card className="w-full md:w-96">
+          <CardContent>
+            <Typography variant="h5" gutterBottom className="mb-4">
+              <WorkOutlineIcon className="mr-1" />
+              Professional Details
+            </Typography>
+            <List>
+              {/* Placeholder for LinkedIn and CV upload */}
+              {/* Add more items as needed... */}
+            </List>
+          </CardContent>
+        </Card>
+
+        {/* Photo Gallery Card */}
+        <Card className="w-full md:w-96 justify-center">
+          <CardContent className="h-full flex flex-col">
+            <Typography variant="h5" gutterBottom className="mb-4">
+              <CameraAltIcon className="mr-1" />
+              Photo Gallery
+            </Typography>
+            <div className="w-full flex flex-grow justify-center items-center">
+              <UserPhotoCarousel />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       <PaymentDialog
-        isOpen={isDialogOpen}
-        onClose={handleCloseDialog}
+        isOpen={isPaymentDialogOpen}
+        onClose={handleClosePaymentDialog}
         selectedPaymentMethod={selectedPaymentMethod}
         setSelectedPaymentMethod={setSelectedPaymentMethod}
       />
