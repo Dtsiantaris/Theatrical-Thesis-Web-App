@@ -1,9 +1,13 @@
 <<<<<<< HEAD
+
 # Theatrical-Thesis-Web-App
+
 # Introduction
+
 This repo is created in order to manage and commit files related to my thesis project. Pre-exesting related project can be found here:
 https://github.com/dimitrisanastasiadis/theatrica_frontend_web
 =======
+
 # Web-Based Σύστημα Θεατρικών Παραστάσεων – Front End
 
 ## Εισαγωγή
@@ -17,12 +21,15 @@ https://github.com/dimitrisanastasiadis/theatrica_frontend_web
 Αναλυτική Περιγραφή μπορείτε να βρείτε στο doc [αρχείο](./Περιγραφή_Εφαρμογής.docx) που βρίσκεται σε αυτό το repository.
 
 ## Design
+
 Μπορείτε να βρείτε ένα prototype της εφαρμογής φτιαγμένο σε figma [εδώ](https://www.figma.com/proto/9hnEd0EIZnFsj0guRA3iFa/Theatrica-Front-End?node-id=4%3A3&scaling=scale-down-width&page-id=0%3A1&starting-point-node-id=4%3A3).
 
 ## Demo
+
 Μπορείτε να βρείτε ένα demo της εφαρμογής [εδώ](https://theatrica-web.netlify.app).
 
 ## Τεχνολογίες
 
 Η εφαρμογή αναπτύσσεται χρησιμοποιώντας [React](https://reactjs.org/), καθώς και [Material UI](https://mui.com) για την δημιουργία του interface.
->>>>>>> master
+
+> > > > > > > master
