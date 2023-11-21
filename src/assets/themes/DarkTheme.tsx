@@ -67,6 +67,9 @@ interface DatePickerColor {
 }
 
 export const DatePickerTheme = (color: DatePickerColor): Theme => {
+  if (!color || !color.main) {
+    throw new Error("Invalid color object. main property is required");
+  }
   return createMuiTheme({
     palette: {
       primary: {
