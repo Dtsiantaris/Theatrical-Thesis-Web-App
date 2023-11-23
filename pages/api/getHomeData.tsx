@@ -6,7 +6,8 @@ export const getHomeData = async () => {
     artistIDs.map(async (id) => {
       try {
         let artist = await mainFetcher(`/People/${id}`);
-        console.log(`Artist ${id}:`, artist); // Add logging here
+        // Comment this also - td
+        // console.log(`Artist ${id}:`, artist);
 
         // // Replace any undefined values with null
         // artist = JSON.parse(
