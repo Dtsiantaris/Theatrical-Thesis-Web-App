@@ -10,6 +10,7 @@ import {
   Hidden,
   useMediaQuery,
   useTheme,
+  Tooltip,
 } from "@material-ui/core";
 import routes from "../../routes";
 import style from "../../assets/jss/components/sidebarStyle";
@@ -59,19 +60,26 @@ const Sidebar: FC = () => {
           return (
             <Link href={route.pathOnClick || route.path} key={route.name}>
               <a className="linksNoDecoration">
-                <ListItem
-                  className={classes.item}
-                  classes={{ selected: classes.selected }}
-                  selected={
-                    route.path === "/"
-                      ? router.pathname === "/"
-                      : router.pathname.startsWith(route.path)
-                  }
-                  button
+                <Tooltip
+                  title={route.name}
+                  placement="right"
+                  arrow
+                  disableHoverListener={drawerOpen}
                 >
-                  <ListItemIcon>{route.icon}</ListItemIcon>
-                  <ListItemText primary={route.name} />
-                </ListItem>
+                  <ListItem
+                    className={classes.item}
+                    classes={{ selected: classes.selected }}
+                    selected={
+                      route.path === "/"
+                        ? router.pathname === "/"
+                        : router.pathname.startsWith(route.path)
+                    }
+                    button
+                  >
+                    <ListItemIcon>{route.icon}</ListItemIcon>
+                    <ListItemText primary={route.name} />
+                  </ListItem>
+                </Tooltip>
               </a>
             </Link>
           );
