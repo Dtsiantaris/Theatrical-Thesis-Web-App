@@ -49,8 +49,9 @@ export const getStaticProps = async () => {
 
   let artists = (await getHomeData()).getArtists;
   let latestShows = (await getHomeData()).getLatestShows;
-  console.log("Static Artists: ", artists);
-  console.log("Static shows: ", latestShows);
+  // Comment this too
+  //console.log("Static Artists: ", artists);
+  //console.log("Static shows: ", latestShows);
 
   // try {
   //   console.log(artists);
@@ -94,8 +95,9 @@ function Home({ artists, latestShows, articles }) {
   async function handleRes() {
     // const latestShows = await mainFetcher(`/Productions?page=1&size=4`);
     // const artists = await mainFetcher(`/People/8158`);
-    console.log("Artists inside useEffect:", artists);
-    console.log("LatestShows inside useEffect:", latestShows);
+    // Giati exoume function poy apla kanei console.log??
+    //console.log("Artists inside useEffect:", artists);
+    //console.log("LatestShows inside useEffect:", latestShows);
   }
 
   useEffect(() => {

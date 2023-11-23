@@ -31,6 +31,7 @@ import { DatePickerTheme } from "../src/assets/themes/DarkTheme";
 let sessionToken;
 const date = new Date();
 
+// loading of the Google Maps Autocomplete and set the Autocomplete service
 function handleScriptLoad(setService) {
   sessionToken = new google.maps.places.AutocompleteSessionToken();
   const autocompleteService = new google.maps.places.AutocompleteService();
@@ -319,6 +320,7 @@ const FindShow = ({ shows }) => {
                   label="Εύρος Ημερομηνιών"
                 />
               </div>
+              {/* Στο ThemeProvider, καλείτε το DatePickerTheme με prop theme.palette.secondary.main. Η συνάρτηση DatePickerTheme αναμένει ένα αντικείμενο με main property, αλλά φαίνεται ότι εστελνε απευθείας το χρώμα. */}
               <ThemeProvider
                 theme={() =>
                   DatePickerTheme({ main: theme.palette.secondary.main })

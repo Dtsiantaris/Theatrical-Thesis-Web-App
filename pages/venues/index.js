@@ -1,24 +1,24 @@
 import PaginationPage from "../../src/components/PaginationPage";
 import { mainFetcher } from "../../src/utils/AxiosInstances";
-import Head from "next/head"
+import Head from "next/head";
 
 export const getServerSideProps = async ({ query }) => {
-  if (!query.page){
+  if (!query.page || isNaN(query.page) || query.page <= 0) {
     return {
       redirect: {
-        destination: '/venues?page=1',
+        destination: "/venues?page=1",
         permanent: false,
       },
-    }
+    };
   }
 
-  const page = Number(query.page)
-  const data = await mainFetcher(`/venues?page=${page-1}&size=20`);
+  const page = Number(query.page);
+  const data = await mainFetcher(`/venues?page=${page - 1}&size=20`);
 
-  if(!data.content.length) {
+  if (!data.content.length) {
     return {
-      notFound: true
-    }
+      notFound: true,
+    };
   }
 
   const venues = data.content;
@@ -29,21 +29,26 @@ export const getServerSideProps = async ({ query }) => {
     props: {
       venues,
       pageCount,
-      page
-    }
-  }
-}
+      page,
+    },
+  };
+};
 
 const VenuesPagination = ({ venues, pageCount, page }) => {
-
   return (
     <>
       <Head>
         <title>Θεατρικοί Χώροι | Theatrica</title>
       </Head>
-      <PaginationPage title="Θέατρα" items={venues} pageCount={pageCount} page={page} path="/venues" />
+      <PaginationPage
+        title="Θέατρα"
+        items={venues}
+        pageCount={pageCount}
+        page={page}
+        path="/venues"
+      />
     </>
   );
-}
- 
+};
+
 export default VenuesPagination;
