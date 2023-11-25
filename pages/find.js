@@ -18,7 +18,7 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import Script from "next/script";
 import { useRouter } from "next/router";
-import events from "../public/eventsVeryNew.json";
+// import events from "../public/eventsVeryNew.json";
 import { mainFetcher } from "../src/utils/AxiosInstances";
 import EventsCard from "../src/components/EventsCard";
 import { Pagination } from "@material-ui/lab";
@@ -63,6 +63,17 @@ const reducer = (state, { field, value }) => {
 export const getServerSideProps = async ({ query }) => {
   let filteredEvents = [];
   let filteredVenues = [];
+  // initialize events
+  const response = await mainFetcher(`/events`);
+  const events = response.results;
+
+  //initialize productions
+  const apiProductions = await mainFetcher("/productions");
+  const productionsResult = apiProductions.results;
+
+  // initialize venues
+  const apiVenues = await mainFetcher("/venues");
+  const venuesResult = apiVenues.results;
 
   if (query.dateStart) {
     const dateStart = new Date(query.dateStart);
@@ -71,14 +82,14 @@ export const getServerSideProps = async ({ query }) => {
       const dateEnd = new Date(query.dateEnd);
       dateEnd.setUTCHours(23, 59, 59, 999);
       filteredEvents = events.filter((event) => {
-        const eventDate = new Date(event.DateEvent);
+        const eventDate = new Date(event.dateEvent);
         if (eventDate > dateStart && eventDate < dateEnd) {
           return true;
         }
       });
     } else {
       filteredEvents = events.filter((event) => {
-        const eventDate = new Date(event.DateEvent);
+        const eventDate = new Date(event.dateEvent);
         if (
           eventDate.getDate() === dateStart.getDate() &&
           eventDate.getMonth() === dateStart.getMonth() &&
@@ -89,13 +100,10 @@ export const getServerSideProps = async ({ query }) => {
       });
     }
 
-    const venueIDs = [...new Set(filteredEvents.map((event) => event.VenueID))];
+    const venueIDs = [...new Set(filteredEvents.map((event) => event.venueId))];
 
-    filteredVenues = await Promise.all(
-      venueIDs.map(async (id) => {
-        const venue = await mainFetcher(`/venues/${id}`);
-        return venue;
-      })
+    filteredVenues = venuesResult.filter((venue) =>
+      venueIDs.includes(venue.id)
     );
 
     if (query.address && query.maxDistance) {
@@ -130,27 +138,25 @@ export const getServerSideProps = async ({ query }) => {
   }
 
   const productionIDs = [
-    ...new Set(filteredEvents.map((event) => event.ProductionID)),
+    ...new Set(filteredEvents.map((event) => event.productionId)),
   ];
-  const productions = await Promise.all(
-    productionIDs.map(async (id) => {
-      const production = await mainFetcher(`/productions/${id}`);
-      return production;
-    })
+
+  const productions = productionsResult.filter((production) =>
+    productionIDs.includes(production.id)
   );
 
   const shows = productions.map((production) => {
     let eventsFinal = filteredEvents.filter(
-      (event) => Number(event.ProductionID) === production?.id
+      (event) => Number(event.productionId) === production?.id
     );
     eventsFinal = eventsFinal.map((event) => {
       const venue = filteredVenues.find(
-        (venue) => Number(event.VenueID) === venue?.id
+        (venue) => Number(event.venueId) === venue?.id
       );
       return {
-        date: event.DateEvent,
+        date: event.dateEvent,
         venue,
-        price: event.PriceRange,
+        price: event.priceRange,
       };
     });
     return {
@@ -161,7 +167,6 @@ export const getServerSideProps = async ({ query }) => {
       url: production.url,
     };
   });
-
   return {
     props: {
       shows,

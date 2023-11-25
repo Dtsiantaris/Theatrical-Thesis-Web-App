@@ -96,10 +96,8 @@ export const newsFetcher = async (url: string) => {
 };
 
 export const mainFetcher = async (url: string) => {
-  //console.log("MAIN FETCHER CALLED!!!!!!!!!", url);
   try {
     const response = await mainAxios.get(url);
-    //console.log("AXIOS RESPONSE: ", response);
     const data = response.data.data;
     return data;
   } catch (error) {
