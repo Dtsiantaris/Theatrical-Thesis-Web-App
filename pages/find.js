@@ -130,7 +130,7 @@ export const getServerSideProps = async ({ query }) => {
       const filteredVenueIDs = filteredVenues.map((venue) => venue.id);
 
       filteredEvents = filteredEvents.filter((event) => {
-        if (filteredVenueIDs.includes(Number(event.VenueID))) {
+        if (filteredVenueIDs.includes(Number(event.venueId))) {
           return true;
         }
       });
