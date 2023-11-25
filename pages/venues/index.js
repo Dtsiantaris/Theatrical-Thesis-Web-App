@@ -15,13 +15,13 @@ export const getServerSideProps = async ({ query }) => {
   const page = Number(query.page);
   const data = await mainFetcher(`/venues?page=${page - 1}&size=20`);
 
-  if (!data.content.length) {
+  if (!data.results.length) {
     return {
       notFound: true,
     };
   }
 
-  const venues = data.content;
+  const venues = data.results;
 
   const pageCount = data.totalPages;
 
