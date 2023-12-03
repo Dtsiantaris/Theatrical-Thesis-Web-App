@@ -63,10 +63,12 @@ const UserPhotoCarousel = () => {
 
   const handleConfirmDeletePhoto = (index: number) => {
     console.log("aight delete photo at index", index);
+    // TODO: wait for backend endpoint
   };
 
   const handleUploadPhoto = () => {
     // Logic to upload new photo
+    // TODO: dialog with drag and drop when endpoinnt is available
     console.log("Upload new photo");
   };
 
