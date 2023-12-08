@@ -38,6 +38,9 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AddCard from "@mui/icons-material/AddCard";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import CoPresentIcon from "@mui/icons-material/CoPresent";
+import EventIcon from "@mui/icons-material/Event";
+import FolderSharedIcon from "@mui/icons-material/FolderShared";
 
 import { useUserQueries } from "../../src/hooks/queries/useUserQueries";
 
@@ -310,8 +313,31 @@ const UserProfile = () => {
               Professional Details
             </Typography>
             <List>
-              {/* Placeholder for LinkedIn and CV upload */}
-              {/* Add more items as needed... */}
+              <ListItem>
+                <ListItemIcon>
+                  <CoPresentIcon />
+                </ListItemIcon>
+                <ListItemText primary="Linked-artist" secondary={user.email} />
+                <VerifiedChip isVerified={user.emailVerified} />
+              </ListItem>
+            </List>
+            <List>
+              <ListItem>
+                <ListItemIcon>
+                  <EventIcon />
+                </ListItemIcon>
+                <ListItemText primary="Linked-events" secondary={user.email} />
+                <VerifiedChip isVerified={user.emailVerified} />
+              </ListItem>
+            </List>
+            <List>
+              <ListItem>
+                <ListItemIcon>
+                  <FolderSharedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Linked-events" secondary={user.email} />
+                <VerifiedChip isVerified={user.emailVerified} />
+              </ListItem>
             </List>
           </CardContent>
         </Card>

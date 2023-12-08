@@ -60,6 +60,7 @@ const ClaimPersonDialog: React.FC<ClaimPersonDialogProps> = ({
       setTimeout(() => setIsShaking(false), 1000);
       return;
     }
+    // test fork commit
     // Your existing code...
   };
 
