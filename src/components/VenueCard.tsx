@@ -37,6 +37,7 @@ const VenueCard: FC<VenueCardProps> = ({ id, title }) => {
             <a className="linksNoDecoration">
               <div className={classes.imageContainer}>
                 <Image
+                  priority
                   src="/DefaultShowImage.jpg"
                   alt={`${title} thumbnail`}
                   layout="fill"

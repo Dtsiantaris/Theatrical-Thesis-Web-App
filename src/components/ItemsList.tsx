@@ -32,37 +32,35 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
             console.log("Item in loop checked:", item);
 
             return (
-              <Link href={`/artists/${item.id}`}>
-                <a className="linksNoDecoration">
+              <Link href={`/artists/${item.id}`} key={item.id}>
+                <div className="linksNoDecoration">
                   <ArtistCard
                     id={item.id}
                     fullname={item.fullname}
                     image={item.image}
-                    key={item.id}
                     systemId={item.systemId}
                   />
-                </a>
+                </div>
               </Link>
             );
           } else if (type === "/shows" && "title" in item && "media" in item)
             return (
-              <Link href={`/shows/${item.id}`}>
-                <a className="linksNoDecoration">
+              <Link href={`/shows/${item.id}`} key={item.id}>
+                <div className="linksNoDecoration">
                   <ShowCard
                     id={item.id}
                     title={item.title}
                     media={item.media}
-                    key={item.id}
                   />
-                </a>
+                </div>
               </Link>
             );
           else if (type === "/venues" && "title" in item)
             return (
-              <Link href={`/venues/${item.id}`}>
-                <a className="linksNoDecoration">
-                  <VenueCard id={item.id} title={item.title} key={item.id} />
-                </a>
+              <Link href={`/venues/${item.id}`} key={item.id}>
+                <div className="linksNoDecoration">
+                  <VenueCard id={item.id} title={item.title} />
+                </div>
               </Link>
             );
           return null;

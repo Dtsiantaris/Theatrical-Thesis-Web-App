@@ -34,21 +34,21 @@ export const getServerSideProps: GetServerSideProps<
   let data;
 
   const page = Number(query.page);
-  console.log("page my nigga: ", query.page);
+  //??console.log("page my nigga: ", query.page);
   //FIXME: this doesnt work
   //FIXME: roles do not exist at the test db.
 
   if (query.letter) {
-    console.log(
-      "TESTING",
-      query.letter,
-      `/people/initials/${query.letter}?page=${page}&size=12`
-    );
+    // console.log(
+    //   "TESTING",
+    //   query.letter,
+    //   `/people/initials/${query.letter}?page=${page}&size=12`
+    // );
     data = await mainFetcher(
       encodeURI(`/people/initials/${query.letter}?page=${page}&size=12`)
     );
-    console.log("WTF IS THIS DATA FAM?? 1", data);
-    console.log("QUERY IS:" + query);
+    // console.log("WTF IS THIS DATA FAM?? 1", data);
+    // console.log("QUERY IS:" + query);
   } else if (query.role) {
     data = await mainFetcher(
       encodeURI(`/People/role/${query.role}?page=${page}&size=12`)
@@ -57,12 +57,20 @@ export const getServerSideProps: GetServerSideProps<
     //   results: [{ id: 4659, fullname: "Γιώργος Καπουτζίδης", systemID: 2 }],
     //   pageSize: 1,
     // };
-    console.log("WTF IS THIS DATA FAM?? 2", data);
-    console.log("QUERY IS:" + query);
+    // console.log("WTF IS THIS DATA FAM?? 2", data);
+    // console.log("QUERY IS:" + query);
+  } else if (query.claimed) {
+    data = await mainFetcher(
+      `/people?showAvailableAccounts=${query.claimed}&page=${page}&size=12`
+    );
+  } else if (query.order) {
+    data = await mainFetcher(
+      `/people?alphabeticalOrder=${query.order}&page=${page}&size=12`
+    );
   } else {
     data = await mainFetcher(`/people?page=${page}&size=12`);
-    console.log("WTF IS THIS DATA FAM?? 3", data.results);
-    console.log("QUERY IS:" + query);
+    // console.log("WTF IS THIS DATA FAM?? 3", data.results);
+    // console.log("QUERY IS:" + query);
   }
 
   //FIXME: always returns 404
@@ -115,6 +123,9 @@ const roles = [
   "Ερμηνεία",
 ];
 
+const claimed = ["True", "False"];
+const order = ["True", "False"];
+
 const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
   artists,
   pageCount,
@@ -124,6 +135,8 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
   const router = useRouter();
   const [letterValue, setLetterValue] = useState(router.query.letter);
   const [roleValue, setRoleValue] = useState(router.query.role);
+  const [claimedValue, setClaimedValue] = useState(router.query.claimed);
+  const [orderValue, setOrderValue] = useState(router.query.order);
   const [drawer, setDrawer] = useState(false);
 
   const handleClear = () => {
@@ -164,6 +177,31 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roleValue]);
 
+  useEffect(() => {
+    if (claimedValue) {
+      router.push({
+        pathname: "/artists",
+        query: {
+          page: 1,
+          claimed: claimedValue,
+        },
+      });
+      setDrawer(false);
+    }
+  }, [claimedValue]);
+
+  useEffect(() => {
+    if (orderValue) {
+      router.push({
+        pathname: "/artists",
+        query: {
+          page: 1,
+          order: orderValue,
+        },
+      });
+    }
+  }, [orderValue]);
+
   const Filters = (
     <div className={classes.filtersContainer}>
       <Typography variant="h3" style={{ marginBottom: 30 }}>
@@ -199,6 +237,40 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
             color="secondary"
             {...params}
             label="Επάγγελμα"
+            variant="outlined"
+          />
+        )}
+      />
+      <Autocomplete
+        value={claimedValue}
+        onChange={(event, newValue) => {
+          if (newValue != null) setClaimedValue(newValue);
+        }}
+        id="controllable-states-demo"
+        options={claimed}
+        style={{ width: 200 }}
+        renderInput={(params) => (
+          <TextField
+            color="secondary"
+            {...params}
+            label="Unclaimed"
+            variant="outlined"
+          />
+        )}
+      />
+      <Autocomplete
+        value={orderValue}
+        onChange={(event, newValue) => {
+          if (newValue != null) setOrderValue(newValue);
+        }}
+        id="controllable-states-demo"
+        options={order}
+        style={{ width: 200 }}
+        renderInput={(params) => (
+          <TextField
+            color="secondary"
+            {...params}
+            label="Ordered"
             variant="outlined"
           />
         )}
