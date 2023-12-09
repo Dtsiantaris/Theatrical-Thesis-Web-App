@@ -12,38 +12,25 @@ import UploadIcon from "@mui/icons-material/Upload";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 import ConfirmationPrompt from "./ConfirmationPrompt";
+import { UserPhoto } from "../types/User";
+import UploadUserPhotoDialog from "./UploadUserPhotoDialog";
+import { useUserMutations } from "../hooks/mutations/useUserMutations";
+import { useUserQueries } from "../hooks/queries/useUserQueries";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
-const images = [
-  {
-    label: "San Francisco – Oakland Bay Bridge, United States",
-    imgPath:
-      "https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60",
-  },
-  {
-    label: "Bird",
-    imgPath:
-      "https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60",
-  },
-  {
-    label: "Bali, Indonesia",
-    imgPath:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250",
-  },
-  {
-    label: "Goč, Serbia",
-    imgPath:
-      "https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60",
-  },
-];
-
-const UserPhotoCarousel = () => {
+const UserPhotoCarousel: React.FC<{ images: UserPhoto[] }> = (children) => {
+  const images = children.images;
+  console.log("userPhotoCarousel", images);
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
   const maxSteps = images.length;
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+
+  const { deleteUserPhoto } = useUserMutations();
+  const { fetchUserInfo } = useUserQueries();
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -61,15 +48,9 @@ const UserPhotoCarousel = () => {
     setIsConfirmOpen(true);
   };
 
-  const handleConfirmDeletePhoto = (index: number) => {
-    console.log("aight delete photo at index", index);
-    // TODO: wait for backend endpoint
-  };
-
-  const handleUploadPhoto = () => {
-    // Logic to upload new photo
-    // TODO: dialog with drag and drop when endpoinnt is available
-    console.log("Upload new photo");
+  const handleConfirmDeletePhoto = async (id: number) => {
+    await deleteUserPhoto(id);
+    await fetchUserInfo();
   };
 
   return (
@@ -92,35 +73,39 @@ const UserPhotoCarousel = () => {
           pl: 2,
         }}
       >
-        <Typography>{images[activeStep].label}</Typography>
+        {images[activeStep]?.label && (
+          <Typography>{images[activeStep]?.label}</Typography>
+        )}
       </Paper>
-      <AutoPlaySwipeableViews
-        axis={theme.direction === "rtl" ? "x-reverse" : "x"}
-        index={activeStep}
-        onChangeIndex={handleStepChange}
-        enableMouseEvents
-        interval={7000}
-        autoplay={!isConfirmOpen}
-      >
-        {images.map((step, index) => (
-          <div key={step.label}>
-            {Math.abs(activeStep - index) <= 2 ? (
-              <Box
-                component="img"
-                sx={{
-                  height: 255,
-                  display: "block",
-                  maxWidth: 400,
-                  overflow: "hidden",
-                  width: "100%",
-                }}
-                src={step.imgPath}
-                alt={step.label}
-              />
-            ) : null}
-          </div>
-        ))}
-      </AutoPlaySwipeableViews>
+      {images.length > 0 && (
+        <AutoPlaySwipeableViews
+          axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+          index={activeStep}
+          onChangeIndex={handleStepChange}
+          enableMouseEvents
+          interval={7000}
+          autoplay={!isConfirmOpen}
+        >
+          {images.map((image, index) => (
+            <div key={image.label}>
+              {Math.abs(activeStep - index) <= 2 ? (
+                <Box
+                  component="img"
+                  sx={{
+                    height: 255,
+                    display: "block",
+                    maxWidth: 400,
+                    overflow: "hidden",
+                    width: "100%",
+                  }}
+                  src={image.imageLocation}
+                  alt={image.label}
+                />
+              ) : null}
+            </div>
+          ))}
+        </AutoPlaySwipeableViews>
+      )}
       <Box
         className="!bg-zinc-400 border-b"
         sx={{ display: "flex", justifyContent: "space-between", p: 1 }}
@@ -128,7 +113,7 @@ const UserPhotoCarousel = () => {
         <Button
           variant="contained"
           startIcon={<UploadIcon />}
-          onClick={handleUploadPhoto}
+          onClick={() => setIsUploadOpen(true)}
         >
           Upload
         </Button>
@@ -136,6 +121,7 @@ const UserPhotoCarousel = () => {
           variant="contained"
           color="error"
           startIcon={<DeleteIcon />}
+          disabled={!images.length}
           onClick={handleDeletePhoto}
         >
           Delete
@@ -150,7 +136,7 @@ const UserPhotoCarousel = () => {
           <Button
             size="small"
             onClick={handleNext}
-            disabled={activeStep === maxSteps - 1}
+            disabled={activeStep === maxSteps - 1 || !images.length}
           >
             Next
             {theme.direction === "rtl" ? (
@@ -174,9 +160,16 @@ const UserPhotoCarousel = () => {
       <ConfirmationPrompt
         isOpen={isConfirmOpen}
         onClose={() => setIsConfirmOpen(false)}
-        onConfirm={() => handleConfirmDeletePhoto(activeStep)}
+        onConfirm={() => handleConfirmDeletePhoto(images[activeStep].id)}
         title="Confirm Deletion"
-        content={`Are you sure you want to delete '${images[activeStep].label}'?`}
+        content={`Are you sure you want to delete '${
+          images[activeStep]?.label || "this image"
+        }'?`}
+      />
+      <UploadUserPhotoDialog
+        isOpen={isUploadOpen}
+        onClose={() => setIsUploadOpen(false)}
+        isProfile={false}
       />
     </Box>
   );

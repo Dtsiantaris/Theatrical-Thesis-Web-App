@@ -43,6 +43,7 @@ import EventIcon from "@mui/icons-material/Event";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
 
 import { useUserQueries } from "../../src/hooks/queries/useUserQueries";
+import UploadUserPhotoDialog from "../../src/components/UploadUserPhotoDialog";
 
 const UserProfile = () => {
   const { user } = useUserContext();
@@ -62,6 +63,8 @@ const UserProfile = () => {
   const [changesMade, setChangesMade] = useState(false);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("paypal");
+  const [isUploadProfileDialogOpen, setIsUploadProfileDialogOpen] =
+    useState(false);
 
   // Initial state values for input fields
   const [initialFacebookLink, setInitialFacebookLink] = useState("");
@@ -205,6 +208,41 @@ const UserProfile = () => {
               </Button>
             </Typography>
             <List>
+              <ListItem>
+                {user.profilePhoto && user.profilePhoto.imageLocation ? (
+                  <div className="flex items-center justify-between w-full">
+                    {
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={user.profilePhoto.imageLocation}
+                        alt="Profile"
+                        className="w-20 h-20 rounded-full mr-4" // adjust styling as needed
+                      />
+                    }
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => setIsUploadProfileDialogOpen(true)}
+                    >
+                      Change Profile Photo
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center justify-center w-20 h-20 rounded-full mr-4 bg-gray-200">
+                      {/* Placeholder content, e.g., an upload icon or text */}
+                      <CameraAltIcon className="mr-1" />
+                    </div>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => setIsUploadProfileDialogOpen(true)}
+                    >
+                      Upload Profile Photo
+                    </Button>
+                  </div>
+                )}
+              </ListItem>
               <ListItem>
                 <ListItemIcon>
                   <EmailIcon />
@@ -350,7 +388,7 @@ const UserProfile = () => {
               Photo Gallery
             </Typography>
             <div className="w-full flex flex-grow justify-center items-center">
-              <UserPhotoCarousel />
+              <UserPhotoCarousel images={user.userImages} />
             </div>
           </CardContent>
         </Card>
@@ -361,6 +399,12 @@ const UserProfile = () => {
         onClose={handleClosePaymentDialog}
         selectedPaymentMethod={selectedPaymentMethod}
         setSelectedPaymentMethod={setSelectedPaymentMethod}
+      />
+
+      <UploadUserPhotoDialog
+        isOpen={isUploadProfileDialogOpen}
+        isProfile={true}
+        onClose={() => setIsUploadProfileDialogOpen(false)}
       />
     </div>
   );

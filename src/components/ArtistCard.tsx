@@ -13,11 +13,12 @@ import Link from "next/link";
 import { mainFetcher } from "../utils/AxiosInstances";
 import CopyrightIcon from "@mui/icons-material/Copyright";
 import ClaimPersonDialog from "./ClaimPersonDialog";
+import { Person } from "../types/Person";
 
 const useStyles = makeStyles(style);
 
 // Define the prop types for ArtistCard component
-export interface ArtistCardProps {
+export interface ArtistCardProps extends Person {
   id: number; // Assuming it's a string, update the type accordingly if it's different
   fullname: string;
   systemId: number;

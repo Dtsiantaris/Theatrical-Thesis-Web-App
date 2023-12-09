@@ -95,5 +95,45 @@ export const useUserMutations = () => {
     }
   };
 
-  return { toggle2FA, updateSocial, loginUser, claimAccount, loading };
+  const uploadUserPhoto = async (
+    photo: string,
+    label: string,
+    isProfile: boolean
+  ) => {
+    setLoading(true);
+    try {
+      return await mainAxios.post("User/UploadPhoto", {
+        photo,
+        label,
+        isProfile,
+      });
+    } catch (error) {
+      console.log("Error in uploading user photo:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteUserPhoto = async (imageId: number) => {
+    setLoading(true);
+    try {
+      return await mainAxios.delete(`User/Remove/Image/${imageId}`);
+    } catch (error) {
+      console.log("Error in delete user photo:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return {
+    toggle2FA,
+    updateSocial,
+    loginUser,
+    claimAccount,
+    uploadUserPhoto,
+    deleteUserPhoto,
+    loading,
+  };
 };

@@ -1,5 +1,11 @@
 import { Transaction } from "./Transaction";
 
+export interface UserPhoto {
+  id: number;
+  imageLocation: string;
+  label: string;
+}
+
 export interface User {
   id: number;
   email: string;
@@ -11,4 +17,6 @@ export interface User {
   facebook?: string;
   instagram?: string;
   youtube?: string;
+  profilePhoto?: UserPhoto;
+  userImages: UserPhoto[];
 }

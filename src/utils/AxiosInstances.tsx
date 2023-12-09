@@ -21,7 +21,11 @@ mainAxios.interceptors.request.use((config) => {
 mainAxios.interceptors.response.use(
   (response) => {
     // If the response comes from a POST or PUT request
-    if (response.config.method === "post" || response.config.method === "put") {
+    if (
+      response.config.method === "post" ||
+      response.config.method === "put" ||
+      response.config.method === "delete"
+    ) {
       // Display success toast notification
       toast.success("Operation successful!", { theme: "colored" });
     }
