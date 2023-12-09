@@ -18,22 +18,21 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   const page = Number(query.page);
   const data = await mainFetcher(`/productions?page=${page - 1}&size=20`);
-
   //console.log("Shows Data Fam!!", data.pageSize);
 
-  if (!data.length) {
+  if (!data) {
     return {
       notFound: true,
     };
   }
+  let shows = data.results as Production[];
 
-  let shows = data as Production[];
   shows = shows.map((show) => ({
     ...show,
     image: getShowImage(show.mediaUrl),
   }));
 
-  const pageCount = data.pageSize;
+  const pageCount = data.totalPages;
   //TODO: pagination
 
   return {
