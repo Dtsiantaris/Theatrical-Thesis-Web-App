@@ -149,6 +149,30 @@ export const useUserMutations = () => {
     }
   };
 
+  const addRole = async (role: string) => {
+    setLoading(true);
+    try {
+      return await mainAxios.post(`User/Add-Artist-Role/?role=${role}`);
+    } catch (error) {
+      console.log("Error in add role:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const removeRole = async (role: string) => {
+    setLoading(true);
+    try {
+      return await mainAxios.post(`User/Remove-Artist-Role/?role=${role}`);
+    } catch (error) {
+      console.log("Error in remove role:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     toggle2FA,
     updateSocial,
@@ -157,6 +181,8 @@ export const useUserMutations = () => {
     claimProduction,
     uploadUserPhoto,
     deleteUserPhoto,
+    addRole,
+    removeRole,
     loading,
   };
 };

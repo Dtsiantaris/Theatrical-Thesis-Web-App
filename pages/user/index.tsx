@@ -41,6 +41,7 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
 import EventIcon from "@mui/icons-material/Event";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
+import AddRolesDialog from "../../src/components/AddUserRoleDialog";
 
 const UserProfile = () => {
   const { user } = useUserContext();
@@ -48,6 +49,8 @@ const UserProfile = () => {
   const {
     toggle2FA,
     updateSocial,
+    addRole,
+    removeRole,
     loading: loadingMutation,
   } = useUserMutations();
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
@@ -62,6 +65,8 @@ const UserProfile = () => {
   const [isUploadProfileDialogOpen, setIsUploadProfileDialogOpen] =
     useState(false);
 
+  const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
+
   // Initial state values for input fields
   const [initialFacebookLink, setInitialFacebookLink] = useState("");
   const [initialInstagramLink, setInitialInstagramLink] = useState("");
@@ -74,7 +79,6 @@ const UserProfile = () => {
       setFacebookLink(user.facebook || "");
       setInstagramLink(user.instagram || "");
       setYoutubeLink(user.youtube || "");
-      console.log("fb link changed", user);
     }
   }, [user, twoFactorEnabled]);
 
@@ -174,8 +178,13 @@ const UserProfile = () => {
     }
   };
 
-  const handleClosePaymentDialog = () => {
-    setIsPaymentDialogOpen(false);
+  const handleAddRole = async () => {
+    await fetchUserInfo();
+  };
+
+  const handleRemoveRole = async (role: string) => {
+    await removeRole(role);
+    await fetchUserInfo();
   };
 
   if (!user) {
@@ -290,9 +299,29 @@ const UserProfile = () => {
                 </ListItemIcon>
                 <ListItemText
                   primary="Role"
-                  secondary={user.role}
                   className="capitalize"
+                  secondary={
+                    <div className="flex w-full gap-1">
+                      {user.performerRoles && user.performerRoles.length > 0
+                        ? user.performerRoles.map((role, index) => (
+                            <Chip
+                              key={index}
+                              label={role}
+                              onDelete={() => handleRemoveRole(role)}
+                              className="mr-2" // Add some margin between chips
+                            />
+                          ))
+                        : "No roles available"}
+                    </div>
+                  }
                 />
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => setIsRoleDialogOpen(true)}
+                >
+                  Add role
+                </Button>
               </ListItem>
               <ListItem>
                 <ListItemIcon>
@@ -315,10 +344,6 @@ const UserProfile = () => {
                   className="mt-4 w-[12rem]"
                 >
                   Add Credits
-                  {/* TODO: stripe redirect check it 
-                  TODO: claim dialog sto events
-                  TODO: fix filters gia actors
-                  */}
                 </Button>
               </ListItem>
               <ListItem>
@@ -416,6 +441,12 @@ const UserProfile = () => {
         isOpen={isUploadProfileDialogOpen}
         isProfile={true}
         onClose={() => setIsUploadProfileDialogOpen(false)}
+      />
+
+      <AddRolesDialog
+        existingRoles={user?.performerRoles}
+        isOpen={isRoleDialogOpen}
+        onClose={handleAddRole}
       />
 
       {/* Backdrop for when payment dialog is open */}

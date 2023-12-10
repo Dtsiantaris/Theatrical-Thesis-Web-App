@@ -12,11 +12,13 @@ export interface User {
   emailVerified: boolean;
   _2FA_enabled: boolean;
   role: string;
+  performerRoles: string[];
   transactions?: Transaction[];
   balance: number;
   facebook?: string;
   instagram?: string;
   youtube?: string;
   profilePhoto?: UserPhoto;
+  bioPdfLocation?: string;
   userImages: UserPhoto[];
 }
