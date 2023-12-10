@@ -1,17 +1,16 @@
-// pages/user/profile.tsx
 import React, { useEffect, useState } from "react";
 //hooks
 import { useUserContext } from "../../src/contexts/UserContext";
 import { useUserMutations } from "../../src/hooks/mutations/useUserMutations";
+import { useUserQueries } from "../../src/hooks/queries/useUserQueries";
 // components
-import PaymentDialog from "../../src/components/PaymentDialog";
 import UserPhotoCarousel from "../../src/components/UserPhotoCarousel";
+import UploadUserPhotoDialog from "../../src/components/UploadUserPhotoDialog";
 // utils & icons
 import {
   Card,
   CardContent,
   Typography,
-  Divider,
   List,
   ListItem,
   ListItemText,
@@ -22,6 +21,7 @@ import {
   TextField,
   Button,
   CircularProgress,
+  Backdrop,
 } from "@material-ui/core";
 import EnhancedEncryptionIcon from "@material-ui/icons/EnhancedEncryption";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
@@ -41,9 +41,6 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
 import EventIcon from "@mui/icons-material/Event";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
-
-import { useUserQueries } from "../../src/hooks/queries/useUserQueries";
-import UploadUserPhotoDialog from "../../src/components/UploadUserPhotoDialog";
 
 const UserProfile = () => {
   const { user } = useUserContext();
@@ -157,7 +154,25 @@ const UserProfile = () => {
   };
 
   const handleOpenPaymentDialog = () => {
-    setIsPaymentDialogOpen(true);
+    const url =
+      "https://theatricalapi.jollybay-0ad0b06b.germanywestcentral.azurecontainerapps.io/api/stripe/create-checkout-session";
+    const popup = window.open(
+      url,
+      "PaymentWindow",
+      `width=600,height=800,
+      top=${window.screenTop + (window.outerHeight - 800) / 2},
+      left=${window.screenLeft + (window.outerWidth - 600) / 2}`
+    );
+
+    if (popup) {
+      setIsPaymentDialogOpen(true); // Show overlay
+      const checkPopupClosed = setInterval(() => {
+        if (!popup || popup.closed) {
+          clearInterval(checkPopupClosed);
+          setIsPaymentDialogOpen(false); // Hide overlay when popup is closed
+        }
+      }, 500);
+    }
   };
 
   const handleClosePaymentDialog = () => {
@@ -286,7 +301,7 @@ const UserProfile = () => {
                 </ListItemIcon>
                 <ListItemText
                   primary="Balance"
-                  secondary={`$${user.balance.toFixed(2)}`}
+                  secondary={`€${user.balance.toFixed(2)}`}
                 />
                 <Button
                   variant="contained"
@@ -301,6 +316,10 @@ const UserProfile = () => {
                   className="mt-4 w-[12rem]"
                 >
                   Add Credits
+                  {/* TODO: stripe redirect check it 
+                  TODO: claim dialog sto events
+                  TODO: fix filters gia actors
+                  */}
                 </Button>
               </ListItem>
               <ListItem>
@@ -394,18 +413,19 @@ const UserProfile = () => {
         </Card>
       </div>
 
-      <PaymentDialog
-        isOpen={isPaymentDialogOpen}
-        onClose={handleClosePaymentDialog}
-        selectedPaymentMethod={selectedPaymentMethod}
-        setSelectedPaymentMethod={setSelectedPaymentMethod}
-      />
-
       <UploadUserPhotoDialog
         isOpen={isUploadProfileDialogOpen}
         isProfile={true}
         onClose={() => setIsUploadProfileDialogOpen(false)}
       />
+
+      {/* Backdrop for when payment dialog is open */}
+      <Backdrop style={{ zIndex: 1201 }} open={isPaymentDialogOpen}>
+        <div className="flex gap-2 items-center">
+          <CircularProgress color="inherit" />
+          <div style={{ color: "white" }}>Processing Payment...</div>
+        </div>
+      </Backdrop>
     </div>
   );
 };

@@ -21,7 +21,6 @@ const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 const UserPhotoCarousel: React.FC<{ images: UserPhoto[] }> = (children) => {
   const images = children.images;
-  console.log("userPhotoCarousel", images);
   const theme = useTheme();
   const [activeStep, setActiveStep] = useState(0);
   const maxSteps = images.length;
