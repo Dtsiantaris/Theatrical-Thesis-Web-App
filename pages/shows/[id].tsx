@@ -10,6 +10,7 @@ import {
   TableCell,
   IconButton,
   useTheme,
+  Tooltip as MaterialTooltip,
 } from "@material-ui/core";
 import style from "../../src/assets/jss/layouts/showDetailsStyle";
 import he from "he";
@@ -44,6 +45,9 @@ import {
 } from "recharts";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { Production } from "../../src/types/Production";
+import Copyright from "@mui/icons-material/Copyright";
+import ClaimEventDialog from "../../src/components/ClaimEventDialog";
+import { Person } from "../../src/types/Person";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const latestShows = await mainFetcher(`/productions?page=0&size=10`);
@@ -159,28 +163,12 @@ const getArtistsByRole = (people: any[]) => {
 };
 
 interface ShowDetailsProps {
-  show: any;
-  people: any[]; // You should replace this with a proper type
-  pastEvents: any[]; // You should replace this with a proper type
-  upcomingEvents: any[]; // You should replace this with a proper type
-  range: any; // You should replace this with a proper type
-  media: any; // You should replace this with a proper type
-  images: string[]; // You should replace this with a proper type
-  eventsByMonth: any; // You should replace this with a proper type
-  eventsByStartTime: any; // You should replace this with a proper type
+  show: Production;
+  people: Person[];
+  images: string[];
 }
 
-function ShowDetails({
-  show,
-  people,
-  pastEvents,
-  upcomingEvents,
-  range,
-  media,
-  images,
-  eventsByMonth,
-  eventsByStartTime,
-}: ShowDetailsProps) {
+function ShowDetails({ show, people, images }: ShowDetailsProps) {
   const classes = useStyles();
   const theme = useTheme();
   const [tabValue, setTabValue] = useState(0);
@@ -188,6 +176,9 @@ function ShowDetails({
 
   const { isFavorite, setIsFavorite } = useFavoriteShow(show && show.id);
   const { inWatchlist, setInWatchlist } = useWatchlist(show && show.id);
+  const [isClaimed, setIsClaimed] = useState(true);
+
+  const [isClaimEventDialogOpen, setIsClaimEventDialogOpen] = useState(false);
 
   const [mediaViewerOpen, setMediaViewerOpen] = useState(false);
   const [mediaIndex, setMediaIndex] = useState(0);
@@ -195,8 +186,8 @@ function ShowDetails({
   const hasTrailer = React.useMemo(() => {
     return (
       show &&
-      show.mediaURL &&
-      (show.mediaURL.includes("youtube") || show.mediaURL.includes("youtu.be"))
+      show.mediaUrl &&
+      (show.mediaUrl.includes("youtube") || show.mediaUrl.includes("youtu.be"))
     );
   }, [show]);
 
@@ -234,6 +225,10 @@ function ShowDetails({
     setMediaViewerOpen(true);
   };
 
+  const handleClaimEvent = () => {
+    setIsClaimEventDialogOpen(true);
+  };
+
   return (
     <>
       <Head>
@@ -251,21 +246,53 @@ function ShowDetails({
                 className={classes.button}
                 onClick={handleWatchlist}
               >
-                {inWatchlist ? <PlaylistAddCheckIcon /> : <PlaylistAddIcon />}
+                <MaterialTooltip
+                  title={
+                    inWatchlist ? "Remove from watchlist" : "Add to watchlist"
+                  }
+                  placement="bottom"
+                  arrow
+                >
+                  {inWatchlist ? <PlaylistAddCheckIcon /> : <PlaylistAddIcon />}
+                </MaterialTooltip>
               </IconButton>
               <IconButton
                 size="small"
                 className={classes.button}
                 onClick={handleFavorite}
               >
-                {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                <MaterialTooltip
+                  title={
+                    isFavorite ? "Remove from Favorites" : "Add to Favorites"
+                  }
+                  placement="bottom"
+                  arrow
+                >
+                  {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                </MaterialTooltip>
               </IconButton>
+              {isClaimed && (
+                <IconButton
+                  size="small"
+                  className={classes.button}
+                  onClick={handleClaimEvent}
+                >
+                  <MaterialTooltip
+                    title={"Claim this event"}
+                    placement="bottom"
+                    arrow
+                  >
+                    <Copyright />
+                  </MaterialTooltip>
+                </IconButton>
+              )}
             </div>
           </div>
+          {/* TODO: remove hardcoded images. */}
           <div className={classes.meta}>
-            {range && <Typography variant="body2">{range}</Typography>}
+            {/* {range && <Typography variant="body2">{range}</Typography>} */}
             <Typography variant="body2" className="dotSeparator">
-              {show.duration || "2 ώρες 30 λεπτά"}
+              {show.duration || "Duration not provided"}
             </Typography>
           </div>
           <a
@@ -286,7 +313,7 @@ function ShowDetails({
             {!hasTrailer ? (
               <div className={classes.imageNoTrailer}>
                 <Image
-                  src={media ? media : "/DefaultShowImage.jpg"}
+                  src={show.mediaUrl || "/DefaultShowImage.jpg"}
                   alt={show.title}
                   className={classes.photograph}
                   layout="fill"
@@ -297,7 +324,7 @@ function ShowDetails({
               <>
                 <div className={classes.imageTrailer}>
                   <Image
-                    src={media ? media : "/DefaultShowImage.jpg"}
+                    src={show.mediaUrl || "/DefaultShowImage.jpg"}
                     alt={show.title}
                     className={classes.photograph}
                     layout="fill"
@@ -306,7 +333,7 @@ function ShowDetails({
                 </div>
                 <AspectRatioSizer widthRatio={16} heightRatio={9}>
                   <ReactPlayer
-                    url={show.mediaURL}
+                    url={show.mediaUrl}
                     controls
                     width="100%"
                     height="100%"
@@ -513,7 +540,7 @@ function ShowDetails({
                 </div>
               )}
             </TabPanel>
-            <TabPanel value={tabValue} index={3} className={classes.tabPanel}>
+            {/* <TabPanel value={tabValue} index={3} className={classes.tabPanel}>
               {!!(eventsByMonth.length || eventsByStartTime.length) && (
                 <>
                   <Typography variant="h4" className={classes.titleDecoration}>
@@ -675,10 +702,15 @@ function ShowDetails({
                   )}
                 </TableBody>
               </Table>
-            </TabPanel>
+            </TabPanel> */}
           </div>
         </div>
       </div>
+      <ClaimEventDialog
+        isOpen={isClaimEventDialogOpen}
+        onClose={() => setIsClaimEventDialogOpen(false)}
+        eventId={1}
+      />
     </>
   );
 }

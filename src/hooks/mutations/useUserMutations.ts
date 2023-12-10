@@ -95,6 +95,28 @@ export const useUserMutations = () => {
     }
   };
 
+  const claimProduction = async (
+    productionId: number,
+    identificationDocument: string
+  ) => {
+    setLoading(true);
+    try {
+      return (await mainAxios.post("ProductionRequests/RequestProduction", {
+        personId: productionId,
+        identificationDocument,
+      })) as AxiosResponse<{
+        success: boolean;
+        message: string;
+        errorCode: string;
+      }>;
+    } catch (error) {
+      console.log("Error in claiming production:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const uploadUserPhoto = async (
     photo: string,
     label: string,
@@ -132,6 +154,7 @@ export const useUserMutations = () => {
     updateSocial,
     loginUser,
     claimAccount,
+    claimProduction,
     uploadUserPhoto,
     deleteUserPhoto,
     loading,

@@ -1,5 +1,10 @@
+import { Contribution } from "./Contribution";
+import { Event } from "./Event";
+import { Organizer } from "./Organizer";
+
 export interface Production {
   id: number;
+  systemId: number;
   organizerId: number;
   title: string;
   description: string;
@@ -7,4 +12,8 @@ export interface Production {
   producer: string;
   mediaUrl: string;
   duration: string;
+  timeStamp: Date;
+  organizer: Organizer;
+  contributions: Contribution[];
+  events: Event[];
 }

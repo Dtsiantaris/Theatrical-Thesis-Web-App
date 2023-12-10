@@ -21,18 +21,18 @@ import Copyright from "@mui/icons-material/Copyright";
 import DownloadIcon from "@mui/icons-material/Download";
 import { convertToBase64 } from "../utils/fileTools";
 
-interface ClaimPersonDialogProps {
-  personId: number;
+interface ClaimEventDialogProps {
+  eventId: number;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const ClaimPersonDialog: React.FC<ClaimPersonDialogProps> = ({
-  personId,
+const ClaimEventDialog: React.FC<ClaimEventDialogProps> = ({
+  eventId,
   isOpen,
   onClose,
 }) => {
-  const { claimAccount, loading } = useUserMutations();
+  const { claimProduction, loading } = useUserMutations();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [dragAndDropError, setDragAndDropError] = useState(false);
 
@@ -53,7 +53,7 @@ const ClaimPersonDialog: React.FC<ClaimPersonDialogProps> = ({
       const base64 = await convertToBase64(selectedFile);
       // Now you have the file in base64 format, you can proceed with further actions
       console.log(base64); // Replace this with your action
-      await claimAccount(personId, base64);
+      await claimProduction(eventId, base64);
     } else {
       setDragAndDropError(true);
       setIsShaking(true);
@@ -73,7 +73,7 @@ const ClaimPersonDialog: React.FC<ClaimPersonDialogProps> = ({
     >
       <DialogTitle className="!text-black bg-gray-100 text-base">
         <Copyright className="mr-2" />
-        Claim Profile
+        Claim Production
       </DialogTitle>
       <DialogContent className="!text-black bg-gray-100 text-base !p-0">
         <div className="border rounded w-full">
@@ -117,11 +117,9 @@ const ClaimPersonDialog: React.FC<ClaimPersonDialogProps> = ({
           >
             <div>
               <VerifiedUserIcon style={{ marginRight: "10px" }} />
-              <strong>Profile Ownership:</strong>
+              <strong>Event Ownership:</strong>
             </div>
-            <span>
-              Ensure that the profile you are claiming belongs to you.
-            </span>
+            <span>Ensure that the event you are claiming belongs to you.</span>
           </Box>
 
           <Box
@@ -158,4 +156,4 @@ const ClaimPersonDialog: React.FC<ClaimPersonDialogProps> = ({
   );
 };
 
-export default ClaimPersonDialog;
+export default ClaimEventDialog;
