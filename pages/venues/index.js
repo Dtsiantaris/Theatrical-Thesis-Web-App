@@ -83,7 +83,7 @@ const VenuesPagination = ({ venues, pageCount, page }) => {
       <Head>
         <title>Θεατρικοί Χώροι | Theatrica</title>
       </Head>
-      <Hidden mdUp>
+      <div>
         <div className={classes.fab}>
           <Fab color="secondary" onClick={() => setDrawer(true)}>
             <FilterListIcon />
@@ -97,7 +97,7 @@ const VenuesPagination = ({ venues, pageCount, page }) => {
         >
           {Filters}
         </Drawer>
-      </Hidden>
+      </div>
       <div className={classes.venuesContainer}>
         <PaginationPage
           title="Θέατρα"

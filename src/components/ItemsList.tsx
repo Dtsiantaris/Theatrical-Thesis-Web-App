@@ -16,7 +16,7 @@ export interface ItemsListProps {
 }
 
 const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
-  console.log("ItemsList Props:", items, type);
+  // console.log("ItemsList Props:", items, type);
   const classes = useStyles();
 
   return (
@@ -27,9 +27,9 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
     >
       {items ? (
         items.map((item, index) => {
-          console.log("Item in loop:", item);
+          // console.log("Item in loop:", item);
           if (type === "/artists" && "fullname" in item) {
-            console.log("Item in loop checked:", item);
+            // console.log("Item in loop checked:", item);
 
             return (
               <Link href={`/artists/${item.id}`} key={item.id}>
