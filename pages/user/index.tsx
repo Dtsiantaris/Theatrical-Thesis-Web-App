@@ -59,7 +59,6 @@ const UserProfile = () => {
   // State to track if any changes have been made to the input fields
   const [changesMade, setChangesMade] = useState(false);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("paypal");
   const [isUploadProfileDialogOpen, setIsUploadProfileDialogOpen] =
     useState(false);
 
