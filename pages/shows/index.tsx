@@ -18,7 +18,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
   const page = Number(query.page);
   const data = await mainFetcher(`/productions?page=${page - 1}&size=20`);
-  //console.log("Shows Data Fam!!", data.pageSize);
 
   if (!data) {
     return {

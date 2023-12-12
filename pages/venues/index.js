@@ -1,6 +1,6 @@
 import { makeStyles, Drawer, Fab, Hidden, Button } from "@material-ui/core";
 import { Typography } from "@material-ui/core";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
@@ -13,6 +13,7 @@ import Head from "next/head";
 const useStyles = makeStyles(style);
 
 const optionsArray = ["True", "False"];
+const placeArray = ["Αθήνα", "Κολωνάκι", "Πειραιάς", "Φάληρο", "Δράμα"];
 
 export const getServerSideProps = async ({ query }) => {
   if (!query.page || isNaN(query.page) || query.page <= 0) {
@@ -24,10 +25,24 @@ export const getServerSideProps = async ({ query }) => {
     };
   }
 
+  let data;
   const page = Number(query.page);
-  const data = await mainFetcher(`/venues?page=${page - 1}&size=20`);
 
-  if (!data.results.length) {
+  if (query.order) {
+    data = await mainFetcher(
+      `/venues?page=${page - 1}&size=20&alphabeticalOrder=true`
+    );
+  } else if (query.place) {
+    // exei problhma auto edw den mporesa na brw giati akoma
+    data = await mainFetcher(
+      `/venues?addressSearch=${query.place}&page=${page - 1}&size=20`
+    );
+    console.log(data);
+  } else {
+    data = await mainFetcher(`/venues?page=${page - 1}&size=20`);
+  }
+
+  if (!data) {
     return {
       notFound: true,
     };
@@ -49,8 +64,45 @@ export const getServerSideProps = async ({ query }) => {
 const VenuesPagination = ({ venues, pageCount, page }) => {
   const [drawer, setDrawer] = useState(false);
   const [ordered, setOrdered] = useState(false);
+  const [places, setPlaces] = useState(false);
   const classes = useStyles();
   const router = useRouter();
+
+  const handleClear = () => {
+    router.push({
+      pathname: "/venues",
+      query: {
+        page: 1,
+      },
+    });
+    setDrawer(false);
+  };
+
+  useEffect(() => {
+    if (ordered) {
+      router.push({
+        pathname: "/venues",
+        query: {
+          page: 1,
+          order: ordered,
+        },
+      });
+      setDrawer(false);
+    }
+  }, [ordered]);
+
+  useEffect(() => {
+    if (places) {
+      router.push({
+        pathname: "/venues",
+        query: {
+          page: 1,
+          place: places,
+        },
+      });
+      setDrawer(false);
+    }
+  }, [places]);
 
   const Filters = (
     <div className={classes.filtersContainer}>
@@ -75,7 +127,26 @@ const VenuesPagination = ({ venues, pageCount, page }) => {
           />
         )}
       />
-      <Button color="secondary">ΚΑΘΑΡΙΣΜΟΣ</Button>
+      <Autocomplete
+        value={places}
+        onChange={(event, newValue) => {
+          if (newValue != null) setPlaces(newValue);
+        }}
+        id="controllable-states-demo"
+        options={placeArray}
+        style={{ width: 200 }}
+        renderInput={(params) => (
+          <TextField
+            color="secondary"
+            {...params}
+            label="Τοποθεσια"
+            variant="outlined"
+          />
+        )}
+      />
+      <Button color="secondary" onClick={handleClear}>
+        ΚΑΘΑΡΙΣΜΟΣ
+      </Button>
     </div>
   );
   return (

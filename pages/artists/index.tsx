@@ -199,6 +199,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
           order: orderValue,
         },
       });
+      setDrawer(false);
     }
   }, [orderValue]);
 
