@@ -20,7 +20,7 @@ const useStyles = makeStyles(style);
 
 interface ContentSliderProps {
   title: string;
-  description: string;
+  description?: string;
   decoratedTitle?: boolean;
   children: React.ReactNode[];
 }

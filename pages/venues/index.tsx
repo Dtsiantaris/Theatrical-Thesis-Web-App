@@ -6,17 +6,19 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import PaginationPage from "../../src/components/PaginationPage";
+import { Venue } from "../../src/types/Venue";
 import { mainFetcher } from "../../src/utils/AxiosInstances";
 import style from "../../src/assets/jss/layouts/venuesPageStyle";
 import Head from "next/head";
+import { GetServerSideProps } from "next";
 
 const useStyles = makeStyles(style);
 
 const optionsArray = ["True", "False"];
 const placeArray = ["Αθήνα", "Κολωνάκι", "Πειραιάς", "Φάληρο", "Δράμα"];
 
-export const getServerSideProps = async ({ query }) => {
-  if (!query.page || isNaN(query.page) || query.page <= 0) {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  if (!query.page) {
     return {
       redirect: {
         destination: "/venues?page=1",
@@ -60,10 +62,19 @@ export const getServerSideProps = async ({ query }) => {
   };
 };
 
-const VenuesPagination = ({ venues, pageCount, page }) => {
+interface VenuesPaginationProps {
+  venues: Venue[];
+  pageCount: number;
+  page: number;
+}
+const VenuesPagination = ({
+  venues,
+  pageCount,
+  page,
+}: VenuesPaginationProps) => {
   const [drawer, setDrawer] = useState(false);
-  const [ordered, setOrdered] = useState(false);
-  const [places, setPlaces] = useState(false);
+  const [ordered, setOrdered] = useState<string | null>(null);
+  const [places, setPlaces] = useState<string | null>(null);
   const classes = useStyles();
   const router = useRouter();
 

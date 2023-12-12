@@ -8,9 +8,10 @@ import ContentSlider from "../../src/components/ContentSlider";
 import ShowCard from "../../src/components/ShowCard";
 import PhoneIcon from "@material-ui/icons/Phone";
 import Head from "next/head";
+import { GetStaticPaths, GetStaticProps } from "next";
 
-export const getStaticPaths = async () => {
-  const venueIDs = [];
+export const getStaticPaths: GetStaticPaths = async () => {
+  const venueIDs: string[] = [];
   const paths = venueIDs.map((id) => ({
     params: { id: id.toString() },
   }));
@@ -21,7 +22,12 @@ export const getStaticPaths = async () => {
   };
 };
 
-export const getStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  if (!params || !("id" in params)) {
+    return {
+      notFound: true,
+    };
+  }
   const venue = await mainFetcher(`/venues/${params.id}`);
 
   if (!venue) {
@@ -47,9 +53,16 @@ export const getStaticProps = async ({ params }) => {
   };
 };
 
+// idk this error.
 const useStyles = makeStyles(style);
 
-function VenueDetails({ venue, productions, location }) {
+interface VenueDetailsProps {
+  venue: any;
+  productions: any;
+  location: any;
+}
+
+function VenueDetails({ venue, productions, location }: VenueDetailsProps) {
   const classes = useStyles();
   const router = useRouter();
 
@@ -121,6 +134,7 @@ function VenueDetails({ venue, productions, location }) {
           </section>
           <section>
             <ContentSlider title="Παραστάσεις" decoratedTitle>
+              {/* FIX THIS ERROR TO */}
               {productions.map((item) => (
                 <ShowCard
                   id={item.id}

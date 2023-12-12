@@ -3,4 +3,5 @@ export interface Venue {
   title: string;
   address: string;
   systemId: number;
+  isClaimed: boolean;
 }
