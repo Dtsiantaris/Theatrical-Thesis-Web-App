@@ -33,9 +33,8 @@ export const getServerSideProps = async ({ query }) => {
       `/venues?page=${page - 1}&size=20&alphabeticalOrder=true`
     );
   } else if (query.place) {
-    // exei problhma auto edw den mporesa na brw giati akoma
     data = await mainFetcher(
-      `/venues?addressSearch=${query.place}&page=${page - 1}&size=20`
+      encodeURI(`/venues?addressSearch=${query.place}&page=${page - 1}&size=20`)
     );
     console.log(data);
   } else {
