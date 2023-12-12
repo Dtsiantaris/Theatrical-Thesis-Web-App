@@ -34,31 +34,15 @@ export const getServerSideProps: GetServerSideProps<
   let data;
 
   const page = Number(query.page);
-  //??console.log("page my nigga: ", query.page);
-  //FIXME: this doesnt work
-  //FIXME: roles do not exist at the test db.
 
   if (query.letter) {
-    // console.log(
-    //   "TESTING",
-    //   query.letter,
-    //   `/people/initials/${query.letter}?page=${page}&size=12`
-    // );
     data = await mainFetcher(
       encodeURI(`/people/initials/${query.letter}?page=${page}&size=12`)
     );
-    // console.log("WTF IS THIS DATA FAM?? 1", data);
-    // console.log("QUERY IS:" + query);
   } else if (query.role) {
     data = await mainFetcher(
       encodeURI(`/People/role/${query.role}?page=${page}&size=12`)
     );
-    // data = {
-    //   results: [{ id: 4659, fullname: "Γιώργος Καπουτζίδης", systemID: 2 }],
-    //   pageSize: 1,
-    // };
-    // console.log("WTF IS THIS DATA FAM?? 2", data);
-    // console.log("QUERY IS:" + query);
   } else if (query.claimed) {
     data = await mainFetcher(
       `/people?showAvailableAccounts=${query.claimed}&page=${page}&size=12`
@@ -69,11 +53,8 @@ export const getServerSideProps: GetServerSideProps<
     );
   } else {
     data = await mainFetcher(`/people?page=${page}&size=12`);
-    // console.log("WTF IS THIS DATA FAM?? 3", data.results);
-    // console.log("QUERY IS:" + query);
   }
 
-  //FIXME: always returns 404
   if (!data) {
     return {
       notFound: true,
