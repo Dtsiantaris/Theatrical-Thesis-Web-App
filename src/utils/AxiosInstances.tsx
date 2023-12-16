@@ -30,7 +30,7 @@ mainAxios.interceptors.response.use(
       toast.success("Operation successful!", { theme: "colored" });
     }
     // If a new token is provided in the response, update it in localStorage
-    if (typeof window !== "undefined" && response.data.data.access_token) {
+    if (typeof window !== "undefined" && response.data.data?.access_token) {
       const token = response.data.data.access_token;
       localStorage.setItem("authToken", token);
     }

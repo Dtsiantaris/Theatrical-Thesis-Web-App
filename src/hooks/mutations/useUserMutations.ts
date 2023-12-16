@@ -223,6 +223,19 @@ export const useUserMutations = () => {
     }
   };
 
+  const claimVenue = async (id: number) => {
+    setLoading(true);
+    try {
+      await mainAxios.post(`Venues/claim-venue/${id}`);
+      return true;
+    } catch (error) {
+      console.log("Error in claim venue", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     toggle2FA,
     updateSocial,
@@ -236,6 +249,7 @@ export const useUserMutations = () => {
     requestPhoneVerification,
     confirmPhoneVerification,
     addBio,
+    claimVenue,
     loading,
   };
 };

@@ -1,4 +1,4 @@
-import { makeStyles, Typography } from "@material-ui/core";
+import { Button, makeStyles, Typography } from "@material-ui/core";
 import style from "../../src/assets/jss/layouts/venueDetailsStyle";
 import { mainFetcher } from "../../src/utils/AxiosInstances";
 import { useRouter } from "next/router";
@@ -9,6 +9,12 @@ import ShowCard from "../../src/components/ShowCard";
 import PhoneIcon from "@material-ui/icons/Phone";
 import Head from "next/head";
 import { GetStaticPaths, GetStaticProps } from "next";
+import Copyright from "@mui/icons-material/Copyright";
+import { useUserMutations } from "../../src/hooks/mutations/useUserMutations";
+import { Production } from "../../src/types/Production";
+import { Venue } from "../../src/types/Venue";
+import useForceUpdate from "../../src/utils/useForceUpdate";
+import { useState } from "react";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const venueIDs: string[] = [];
@@ -57,14 +63,21 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 const useStyles = makeStyles(style);
 
 interface VenueDetailsProps {
-  venue: any;
-  productions: any;
+  venue: Venue;
+  productions: Production[];
   location: any;
 }
 
 function VenueDetails({ venue, productions, location }: VenueDetailsProps) {
   const classes = useStyles();
   const router = useRouter();
+
+  const [isClaimed, setIsClaimed] = useState(venue.isClaimed);
+  const { claimVenue } = useUserMutations();
+  const handleClaim = async () => {
+    const res = await claimVenue(venue.id);
+    setIsClaimed(res);
+  };
 
   if (router.isFallback) {
     return <LoadingScene fullScreen />;
@@ -106,6 +119,15 @@ function VenueDetails({ venue, productions, location }: VenueDetailsProps) {
                 component="h2"
               >{`${location.address_components[1].long_name} ${location.address_components[0].long_name}, ${location.address_components[2].long_name}`}</Typography>
             )}
+            {!isClaimed ? (
+              <Button
+                className="!normal-case !bg-sky-500 !mt-3"
+                startIcon={<Copyright />}
+                onClick={handleClaim}
+              >
+                Claim this Venue
+              </Button>
+            ) : undefined}
           </div>
           <section>
             <Typography className={classes.sectionTitle} variant="h3">
@@ -139,7 +161,7 @@ function VenueDetails({ venue, productions, location }: VenueDetailsProps) {
                 <ShowCard
                   id={item.id}
                   title={item.title}
-                  media={item.mediaURL}
+                  media={item.mediaUrl}
                   key={item.id}
                 />
               ))}
