@@ -210,6 +210,19 @@ export const useUserMutations = () => {
     }
   };
 
+  const addBio = async (userBioPdf: string) => {
+    setLoading(true);
+    try {
+      await mainAxios.post("User/Upload/Bio", userBioPdf);
+      return true;
+    } catch (error) {
+      console.log("Error in add user bio", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     toggle2FA,
     updateSocial,
@@ -222,6 +235,7 @@ export const useUserMutations = () => {
     removeRole,
     requestPhoneVerification,
     confirmPhoneVerification,
+    addBio,
     loading,
   };
 };

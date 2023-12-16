@@ -27,7 +27,7 @@ const AddUserPhoneDialog: React.FC<AddUserPhoneDialogProps> = ({
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [isVerificationOpen, setIsVerificationOpen] = useState<boolean>(false);
   const [isValidPhoneNumber, setIsValidPhoneNumber] = useState<boolean>(false);
-  const [countryCode, setCountryCode] = useState<string>("+30");
+  const [countryCode, setCountryCode] = useState<string>("30");
   const { requestPhoneVerification, loading } = useUserMutations();
 
   useEffect(() => {
@@ -74,9 +74,9 @@ const AddUserPhoneDialog: React.FC<AddUserPhoneDialogProps> = ({
             variant="filled"
             onChange={handleChangeCountryCode}
           >
-            <MenuItem value="+1">+1 (US)</MenuItem>
-            <MenuItem value="+44">+44 (UK)</MenuItem>
-            <MenuItem value="+30">+30 (GR)</MenuItem>
+            <MenuItem value="1">+1 (US)</MenuItem>
+            <MenuItem value="44">+44 (UK)</MenuItem>
+            <MenuItem value="30">+30 (GR)</MenuItem>
             {/* Add more country codes as needed */}
           </Select>
         </FormControl>

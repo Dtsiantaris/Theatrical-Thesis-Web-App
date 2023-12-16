@@ -6,6 +6,8 @@ import { useUserQueries } from "../../src/hooks/queries/useUserQueries";
 // components
 import UserPhotoCarousel from "../../src/components/UserPhotoCarousel";
 import UploadUserPhotoDialog from "../../src/components/UploadUserPhotoDialog";
+import AddRolesDialog from "../../src/components/AddUserRoleDialog";
+import AddUserPhoneDialog from "../../src/components/AddUserPhoneDialog";
 // utils & icons
 import {
   Card,
@@ -41,9 +43,10 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CoPresentIcon from "@mui/icons-material/CoPresent";
 import EventIcon from "@mui/icons-material/Event";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
-import AddRolesDialog from "../../src/components/AddUserRoleDialog";
 import PhoneIcon from "@mui/icons-material/Phone";
-import AddUserPhoneDialog from "../../src/components/AddUserPhoneDialog";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import AddBioDialog from "../../src/components/AddBioDialog";
 
 const UserProfile = () => {
   const { user } = useUserContext();
@@ -51,7 +54,6 @@ const UserProfile = () => {
   const {
     toggle2FA,
     updateSocial,
-    addRole,
     removeRole,
     loading: loadingMutation,
   } = useUserMutations();
@@ -69,6 +71,7 @@ const UserProfile = () => {
 
   const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
   const [isAddPhoneDialogOpen, setIsAddPhoneDialogOpen] = useState(false);
+  const [isAddBioDialogOpen, setIsAddBioDialogOpen] = useState(false);
 
   // Initial state values for input fields
   const [initialFacebookLink, setInitialFacebookLink] = useState("");
@@ -397,10 +400,34 @@ const UserProfile = () => {
             <List>
               <ListItem>
                 <ListItemIcon>
-                  <CoPresentIcon />
+                  <PictureAsPdfIcon />
                 </ListItemIcon>
-                <ListItemText primary="Linked-artist" secondary={user.email} />
-                <VerifiedChip isVerified={user.emailVerified} />
+                <ListItemText
+                  primary="User biography"
+                  secondary={
+                    <Button
+                      color="secondary"
+                      variant="text"
+                      disabled={!user?.bioPdfLocation}
+                      endIcon={<FileDownloadIcon />}
+                    >
+                      Download Bio
+                    </Button>
+                  }
+                />
+                {user?.bioPdfLocation ? (
+                  <Button className="bg-red-500" variant="text">
+                    Remove Bio
+                  </Button>
+                ) : (
+                  <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => setIsAddBioDialogOpen(true)}
+                  >
+                    Add Bio
+                  </Button>
+                )}
               </ListItem>
             </List>
             <List>
@@ -485,6 +512,11 @@ const UserProfile = () => {
       <AddUserPhoneDialog
         isOpen={isAddPhoneDialogOpen}
         onClose={() => setIsAddPhoneDialogOpen(false)}
+      />
+
+      <AddBioDialog
+        isOpen={isAddBioDialogOpen}
+        onClose={() => setIsAddBioDialogOpen(false)}
       />
 
       {/* Backdrop for when payment dialog is open */}
