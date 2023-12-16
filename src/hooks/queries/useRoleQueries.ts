@@ -8,7 +8,7 @@ export const useRoleQueries = () => {
   const fetchAvailableRoles = async () => {
     setLoading(true);
     try {
-      return (await mainAxios.get("Roles")).data as Role[];
+      return (await mainAxios.get("Roles")).data.data.results as Role[];
     } catch (error) {
       console.log("Error in fetching available roles", error);
     } finally {

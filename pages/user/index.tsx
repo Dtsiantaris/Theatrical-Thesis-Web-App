@@ -42,6 +42,8 @@ import CoPresentIcon from "@mui/icons-material/CoPresent";
 import EventIcon from "@mui/icons-material/Event";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
 import AddRolesDialog from "../../src/components/AddUserRoleDialog";
+import PhoneIcon from "@mui/icons-material/Phone";
+import AddUserPhoneDialog from "../../src/components/AddUserPhoneDialog";
 
 const UserProfile = () => {
   const { user } = useUserContext();
@@ -66,6 +68,7 @@ const UserProfile = () => {
     useState(false);
 
   const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
+  const [isAddPhoneDialogOpen, setIsAddPhoneDialogOpen] = useState(false);
 
   // Initial state values for input fields
   const [initialFacebookLink, setInitialFacebookLink] = useState("");
@@ -169,17 +172,14 @@ const UserProfile = () => {
 
     if (popup) {
       setIsPaymentDialogOpen(true); // Show overlay
-      const checkPopupClosed = setInterval(() => {
+      const checkPopupClosed = setInterval(async () => {
         if (!popup || popup.closed) {
           clearInterval(checkPopupClosed);
           setIsPaymentDialogOpen(false); // Hide overlay when popup is closed
+          await fetchUserInfo();
         }
       }, 500);
     }
-  };
-
-  const handleAddRole = async () => {
-    await fetchUserInfo();
   };
 
   const handleRemoveRole = async (role: string) => {
@@ -293,7 +293,7 @@ const UserProfile = () => {
                   />
                 </ListItemSecondaryAction>
               </ListItem>
-              <ListItem>
+              <ListItem className="flex">
                 <ListItemIcon>
                   <PermIdentity />
                 </ListItemIcon>
@@ -301,7 +301,7 @@ const UserProfile = () => {
                   primary="Role"
                   className="capitalize"
                   secondary={
-                    <div className="flex w-full gap-1">
+                    <div className="flex flex-wrap gap-1 mt-5">
                       {user.performerRoles && user.performerRoles.length > 0
                         ? user.performerRoles.map((role, index) => (
                             <Chip
@@ -316,6 +316,7 @@ const UserProfile = () => {
                   }
                 />
                 <Button
+                  className="self-start !w-[17rem]"
                   variant="contained"
                   color="secondary"
                   onClick={() => setIsRoleDialogOpen(true)}
@@ -420,6 +421,38 @@ const UserProfile = () => {
                 <VerifiedChip isVerified={user.emailVerified} />
               </ListItem>
             </List>
+            <List>
+              <ListItem>
+                <ListItemIcon>
+                  <PhoneIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    <div className="flex justify-between w-full">
+                      Phone Number
+                      {!user?.phoneNumber ? (
+                        <Button
+                          variant="contained"
+                          color="secondary"
+                          onClick={() => setIsAddPhoneDialogOpen(true)}
+                        >
+                          Add number
+                        </Button>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  }
+                  secondary={
+                    <div className="flex justify-between mt-3">
+                      {user?.phoneNumber || "No phone number provided"}
+                      <VerifiedChip isVerified={!!user?.phoneNumberVerified} />
+                    </div>
+                  }
+                />
+                <div></div>
+              </ListItem>
+            </List>
           </CardContent>
         </Card>
 
@@ -446,7 +479,12 @@ const UserProfile = () => {
       <AddRolesDialog
         existingRoles={user?.performerRoles}
         isOpen={isRoleDialogOpen}
-        onClose={handleAddRole}
+        onClose={() => setIsRoleDialogOpen(false)}
+      />
+
+      <AddUserPhoneDialog
+        isOpen={isAddPhoneDialogOpen}
+        onClose={() => setIsAddPhoneDialogOpen(false)}
       />
 
       {/* Backdrop for when payment dialog is open */}

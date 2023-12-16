@@ -16,6 +16,7 @@ import {
 import { Role } from "../types/Role";
 import { useRoleQueries } from "../hooks/queries/useRoleQueries";
 import { useUserMutations } from "../hooks/mutations/useUserMutations";
+import { useUserQueries } from "../hooks/queries/useUserQueries";
 
 // Replace this with your actual roles data
 const rolesList = ["Actor", "Director", "Producer", "Writer", "Technician"];
@@ -35,6 +36,7 @@ const AddRolesDialog: React.FC<AddRolesDialogProps> = ({
   const [availableRoles, setAvailableRoles] = useState<string[]>([]);
 
   const { loading, fetchAvailableRoles } = useRoleQueries();
+  const { fetchUserInfo } = useUserQueries();
   const { addRole } = useUserMutations();
   // This effect runs when the component mounts
   useEffect(() => {
@@ -42,10 +44,11 @@ const AddRolesDialog: React.FC<AddRolesDialogProps> = ({
     // Fetch available roles if needed, or use existingRoles
     const fetchRoles = async () => {
       const fetchedRoles = await fetchAvailableRoles(); // Fetch all roles
+      console.log("FETCHED ROLES", fetchedRoles);
       const filteredRoles = fetchedRoles
         ?.filter(
           (role) =>
-            !existingRoles.some((existingRole) => existingRole === role.role)
+            !existingRoles?.some((existingRole) => existingRole === role.role)
         )
         .map((role) => role.role);
 
@@ -64,6 +67,7 @@ const AddRolesDialog: React.FC<AddRolesDialogProps> = ({
     for (let index = 0; index < selectedRoles.length; index++) {
       await addRole(selectedRoles[index]);
     }
+    await fetchUserInfo();
     onClose();
   };
 
@@ -94,7 +98,7 @@ const AddRolesDialog: React.FC<AddRolesDialogProps> = ({
         </Button>
         <Button
           onClick={handleAddRoles}
-          color="primary"
+          color="secondary"
           endIcon={loading && <CircularProgress size={24} />}
         >
           Add Roles

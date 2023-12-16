@@ -173,6 +173,43 @@ export const useUserMutations = () => {
     }
   };
 
+  const requestPhoneVerification = async (phoneNumber: string) => {
+    setLoading(true);
+    try {
+      await mainAxios.post(
+        `User/request-verification-phone-number/?phoneNumber=${encodeURIComponent(
+          phoneNumber
+        )}`
+      );
+      return true;
+    } catch (error) {
+      console.log("Error in add request verification phone number:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const confirmPhoneVerification = async (
+    phoneNumber: string,
+    verificationCode: string
+  ) => {
+    setLoading(true);
+    try {
+      await mainAxios.post(
+        `User/confirm-verification-phone-number/?phoneNumber=${encodeURIComponent(
+          phoneNumber
+        )}&verificationCode=${verificationCode}`
+      );
+      return true;
+    } catch (error) {
+      console.log("Error in add request verification phone number:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     toggle2FA,
     updateSocial,
@@ -183,6 +220,8 @@ export const useUserMutations = () => {
     deleteUserPhoto,
     addRole,
     removeRole,
+    requestPhoneVerification,
+    confirmPhoneVerification,
     loading,
   };
 };

@@ -21,4 +21,6 @@ export interface User {
   profilePhoto?: UserPhoto;
   bioPdfLocation?: string;
   userImages: UserPhoto[];
+  phoneNumber?: string;
+  phoneNumberVerified?: boolean;
 }
