@@ -1,20 +1,30 @@
-import { Button, makeStyles, Typography } from "@material-ui/core";
-import style from "../../src/assets/jss/layouts/venueDetailsStyle";
-import { mainFetcher } from "../../src/utils/AxiosInstances";
+import { useState } from "react";
+import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
-import LoadingScene from "../../src/components/LoadingScene";
-import Image from "next/image";
+// interfaces
+import { Production } from "../../src/types/Production";
+import { GoogleGeocodingResult } from "../../src/types/GoogleGeoResult";
+import { Venue } from "../../src/types/Venue";
+// hooks
+import { useUserMutations } from "../../src/hooks/mutations/useUserMutations";
+import {
+  fetchVenueById,
+  fetchVenueLocation,
+  fetchVenueProductionsById,
+} from "../../src/hooks/queries/useVenueQueries";
+// components
 import ContentSlider from "../../src/components/ContentSlider";
 import ShowCard from "../../src/components/ShowCard";
+import LoadingScene from "../../src/components/LoadingScene";
+// utils & icons
+import { Button, makeStyles, Typography } from "@material-ui/core";
 import PhoneIcon from "@material-ui/icons/Phone";
-import Head from "next/head";
-import { GetStaticPaths, GetStaticProps } from "next";
 import Copyright from "@mui/icons-material/Copyright";
-import { useUserMutations } from "../../src/hooks/mutations/useUserMutations";
-import { Production } from "../../src/types/Production";
-import { Venue } from "../../src/types/Venue";
-import useForceUpdate from "../../src/utils/useForceUpdate";
-import { useState } from "react";
+import Image from "next/image";
+import Head from "next/head";
+// styles
+import style from "../../src/assets/jss/layouts/venueDetailsStyle";
+import EditVenueDialog from "../../src/components/EditVenueDIalog";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const venueIDs: string[] = [];
@@ -34,7 +44,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       notFound: true,
     };
   }
-  const venue = await mainFetcher(`/venues/${params.id}`);
+  const id = Number(params.id as string);
+  const venue = await fetchVenueById(id);
 
   if (!venue) {
     return {
@@ -42,16 +53,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
   }
 
-  let productions = await mainFetcher(`/venues/${params.id}/productions`);
-  productions = productions.results;
-
-  const URI = encodeURI(
-    `https://maps.googleapis.com/maps/api/geocode/json?address=${venue.title}&region=gr&key=${process.env.GEOCODING_API}&language=el`
-  );
-  const response = await fetch(URI);
-  let location = await response.json();
-
-  location = location.results[0] || null;
+  const productions = await fetchVenueProductionsById(id);
+  const location = await fetchVenueLocation(venue.title);
 
   return {
     props: { venue, productions, location },
@@ -65,18 +68,32 @@ const useStyles = makeStyles(style);
 interface VenueDetailsProps {
   venue: Venue;
   productions: Production[];
-  location: any;
+  location: GoogleGeocodingResult;
 }
 
-function VenueDetails({ venue, productions, location }: VenueDetailsProps) {
+const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
   const classes = useStyles();
   const router = useRouter();
 
   const [isClaimed, setIsClaimed] = useState(venue.isClaimed);
+  const [venueRef, setVenueRef] = useState(venue);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const { claimVenue } = useUserMutations();
+
   const handleClaim = async () => {
-    const res = await claimVenue(venue.id);
+    const res = await claimVenue(venueRef.id);
     setIsClaimed(res);
+  };
+
+  const handleEdit = () => {
+    setIsEditDialogOpen(true);
+  };
+
+  const handleVenueUpdate = async () => {
+    const res = await fetchVenueById(venueRef.id);
+    if (res) setVenueRef(res);
+    // TODO: use user context here too for some reason... to check if user/info.claimedVenues
+    // contains this venue.
   };
 
   if (router.isFallback) {
@@ -86,7 +103,7 @@ function VenueDetails({ venue, productions, location }: VenueDetailsProps) {
   return (
     <>
       <Head>
-        <title>{venue.title} | Theatrica</title>
+        <title>{venueRef.title} | Theatrica</title>
       </Head>
       <div className={`pageWrapper ${classes.pageWrapper}`}>
         <div className={classes.imageGridWrapper}>
@@ -111,7 +128,7 @@ function VenueDetails({ venue, productions, location }: VenueDetailsProps) {
         >
           <div style={{ marginTop: -100, marginBottom: "5em" }}>
             <Typography variant="h2" component="h1">
-              {venue.title}
+              {venueRef.title}
             </Typography>
             {location && (
               <Typography
@@ -126,6 +143,15 @@ function VenueDetails({ venue, productions, location }: VenueDetailsProps) {
                 onClick={handleClaim}
               >
                 Claim this Venue
+              </Button>
+            ) : undefined}
+            {isClaimed ? (
+              <Button
+                className="!normal-case !bg-sky-500 !mt-3"
+                startIcon={<Copyright />}
+                onClick={handleEdit}
+              >
+                Edit this Venue
               </Button>
             ) : undefined}
           </div>
@@ -156,8 +182,7 @@ function VenueDetails({ venue, productions, location }: VenueDetailsProps) {
           </section>
           <section>
             <ContentSlider title="Παραστάσεις" decoratedTitle>
-              {/* FIX THIS ERROR TO */}
-              {productions.map((item) => (
+              {productions?.map((item) => (
                 <ShowCard
                   id={item.id}
                   title={item.title}
@@ -226,8 +251,16 @@ function VenueDetails({ venue, productions, location }: VenueDetailsProps) {
           </section>
         </div>
       </div>
+
+      <EditVenueDialog
+        isOpen={isEditDialogOpen}
+        title={venueRef.title}
+        address={venueRef.address}
+        id={venueRef.id}
+        onClose={handleVenueUpdate}
+      />
     </>
   );
-}
+};
 
 export default VenueDetails;
