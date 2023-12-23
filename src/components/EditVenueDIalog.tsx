@@ -16,6 +16,7 @@ interface EditVenueDialogProps {
   id: number;
   isOpen: boolean;
   onClose: () => void;
+  onConfirm: () => void;
   title: string;
   address: string;
 }
@@ -27,6 +28,7 @@ const EditVenueDialog: React.FC<EditVenueDialogProps> = (props) => {
 
   const isOpen = props.isOpen;
   const onClose = props.onClose;
+  const onConfirm = props.onConfirm;
 
   const { loading, updateVenue } = useVenueMutations();
 
@@ -34,7 +36,7 @@ const EditVenueDialog: React.FC<EditVenueDialogProps> = (props) => {
     if (title.length > 0 && address.length > 0) {
       setIsError(false);
       const res = await updateVenue(props.id, title, address);
-      res ? onClose() : undefined;
+      res ? onConfirm() : undefined;
     } else {
       setIsError(true);
     }
@@ -42,11 +44,8 @@ const EditVenueDialog: React.FC<EditVenueDialogProps> = (props) => {
 
   return (
     <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={onClose}>
-      <DialogTitle>Add Phone Number</DialogTitle>
-      <DialogContent className="flex items-center">
-        <FormControl className="flex w-1/4 h-full">
-          <InputLabel>Country Code</InputLabel>
-        </FormControl>
+      <DialogTitle>Edit Venue Details</DialogTitle>
+      <DialogContent className="flex flex-col gap-3 items-center">
         <TextField
           fullWidth
           label="Venue Title"
@@ -64,7 +63,7 @@ const EditVenueDialog: React.FC<EditVenueDialogProps> = (props) => {
       </DialogContent>
 
       {isError ? (
-        <div className="text-red-500">
+        <div className="text-red-500 ml-6 mt-3">
           Please fill title and address fields.
         </div>
       ) : (
@@ -79,7 +78,7 @@ const EditVenueDialog: React.FC<EditVenueDialogProps> = (props) => {
           color="secondary"
           endIcon={loading && <CircularProgress size={24} />}
         >
-          Add Number
+          Confirm
         </Button>
       </DialogActions>
     </Dialog>

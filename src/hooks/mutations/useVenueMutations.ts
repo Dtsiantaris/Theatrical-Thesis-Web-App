@@ -7,7 +7,7 @@ export const useVenueMutations = () => {
   const updateVenue = async (id: number, title: string, address: string) => {
     setLoading(true);
     try {
-      await mainAxios.post("Venues/update", {
+      await mainAxios.put("Venues/update", {
         id,
         title,
         address,

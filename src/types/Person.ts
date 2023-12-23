@@ -11,4 +11,13 @@ export interface Person {
   eyeColor?: string;
   hairColor?: string;
   roles?: string[];
+  images: [
+    {
+      id: number;
+      imageUrl: string;
+      personId: number;
+    }
+  ];
+  isClaimed?: boolean;
+  claimingStatus: string;
 }

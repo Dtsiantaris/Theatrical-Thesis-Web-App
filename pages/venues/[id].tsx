@@ -25,6 +25,7 @@ import Head from "next/head";
 // styles
 import style from "../../src/assets/jss/layouts/venueDetailsStyle";
 import EditVenueDialog from "../../src/components/EditVenueDIalog";
+import { useUserContext } from "../../src/contexts/UserContext";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const venueIDs: string[] = [];
@@ -79,6 +80,11 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
   const [venueRef, setVenueRef] = useState(venue);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const { claimVenue } = useUserMutations();
+  const { user } = useUserContext();
+
+  const isClaimedByUser = user?.claimedVenues.some(
+    (ven) => ven.id === venueRef.id
+  );
 
   const handleClaim = async () => {
     const res = await claimVenue(venueRef.id);
@@ -90,10 +96,9 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
   };
 
   const handleVenueUpdate = async () => {
+    setIsEditDialogOpen(false);
     const res = await fetchVenueById(venueRef.id);
     if (res) setVenueRef(res);
-    // TODO: use user context here too for some reason... to check if user/info.claimedVenues
-    // contains this venue.
   };
 
   if (router.isFallback) {
@@ -145,7 +150,7 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
                 Claim this Venue
               </Button>
             ) : undefined}
-            {isClaimed ? (
+            {isClaimedByUser ? (
               <Button
                 className="!normal-case !bg-sky-500 !mt-3"
                 startIcon={<Copyright />}
@@ -257,7 +262,8 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
         title={venueRef.title}
         address={venueRef.address}
         id={venueRef.id}
-        onClose={handleVenueUpdate}
+        onClose={() => setIsEditDialogOpen(false)}
+        onConfirm={handleVenueUpdate}
       />
     </>
   );

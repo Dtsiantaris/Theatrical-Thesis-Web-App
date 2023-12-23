@@ -1,4 +1,7 @@
+import { Event } from "./Event";
+import { Person } from "./Person";
 import { Transaction } from "./Transaction";
+import { Venue } from "./Venue";
 
 export interface UserPhoto {
   id: number;
@@ -23,4 +26,7 @@ export interface User {
   userImages: UserPhoto[];
   phoneNumber?: string;
   phoneNumberVerified?: boolean;
+  claimedPerson: Person;
+  claimedVenues: Venue[];
+  claimedEvents: Event[];
 }
