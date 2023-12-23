@@ -63,7 +63,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 };
 
-// idk this error.
 const useStyles = makeStyles(style);
 
 interface VenueDetailsProps {
