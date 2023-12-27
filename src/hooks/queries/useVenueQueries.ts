@@ -13,7 +13,7 @@ export const fetchVenueById = async (id: number): Promise<Venue | null> => {
   }
 };
 
-export const fetchVenueProductionsById = async (
+export const fetchVenueProductionsByVenueId = async (
   id: number
 ): Promise<Production[] | null> => {
   try {

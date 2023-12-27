@@ -10,7 +10,7 @@ import { useUserMutations } from "../../src/hooks/mutations/useUserMutations";
 import {
   fetchVenueById,
   fetchVenueLocation,
-  fetchVenueProductionsById,
+  fetchVenueProductionsByVenueId,
 } from "../../src/hooks/queries/useVenueQueries";
 // components
 import ContentSlider from "../../src/components/ContentSlider";
@@ -54,7 +54,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     };
   }
 
-  const productions = await fetchVenueProductionsById(id);
+  const productions = await fetchVenueProductionsByVenueId(id);
   const location = await fetchVenueLocation(venue.title);
 
   return {
