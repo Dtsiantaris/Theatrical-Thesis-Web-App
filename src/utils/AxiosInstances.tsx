@@ -46,13 +46,11 @@ mainAxios.interceptors.response.use(
       customError.message = "twoFactorEnabled";
       return Promise.reject(customError);
     }
-
     // Handle errors globally and show a notification
     const message =
       error.response && error.response.data && error.response.data.message
         ? error.response.data.message
         : "An unexpected error occurred";
-
     toast.error(
       <div style={{ color: "black" }}>
         <div
@@ -62,7 +60,6 @@ mainAxios.interceptors.response.use(
             alignItems: "center",
           }}
         >
-          {/* <EmailIcon style={{ marginRight: "10px" }} /> */}
           <div>Error: {message}</div>
         </div>
       </div>,
@@ -70,7 +67,6 @@ mainAxios.interceptors.response.use(
         theme: "colored",
       }
     );
-
     return Promise.reject(error);
   }
 );

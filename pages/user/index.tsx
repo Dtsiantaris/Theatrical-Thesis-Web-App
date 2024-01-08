@@ -47,6 +47,7 @@ import PhoneIcon from "@mui/icons-material/Phone";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import AddBioDialog from "../../src/components/AddBioDialog";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 
 const UserProfile = () => {
   const { user } = useUserContext();
@@ -132,7 +133,7 @@ const UserProfile = () => {
     const newTwoFactorStatus = !twoFactorEnabled;
 
     try {
-      await toggle2FA(newTwoFactorStatus);
+      await toggle2FA();
       setTwoFactorEnabled(newTwoFactorStatus);
       await fetchUserInfo();
     } catch (error) {
@@ -296,37 +297,7 @@ const UserProfile = () => {
                   />
                 </ListItemSecondaryAction>
               </ListItem>
-              <ListItem className="flex">
-                <ListItemIcon>
-                  <PermIdentity />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Role"
-                  className="capitalize"
-                  secondary={
-                    <div className="flex flex-wrap gap-1 mt-5">
-                      {user.performerRoles && user.performerRoles.length > 0
-                        ? user.performerRoles.map((role, index) => (
-                            <Chip
-                              key={index}
-                              label={role}
-                              onDelete={() => handleRemoveRole(role)}
-                              className="mr-2" // Add some margin between chips
-                            />
-                          ))
-                        : "No roles available"}
-                    </div>
-                  }
-                />
-                <Button
-                  className="self-start !w-[17rem]"
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => setIsRoleDialogOpen(true)}
-                >
-                  Add role
-                </Button>
-              </ListItem>
+
               <ListItem>
                 <ListItemIcon>
                   <AccountBalanceWalletIcon />
@@ -429,26 +400,33 @@ const UserProfile = () => {
                   </Button>
                 )}
               </ListItem>
-            </List>
-            <List>
+
               <ListItem>
                 <ListItemIcon>
                   <EventIcon />
                 </ListItemIcon>
-                <ListItemText primary="Linked-events" secondary={user.email} />
-                <VerifiedChip isVerified={user.emailVerified} />
+                <ListItemText
+                  primary="Linked venues"
+                  secondary={user.claimedEvents.length}
+                />
+                <Button color="secondary" variant="contained">
+                  <VisibilityIcon />
+                </Button>
               </ListItem>
-            </List>
-            <List>
+
               <ListItem>
                 <ListItemIcon>
                   <FolderSharedIcon />
                 </ListItemIcon>
-                <ListItemText primary="Linked-events" secondary={user.email} />
-                <VerifiedChip isVerified={user.emailVerified} />
+                <ListItemText
+                  primary="Linked venues"
+                  secondary={user.claimedVenues.length}
+                />
+                <Button color="secondary" variant="contained">
+                  <VisibilityIcon />
+                </Button>
               </ListItem>
-            </List>
-            <List>
+
               <ListItem>
                 <ListItemIcon>
                   <PhoneIcon />
@@ -478,6 +456,38 @@ const UserProfile = () => {
                   }
                 />
                 <div></div>
+              </ListItem>
+
+              <ListItem className="flex">
+                <ListItemIcon>
+                  <PermIdentity />
+                </ListItemIcon>
+                <ListItemText
+                  primary="Role"
+                  className="capitalize"
+                  secondary={
+                    <div className="flex flex-wrap gap-1 mt-5">
+                      {user.performerRoles && user.performerRoles.length > 0
+                        ? user.performerRoles.map((role, index) => (
+                            <Chip
+                              key={index}
+                              label={role}
+                              onDelete={() => handleRemoveRole(role)}
+                              className="mr-2" // Add some margin between chips
+                            />
+                          ))
+                        : "No roles available"}
+                    </div>
+                  }
+                />
+                <Button
+                  className="self-start !w-[17rem]"
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => setIsRoleDialogOpen(true)}
+                >
+                  Add role
+                </Button>
               </ListItem>
             </List>
           </CardContent>

@@ -58,6 +58,11 @@ const AddRolesDialog: React.FC<AddRolesDialogProps> = ({
     fetchRoles();
   }, [existingRoles]); // Only re-run the effect if existingRoles changes
 
+  useEffect(() => {
+    // Set selected roles initially based on existing roles
+    setSelectedRoles(existingRoles);
+  }, [existingRoles]);
+
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSelectedRoles(event.target.value as string[]);
   };
@@ -82,6 +87,23 @@ const AddRolesDialog: React.FC<AddRolesDialogProps> = ({
             value={selectedRoles}
             onChange={handleChange}
             renderValue={(selected) => (selected as string[]).join(", ")}
+            MenuProps={{
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "left",
+              },
+              transformOrigin: {
+                vertical: "top",
+                horizontal: "left",
+              },
+              getContentAnchorEl: null,
+              PaperProps: {
+                style: {
+                  maxHeight: "400px",
+                  maxWidth: "550px",
+                },
+              },
+            }}
           >
             {availableRoles.map((role) => (
               <MenuItem key={role} value={role}>

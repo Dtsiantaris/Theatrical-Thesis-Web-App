@@ -10,42 +10,7 @@ export const useUserMutations = () => {
   const { fetchUserInfo } = useUserQueries();
   const [loading, setLoading] = useState(false);
 
-  const toggle2FA = async (enable: boolean) => {
-    setLoading(true);
-    try {
-      let result = false;
-      result = enable
-        ? await mainAxios.post("User/enable2fa")
-        : await mainAxios.post("User/disable2fa");
-      return result;
-    } catch (error) {
-      console.log("Error toggling 2fa", error);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const updateSocial = async (
-    link: string,
-    type: "facebook" | "instagram" | "youtube"
-  ) => {
-    setLoading(true);
-    try {
-      let result = false;
-      result = await mainAxios.put(
-        `User/@/${type}?link=${encodeURIComponent(link)}`
-      );
-
-      return result;
-    } catch (error) {
-      console.log("Error updating social", error);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // TODO: remove bio
   /**
    *
    * @param email
@@ -68,6 +33,76 @@ export const useUserMutations = () => {
         console.log("Error in login:", error);
         return -1;
       }
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const registerUser = async (email: string, password: string) => {
+    setLoading(true);
+    try {
+      return await mainAxios.post("User/register", {
+        email,
+        password,
+        role: 0,
+      });
+    } catch (error) {
+      console.log("Error in register:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addRole = async (role: string) => {
+    setLoading(true);
+    try {
+      return await mainAxios.post(`User/Add-Artist-Role/?role=${role}`);
+    } catch (error) {
+      console.log("Error in add role:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const removeRole = async (role: string) => {
+    setLoading(true);
+    try {
+      return await mainAxios.post(`User/Remove-Artist-Role/?role=${role}`);
+    } catch (error) {
+      console.log("Error in remove role:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggle2FA = async () => {
+    setLoading(true);
+    try {
+      let result = false;
+      result = !user?._2FA_enabled
+        ? await mainAxios.post("User/enable2fa")
+        : await mainAxios.post("User/disable2fa");
+      return result;
+    } catch (error) {
+      console.log("Error toggling 2fa", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addBio = async (userBioPdf: string) => {
+    setLoading(true);
+    try {
+      await mainAxios.post("User/Upload/Bio", userBioPdf);
+      return true;
+    } catch (error) {
+      console.log("Error in add user bio", error);
+      return false;
     } finally {
       setLoading(false);
     }
@@ -95,6 +130,19 @@ export const useUserMutations = () => {
     }
   };
 
+  const claimVenue = async (id: number) => {
+    setLoading(true);
+    try {
+      await mainAxios.post(`Venues/claim-venue/${id}`);
+      return true;
+    } catch (error) {
+      console.log("Error in claim venue", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const claimProduction = async (
     productionId: number,
     identificationDocument: string
@@ -111,6 +159,26 @@ export const useUserMutations = () => {
       }>;
     } catch (error) {
       console.log("Error in claiming production:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateSocial = async (
+    link: string,
+    type: "facebook" | "instagram" | "youtube"
+  ) => {
+    setLoading(true);
+    try {
+      let result = false;
+      result = await mainAxios.put(
+        `User/@/${type}?link=${encodeURIComponent(link)}`
+      );
+
+      return result;
+    } catch (error) {
+      console.log("Error updating social", error);
       return false;
     } finally {
       setLoading(false);
@@ -143,30 +211,6 @@ export const useUserMutations = () => {
       return await mainAxios.delete(`User/Remove/Image/${imageId}`);
     } catch (error) {
       console.log("Error in delete user photo:", error);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const addRole = async (role: string) => {
-    setLoading(true);
-    try {
-      return await mainAxios.post(`User/Add-Artist-Role/?role=${role}`);
-    } catch (error) {
-      console.log("Error in add role:", error);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const removeRole = async (role: string) => {
-    setLoading(true);
-    try {
-      return await mainAxios.post(`User/Remove-Artist-Role/?role=${role}`);
-    } catch (error) {
-      console.log("Error in remove role:", error);
       return false;
     } finally {
       setLoading(false);
@@ -210,36 +254,11 @@ export const useUserMutations = () => {
     }
   };
 
-  const addBio = async (userBioPdf: string) => {
-    setLoading(true);
-    try {
-      await mainAxios.post("User/Upload/Bio", userBioPdf);
-      return true;
-    } catch (error) {
-      console.log("Error in add user bio", error);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const claimVenue = async (id: number) => {
-    setLoading(true);
-    try {
-      await mainAxios.post(`Venues/claim-venue/${id}`);
-      return true;
-    } catch (error) {
-      console.log("Error in claim venue", error);
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return {
     toggle2FA,
     updateSocial,
     loginUser,
+    registerUser,
     claimAccount,
     claimProduction,
     uploadUserPhoto,
