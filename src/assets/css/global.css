@@ -32,6 +32,13 @@
   width: 100%;
 }
 
+/* styles.css (or any other global styling file) */
+
+button {
+  text-decoration: none !important;
+  text-transform: none !important;
+}
+
 @media only screen and (min-width: 600px) {
   .pageWrapper {
     margin-left: 55px;

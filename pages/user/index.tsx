@@ -8,6 +8,9 @@ import UserPhotoCarousel from "../../src/components/UserPhotoCarousel";
 import UploadUserPhotoDialog from "../../src/components/UploadUserPhotoDialog";
 import AddRolesDialog from "../../src/components/AddUserRoleDialog";
 import AddUserPhoneDialog from "../../src/components/AddUserPhoneDialog";
+import AddBioDialog from "../../src/components/AddBioDialog";
+import ClaimedEventsList from "../../src/components/ClaimedEventsDialog";
+import ClaimedVenuesList from "../../src/components/ClaimedVenuesDialog";
 // utils & icons
 import {
   Card,
@@ -40,14 +43,16 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AddCard from "@mui/icons-material/AddCard";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import CoPresentIcon from "@mui/icons-material/CoPresent";
 import EventIcon from "@mui/icons-material/Event";
 import FolderSharedIcon from "@mui/icons-material/FolderShared";
 import PhoneIcon from "@mui/icons-material/Phone";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import AddBioDialog from "../../src/components/AddBioDialog";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import AddIcCallIcon from "@mui/icons-material/AddIcCall";
+import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
+import SelectProfilePhotoDialog from "../../src/components/SelectProfilePhotoDialog";
 
 const UserProfile = () => {
   const { user } = useUserContext();
@@ -70,10 +75,15 @@ const UserProfile = () => {
   const [isUploadProfileDialogOpen, setIsUploadProfileDialogOpen] =
     useState(false);
 
+  const [isSelectProfilePhotoOpen, setIsSelectProfilePhotoOpen] =
+    useState(false);
+
   const [isRoleDialogOpen, setIsRoleDialogOpen] = useState(false);
   const [isAddPhoneDialogOpen, setIsAddPhoneDialogOpen] = useState(false);
   const [isAddBioDialogOpen, setIsAddBioDialogOpen] = useState(false);
 
+  const [isClaimedEventsListOpen, setIsClaimedEventsListOpen] = useState(false);
+  const [isClaimedVenuesListOpen, setIsClaimedVenuesListOpen] = useState(false);
   // Initial state values for input fields
   const [initialFacebookLink, setInitialFacebookLink] = useState("");
   const [initialInstagramLink, setInitialInstagramLink] = useState("");
@@ -249,7 +259,8 @@ const UserProfile = () => {
                     <Button
                       variant="contained"
                       color="secondary"
-                      onClick={() => setIsUploadProfileDialogOpen(true)}
+                      onClick={() => setIsSelectProfilePhotoOpen(true)}
+                      startIcon={<AddAPhotoIcon />}
                     >
                       Change Profile Photo
                     </Button>
@@ -395,6 +406,7 @@ const UserProfile = () => {
                     color="secondary"
                     variant="contained"
                     onClick={() => setIsAddBioDialogOpen(true)}
+                    startIcon={<PersonAddIcon />}
                   >
                     Add Bio
                   </Button>
@@ -406,10 +418,15 @@ const UserProfile = () => {
                   <EventIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Linked venues"
+                  primary="Claimed events"
                   secondary={user.claimedEvents.length}
                 />
-                <Button color="secondary" variant="contained">
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  disabled={!user.claimedEvents.length}
+                  onClick={() => setIsClaimedEventsListOpen(true)}
+                >
                   <VisibilityIcon />
                 </Button>
               </ListItem>
@@ -419,10 +436,14 @@ const UserProfile = () => {
                   <FolderSharedIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Linked venues"
+                  primary="Claimed venues"
                   secondary={user.claimedVenues.length}
                 />
-                <Button color="secondary" variant="contained">
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  onClick={() => setIsClaimedVenuesListOpen(true)}
+                >
                   <VisibilityIcon />
                 </Button>
               </ListItem>
@@ -440,6 +461,7 @@ const UserProfile = () => {
                           variant="contained"
                           color="secondary"
                           onClick={() => setIsAddPhoneDialogOpen(true)}
+                          startIcon={<AddIcCallIcon />}
                         >
                           Add number
                         </Button>
@@ -485,6 +507,7 @@ const UserProfile = () => {
                   variant="contained"
                   color="secondary"
                   onClick={() => setIsRoleDialogOpen(true)}
+                  startIcon={<PersonAddIcon />}
                 >
                   Add role
                 </Button>
@@ -509,8 +532,13 @@ const UserProfile = () => {
 
       <UploadUserPhotoDialog
         isOpen={isUploadProfileDialogOpen}
-        isProfile={true}
         onClose={() => setIsUploadProfileDialogOpen(false)}
+      />
+
+      <SelectProfilePhotoDialog
+        isOpen={isSelectProfilePhotoOpen}
+        onClose={() => setIsSelectProfilePhotoOpen(false)}
+        existingPhotos={user.userImages}
       />
 
       <AddRolesDialog
@@ -527,6 +555,18 @@ const UserProfile = () => {
       <AddBioDialog
         isOpen={isAddBioDialogOpen}
         onClose={() => setIsAddBioDialogOpen(false)}
+      />
+
+      <ClaimedEventsList
+        isOpen={isClaimedEventsListOpen}
+        onClose={() => setIsClaimedEventsListOpen(false)}
+        claimedEvents={user.claimedEvents}
+      />
+
+      <ClaimedVenuesList
+        isOpen={isClaimedVenuesListOpen}
+        onClose={() => setIsClaimedVenuesListOpen(false)}
+        claimedVenues={user.claimedVenues}
       />
 
       {/* Backdrop for when payment dialog is open */}

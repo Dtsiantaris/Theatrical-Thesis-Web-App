@@ -20,13 +20,11 @@ import { useUserQueries } from "../hooks/queries/useUserQueries";
 interface UploadPhotoDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  isProfile: boolean;
 }
 
 const UploadUserPhotoDialog: React.FC<UploadPhotoDialogProps> = ({
   isOpen,
   onClose,
-  isProfile,
 }) => {
   const [photoUrl, setPhotoUrl] = useState("");
   const [label, setLabel] = useState("");
@@ -35,7 +33,7 @@ const UploadUserPhotoDialog: React.FC<UploadPhotoDialogProps> = ({
   const { fetchUserInfo } = useUserQueries();
 
   const handleUpload = async () => {
-    await uploadUserPhoto(photoUrl, label, isProfile);
+    await uploadUserPhoto(photoUrl, label, false);
     await fetchUserInfo();
     onClose(); // Close dialog after "upload"
   };
@@ -52,9 +50,14 @@ const UploadUserPhotoDialog: React.FC<UploadPhotoDialogProps> = ({
             fullWidth
             label="Photo URL"
             variant="outlined"
-            className="mb-4"
+            className="!mb-4"
             value={photoUrl}
             onChange={(e) => setPhotoUrl(e.target.value)}
+            InputLabelProps={{
+              style: {
+                color: "white",
+              },
+            }}
           />
           <TextField
             fullWidth
@@ -62,13 +65,18 @@ const UploadUserPhotoDialog: React.FC<UploadPhotoDialogProps> = ({
             variant="outlined"
             value={label}
             onChange={(e) => setLabel(e.target.value)}
+            InputLabelProps={{
+              style: {
+                color: "white",
+              },
+            }}
           />
-          {isProfile && (
+          {/* {isProfile && (
             <Typography variant="subtitle1" className="mt-2">
               <CheckCircleOutlineIcon className="mr-1" />
               This is a profile photo.
             </Typography>
-          )}
+          )} */}
         </Box>
       </DialogContent>
       <DialogActions>

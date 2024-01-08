@@ -157,7 +157,7 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
               >
                 Edit this Venue
               </Button>
-            ) : undefined}
+            ) : null}
           </div>
           <section>
             <Typography className={classes.sectionTitle} variant="h3">

@@ -1,6 +1,13 @@
+import { Production } from "./Production";
+
 export interface Event {
-  dateEvent: Date;
-  priceRange: string;
+  id: number;
   productionId: number;
   venueId: number;
+  dateEvent: Date;
+  priceRange: string;
+  systemId: number;
+  timestamp: Date;
+  isClaimed: boolean;
+  production: Production;
 }

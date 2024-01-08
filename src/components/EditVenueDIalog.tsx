@@ -44,7 +44,7 @@ const EditVenueDialog: React.FC<EditVenueDialogProps> = (props) => {
 
   return (
     <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={onClose}>
-      <DialogTitle>Edit Venue Details</DialogTitle>
+      <DialogTitle className="text-xl">Edit Venue Details</DialogTitle>
       <DialogContent className="flex flex-col gap-3 items-center">
         <TextField
           fullWidth

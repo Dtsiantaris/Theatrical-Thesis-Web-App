@@ -205,6 +205,20 @@ export const useUserMutations = () => {
     }
   };
 
+  const setUserProfilePhoto = async (imageId: number, label: string) => {
+    try {
+      return await mainAxios.post("User/Set/Profile-Photo", {
+        imageId,
+        label,
+      });
+    } catch (error) {
+      console.log("Error in setting user profile photo:", error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const deleteUserPhoto = async (imageId: number) => {
     setLoading(true);
     try {
@@ -262,6 +276,7 @@ export const useUserMutations = () => {
     claimAccount,
     claimProduction,
     uploadUserPhoto,
+    setUserProfilePhoto,
     deleteUserPhoto,
     addRole,
     removeRole,
