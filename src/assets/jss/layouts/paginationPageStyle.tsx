@@ -1,4 +1,4 @@
-import { Theme } from "@material-ui/core";
+import { Theme } from "@mui/material";
 const paginationPageStyle = (theme: Theme) => ({
   grid: {
     flexGrow: 1,

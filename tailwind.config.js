@@ -21,6 +21,13 @@ module.exports = {
       animation: {
         shake: "shake 0.5s ease-in-out",
       },
+      colors: {
+        primary: "#041E42",
+        secondary: "#F5C518",
+      },
+      transitionProperty: {
+        width: "width",
+      },
     },
   },
   plugins: [],

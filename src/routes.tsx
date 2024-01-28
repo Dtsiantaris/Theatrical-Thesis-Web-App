@@ -1,13 +1,12 @@
 import React from "react";
-import HomeIcon from "@material-ui/icons/Home";
-import PersonIcon from "@material-ui/icons/Person";
-import { FaTheaterMasks } from "react-icons/fa";
-import LocationCityIcon from "@material-ui/icons/LocationCity";
-import { FaMapMarkedAlt } from "react-icons/fa";
-import BookmarksIcon from "@material-ui/icons/Bookmarks";
-import EqualizerIcon from "@material-ui/icons/Equalizer";
-import CompareArrowsIcon from "@material-ui/icons/CompareArrows";
-import PaletteIcon from "@material-ui/icons/Palette";
+import HomeIcon from "@mui/icons-material/Home";
+import PersonIcon from "@mui/icons-material/Person";
+import LocationCityIcon from "@mui/icons-material/LocationCity";
+import BookmarksIcon from "@mui/icons-material/Bookmarks";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
+import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
+import PaletteIcon from "@mui/icons-material/Palette";
+import { MapOutlined, MasksTwoTone } from "@mui/icons-material";
 
 export interface Route {
   path: string;
@@ -21,52 +20,52 @@ const routes: Route[] = [
   {
     path: "/",
     name: "Αρχική",
-    icon: <HomeIcon fontSize="default" />,
+    icon: <HomeIcon fontSize="small" />,
   },
   {
     path: "/artists",
     pathOnClick: "/artists?page=1",
     name: "Καλλιτέχνες",
-    icon: <PersonIcon fontSize="default" />,
+    icon: <PersonIcon fontSize="small" />,
   },
   {
     path: "/shows",
     pathOnClick: "/shows?page=1",
     name: "Παραστάσεις",
-    icon: <FaTheaterMasks fontSize={24} />,
+    icon: <MasksTwoTone fontSize="small" />,
   },
   {
     path: "/venues",
     pathOnClick: "/venues?page=1",
     name: "Θέατρα",
-    icon: <LocationCityIcon fontSize="default" />,
+    icon: <LocationCityIcon fontSize="small" />,
   },
   {
     path: "/find",
     name: "Βρες",
-    icon: <FaMapMarkedAlt fontSize={24} />,
+    icon: <MapOutlined fontSize="small" />,
   },
   {
     path: "/stats",
     pathOnClick: "/stats/2022",
     name: "Στατιστικά",
-    icon: <EqualizerIcon fontSize="default" />,
+    icon: <EqualizerIcon fontSize="small" />,
   },
   {
     path: "/compare",
     name: "Σύκριση",
-    icon: <CompareArrowsIcon fontSize="default" />,
+    icon: <CompareArrowsIcon fontSize="small" />,
   },
   {
     path: "/saved",
     name: "Αποθηκευμένα",
-    icon: <BookmarksIcon fontSize="default" />,
+    icon: <BookmarksIcon fontSize="small" />,
     condition: (isLoggedIn) => isLoggedIn,
   },
   {
     path: "/color",
     name: "Χρώματα",
-    icon: <PaletteIcon fontSize="default" />,
+    icon: <PaletteIcon fontSize="small" />,
   },
 ];
 

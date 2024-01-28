@@ -5,11 +5,11 @@ import {
   Button,
   Fade,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import style from "../assets/jss/components/videoContainerStyle";
-import NavigateNextRoundedIcon from "@material-ui/icons/NavigateNextRounded";
-import NavigateBeforeRoundedIcon from "@material-ui/icons/NavigateBeforeRounded";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
+import NavigateBeforeRoundedIcon from "@mui/icons-material/NavigateBeforeRounded";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ReactPlayer from "react-player/youtube";
 import AspectRatioSizer from "../utils/AspectRatioSizer";
 import Link from "next/link";
@@ -96,11 +96,9 @@ const VideoContainer: React.FC<VideoContainerProps> = (props) => {
       </div>
       <div className={classes.description}>
         <Link href={`shows/${production.id}`}>
-          <a className="linksNoDecoration">
-            <Typography variant="h3" component="h2">
-              {production.title}
-            </Typography>
-          </a>
+          <Typography variant="h3" component="h2">
+            {production.title}
+          </Typography>
         </Link>
         <Typography
           component="p"

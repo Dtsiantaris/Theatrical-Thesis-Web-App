@@ -8,7 +8,7 @@ import {
   Box,
   Typography,
   CircularProgress,
-} from "@material-ui/core";
+} from "@mui/material";
 import Dropzone from "react-dropzone";
 //hooks
 import { useUserMutations } from "../hooks/mutations/useUserMutations";

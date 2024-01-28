@@ -1,4 +1,4 @@
-import { Theme } from "@material-ui/core";
+import { Theme } from "@mui/material";
 const savedPageStyle = (theme: Theme) => ({
   container: {
     border: `1px solid ${theme.palette.primary.light}`,

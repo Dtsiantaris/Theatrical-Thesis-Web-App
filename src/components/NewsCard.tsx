@@ -1,9 +1,6 @@
-import { makeStyles, Typography } from "@material-ui/core";
-import style from "../assets/jss/components/newsCardStyle";
+import { Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";
-
-const useStyles = makeStyles(style);
 
 interface NewsCardProps {
   article: {
@@ -15,13 +12,12 @@ interface NewsCardProps {
 }
 
 const NewsCard: React.FC<NewsCardProps> = ({ article }) => {
-  const classes = useStyles();
   const [imageSrc, setImageSrc] = useState(article.urlToImage);
 
   return (
     <a href={article.url} className="linksNoDecoration">
-      <div className={classes.container}>
-        <div className={classes.imageWrapper}>
+      <div className="flex flex-col max-w-xs bg-[#2a2a2a] rounded-[4%] overflow-hidden shadow-sm border-2 border-transparent hover:border-purple-400 hover:shadow-md transition-all">
+        <div className="relative h-44">
           <Image
             onError={() => setImageSrc("/DefaultShowImage.jpg")}
             src={imageSrc}
@@ -30,7 +26,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ article }) => {
             objectFit="cover"
           />
         </div>
-        <div className={classes.body}>
+        <div className="px-5 py-2">
           <Typography variant="h4" component="h3">
             {article.title}
           </Typography>

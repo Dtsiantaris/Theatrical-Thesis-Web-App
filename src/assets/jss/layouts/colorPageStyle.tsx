@@ -1,4 +1,4 @@
-import { Theme } from "@material-ui/core";
+import { Theme } from "@mui/material";
 const colorPageStyle = (theme: Theme) => ({
   paper: {
     padding: 20,

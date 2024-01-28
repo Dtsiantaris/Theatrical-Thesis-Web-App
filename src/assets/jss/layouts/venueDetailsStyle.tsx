@@ -1,4 +1,4 @@
-import { Theme, createStyles } from "@material-ui/core";
+import { Theme, createStyles } from "@mui/material";
 
 const venueDetailsStyle = (theme: Theme) =>
   createStyles({

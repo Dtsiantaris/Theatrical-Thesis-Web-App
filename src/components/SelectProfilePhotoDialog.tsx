@@ -10,7 +10,7 @@ import {
   ListItemText,
   CircularProgress,
   Avatar,
-} from "@material-ui/core";
+} from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { UserPhoto } from "../types/User";
 import { useUserMutations } from "../hooks/mutations/useUserMutations";

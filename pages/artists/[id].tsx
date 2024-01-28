@@ -10,21 +10,19 @@ import {
   IconButton,
   useMediaQuery,
   useTheme,
-} from "@material-ui/core";
+} from "@mui/material";
 import style from "../../src/assets/jss/layouts/artistDetailsStyle";
 import LoadingScene from "../../src/components/LoadingScene";
 import { useRouter } from "next/router";
 import { mainFetcher, tmdbFetcher } from "../../src/utils/AxiosInstances";
 import Link from "next/link";
 import Image from "next/image";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import FavoriteIcon from "@material-ui/icons/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import useFavoriteArtist from "../../src/hooks/useFavoriteArtist";
 import MediaViewer from "../../src/components/MediaViewer";
 import Head from "next/head";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   Tooltip,
   Legend,
@@ -278,20 +276,15 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
                     ) => (
                       <ListItem key={index} className={classes.listItem}>
                         <Link href={`/shows/${play.productionId}`}>
-                          <a className={classes.link}>
+                         
                             <ListItemText primary={play.title} />
-                          </a>
                         </Link>
                         <Link href="/stats/2022">
-                          <a
-                            style={{ marginLeft: "auto" }}
-                            className={classes.link}
-                          >
+                        
                             <ListItemText
                               className={classes.year}
                               primary="2022"
                             />
-                          </a>
                         </Link>
                       </ListItem>
                     )
@@ -327,20 +320,14 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
                       ) => (
                         <ListItem key={index} className={classes.listItem}>
                           <Link href={`/shows/${play.productionId}`}>
-                            <a className={classes.link}>
                               <ListItemText primary={play.title} />
-                            </a>
                           </Link>
                           <Link href="/stats/2022">
-                            <a
-                              style={{ marginLeft: "auto" }}
-                              className={classes.link}
-                            >
+                           
                               <ListItemText
                                 className={classes.year}
                                 primary="2022"
                               />
-                            </a>
                           </Link>
                         </ListItem>
                       )

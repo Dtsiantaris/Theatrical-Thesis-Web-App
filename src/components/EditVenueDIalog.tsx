@@ -9,7 +9,7 @@ import {
   TextField,
   FormControl,
   InputLabel,
-} from "@material-ui/core";
+} from "@mui/material";
 import { useVenueMutations } from "../hooks/mutations/useVenueMutations";
 
 interface EditVenueDialogProps {

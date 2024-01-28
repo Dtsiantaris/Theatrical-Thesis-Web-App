@@ -4,7 +4,7 @@ import getShowImage from "../utils/getShowImage";
 import ArtistCard from "./ArtistCard";
 import VenueCard from "./VenueCard";
 import ShowCard from "./ShowCard";
-import { internalFetcherGet } from "../utils/AxiosInstances";
+import { baseURL, internalFetcherGet } from "../utils/AxiosInstances";
 
 interface FetchComponentProps {
   path?: string;
@@ -23,7 +23,7 @@ const FetchComponent: React.FC<FetchComponentProps> = ({ path, id }) => {
   const [props, setProps] = useState<DataProps>({ id: -1 });
   const { data } = useSWR<DataProps>(
     path ? ["/api/fetchMask", path, id] : null,
-    internalFetcherGet
+    internalFetcherGet(baseURL, path, id)
   );
 
   let component;

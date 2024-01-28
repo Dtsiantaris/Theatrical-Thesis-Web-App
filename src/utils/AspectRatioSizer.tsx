@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles, Theme } from "@material-ui/core";
+import { makeStyles, Theme } from "@mui/material";
 
 const style = (theme: Theme) => ({
   aspectRatioSizer: {

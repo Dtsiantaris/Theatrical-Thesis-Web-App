@@ -9,7 +9,7 @@ import {
   Button,
   Container,
   CircularProgress,
-} from "@material-ui/core";
+} from "@mui/material";
 // interfaces
 import { User } from "../src/types/User";
 // hooks

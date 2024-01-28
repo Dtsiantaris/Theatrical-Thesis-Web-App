@@ -1,6 +1,6 @@
-import NextLink from "next/link"
-import { Link } from "@material-ui/core"
-import Head from 'next/head'
+import NextLink from "next/link";
+import { Link } from "@mui/material";
+import Head from "next/head";
 
 export default function Custom404() {
   return (
@@ -19,6 +19,5 @@ export default function Custom404() {
         </div>
       </div>
     </>
-
-  )
+  );
 }

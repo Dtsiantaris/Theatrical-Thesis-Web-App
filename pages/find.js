@@ -10,23 +10,23 @@ import {
   Radio,
   ThemeProvider,
   useTheme,
-} from "@material-ui/core";
+} from "@mui/material";
 import style from "../src/assets/jss/layouts/findStyle";
 import { useReducer, useEffect, useState, useRef } from "react";
-import SearchIcon from "@material-ui/icons/Search";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
+import SearchIcon from "@mui/icons-material/Search";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import Script from "next/script";
 import { useRouter } from "next/router";
 // import events from "../public/eventsVeryNew.json";
 import { mainFetcher } from "../src/utils/AxiosInstances";
 import EventsCard from "../src/components/EventsCard";
-import { Pagination } from "@material-ui/lab";
+import { Pagination } from "@mui/material";
 import Head from "next/head";
-import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import grLocale from "date-fns/locale/el";
 import { DatePickerTheme } from "../src/assets/themes/DarkTheme";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 
 let sessionToken;
 const date = new Date();
@@ -278,7 +278,7 @@ const FindShow = ({ shows }) => {
   }, [autocompleteService, formData.address]);
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils} locale={grLocale}>
+    <LocalizationProvider utils={DateFnsUtils} locale={grLocale}>
       <Head>
         <title>Εύρεση Παράστασης | Theatrica</title>
       </Head>
@@ -494,7 +494,7 @@ const FindShow = ({ shows }) => {
           )}
         </div>
       </div>
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
   );
 };
 

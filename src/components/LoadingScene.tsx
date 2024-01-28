@@ -1,5 +1,5 @@
 import React from "react";
-import { Typography, LinearProgress, makeStyles } from "@material-ui/core";
+import { Typography, LinearProgress, makeStyles } from "@mui/material";
 import style from "../assets/jss/components/loadingSceneStyle";
 import clsx from "clsx";
 

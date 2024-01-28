@@ -4,36 +4,35 @@ import {
   Toolbar,
   IconButton,
   InputBase,
-  makeStyles,
   Button,
-  Theme,
-  Popover,
-  ListItem,
-  ListItemText,
-} from "@material-ui/core";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import MenuIcon from "@material-ui/icons/Menu";
-import PersonIcon from "@material-ui/icons/Person";
-import style from "../../assets/jss/components/navbarStyle";
-import SearchIcon from "@material-ui/icons/Search";
+  Paper,
+  Grow,
+  ClickAwayListener,
+  MenuItem,
+  ListItemIcon,
+  MenuList,
+  Popper,
+} from "@mui/material";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import MenuIcon from "@mui/icons-material/Menu";
+import PersonIcon from "@mui/icons-material/Person";
+import SearchIcon from "@mui/icons-material/Search";
 import { DrawerContext } from "../../contexts/DrawerContext";
 import NextNprogress from "nextjs-progressbar";
-import { useTheme } from "@material-ui/core/styles";
+import { useTheme } from "@mui/material";
 import { useRouter } from "next/router";
 import { useUserContext } from "../../contexts/UserContext";
 
-const useStyles = makeStyles(style);
-
 const Navbar: FC = () => {
-  const classes = useStyles();
   const { toggleDrawer } = useContext(DrawerContext);
   const theme = useTheme();
 
   const [searchValue, setSearchValue] = useState<string>("");
+  const [menuOpen, setMenuOpen] = useState(false);
+  const anchorRef = React.useRef<HTMLButtonElement>(null);
 
   const { isLoggedIn, user, handleLogout } = useUserContext();
-
   const router = useRouter();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -45,96 +44,126 @@ const Navbar: FC = () => {
     setSearchValue(event.target.value);
   };
 
-  const redirectLogin = () => {
-    router.push("/login");
+  const handleIconClick = () => {
+    setMenuOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleMenuClose = () => {
+    setMenuOpen(false);
   };
 
   const redirectProfile = () => {
     router.push("/user");
+    handleMenuClose();
   };
 
-  //profile icon
-  // Dropdown state
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-  // Handle opening the dropdown
-  const handleIconClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  // Handle closing the dropdown
   const handleLogoutAndRedirect = () => {
-    handleClose();
-    handleLogout(); // Call the logout function from the context
-    router.push("/"); // Redirect to the home page
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
+    handleLogout();
+    router.push("/");
+    handleMenuClose();
   };
 
   return (
     <>
-      <AppBar className={classes.appbar} id="navbar">
-        <Toolbar className={classes.navbar}>
-          <IconButton onClick={toggleDrawer}>
+      <AppBar className="!z-[2000] !bg-primary" id="navbar">
+        <Toolbar className="flex justify-between">
+          <IconButton className="!text-white" onClick={toggleDrawer}>
             <MenuIcon />
           </IconButton>
-          <form onSubmit={handleSubmit} className={classes.search}>
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white w-3/4 flex max-w-xl m-auto "
+          >
             <InputBase
               type="search"
               placeholder="Αναζήτηση"
               value={searchValue}
               onChange={handleChange}
-              classes={{ input: classes.searchInput, root: classes.searchRoot }}
+              slotProps={{
+                input: {
+                  className: "!pl-3 !pr-3 !border  text-black",
+                },
+                root: {
+                  className: "!w-full",
+                },
+              }}
             />
-            <Button className={classes.searchIcon} type="submit">
+            <Button
+              className="!bg-gray-300 !rounded-full !mr-0.5"
+              type="submit"
+            >
               <SearchIcon />
             </Button>
           </form>
           {isLoggedIn ? (
             <>
-              <IconButton onClick={handleIconClick}>
+              <IconButton
+                className="!text-white"
+                onClick={handleIconClick}
+                aria-controls={menuOpen ? "composition-menu" : undefined}
+                aria-expanded={menuOpen ? "true" : undefined}
+                aria-haspopup="true"
+                ref={anchorRef}
+              >
                 <PersonIcon />
               </IconButton>
-              <Popover
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={handleClose}
-                disableScrollLock={true}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "left",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
-                }}
+              <Popper
+                open={menuOpen}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                placement="bottom-start"
+                transition
+                disablePortal
               >
-                <div className={classes.popOverModal}>
-                  <ListItem>
-                    <Button
-                      className={classes.profileButton}
-                      onClick={redirectProfile}
-                    >
-                      {user?.email}
-                      <AccountCircleIcon style={{ marginLeft: "4px" }} />
-                    </Button>
-                  </ListItem>
-                  <ListItem>
-                    <Button
-                      onClick={handleLogoutAndRedirect}
-                      className={classes.logoutButton}
-                    >
-                      Αποσύνδεση
-                      <ExitToAppIcon style={{ marginLeft: "4px" }} />
-                    </Button>
-                  </ListItem>
-                </div>
-              </Popover>
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === "bottom-start"
+                          ? "left top"
+                          : "left bottom",
+                    }}
+                  >
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleMenuClose}>
+                        <MenuList
+                          className="bg-white rounded-md"
+                          autoFocusItem={menuOpen}
+                          id="composition-menu"
+                          onKeyDown={(event) => {
+                            if (event.key === "Tab") {
+                              event.preventDefault();
+                              handleMenuClose();
+                            }
+                          }}
+                          aria-labelledby="composition-button"
+                          role="menu"
+                        >
+                          <MenuItem onClick={redirectProfile}>
+                            <ListItemIcon>
+                              <AccountCircleIcon />
+                            </ListItemIcon>
+                            {user?.email}
+                          </MenuItem>
+                          <MenuItem onClick={handleLogoutAndRedirect}>
+                            <ListItemIcon>
+                              <ExitToAppIcon />
+                            </ListItemIcon>
+                            Αποσύνδεση
+                          </MenuItem>
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
             </>
           ) : (
-            <Button className={classes.loginButton} onClick={redirectLogin}>
+            <Button
+              className="normal-case bg-purple-200 hover:bg-purple-500"
+              onClick={() => router.push("login")}
+            >
               Σύνδεση / Εγγραφή
             </Button>
           )}

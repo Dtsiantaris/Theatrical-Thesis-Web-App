@@ -27,18 +27,18 @@ import {
   Button,
   CircularProgress,
   Backdrop,
-} from "@material-ui/core";
-import EnhancedEncryptionIcon from "@material-ui/icons/EnhancedEncryption";
-import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
-import PermIdentity from "@material-ui/icons/PermIdentity";
-import EmailIcon from "@material-ui/icons/Email";
-import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
-import HighlightOffIcon from "@material-ui/icons/HighlightOff";
-import CloseIcon from "@material-ui/icons/Close";
-import FacebookIcon from "@mui/icons-material/Facebook";
+} from "@mui/material";
+import EnhancedEncryptionIcon from "@mui/icons-material/EnhancedEncryption";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import PermIdentity from "@mui/icons-material/PermIdentity";
+import EmailIcon from "@mui/icons-material/Email";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import CloseIcon from "@mui/icons-material/Close";
+import { Facebook as FacebookIcon } from "@mui/icons-material";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import YouTubeIcon from "@mui/icons-material/YouTube";
-import SaveIcon from "@material-ui/icons/Save";
+import SaveIcon from "@mui/icons-material/Save";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AddCard from "@mui/icons-material/AddCard";
 import WorkOutlineIcon from "@mui/icons-material/WorkOutline";

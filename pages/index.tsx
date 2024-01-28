@@ -4,8 +4,7 @@ import {
   Divider,
   Typography,
   InputBase,
-} from "@material-ui/core";
-import style from "../src/assets/jss/layouts/homeStyle";
+} from "@mui/material";
 import ContentSlider from "../src/components/ContentSlider";
 import ArtistCard from "../src/components/ArtistCard";
 import ShowCard from "../src/components/ShowCard";
@@ -16,7 +15,7 @@ import NewsCard from "../src/components/NewsCard";
 import { v2 as cloudinary } from "cloudinary";
 import { newsFetcher } from "../src/utils/AxiosInstances";
 import { useEffect, useState } from "react";
-import SearchIcon from "@material-ui/icons/Search";
+import SearchIcon from "@mui/icons-material/Search";
 import { useRouter } from "next/router";
 import ScrollPrompt from "../src/components/ScrollPrompt";
 import HeroGraph from "../src/components/HeroGraph";
@@ -76,10 +75,7 @@ export const getStaticProps = async () => {
   };
 };
 
-const useStyles = makeStyles(style);
-
 function Home({ artists, latestShows, articles }) {
-  const classes = useStyles();
   const [searchValue, setSearchValue] = useState("");
   const router = useRouter();
 
@@ -113,14 +109,14 @@ function Home({ artists, latestShows, articles }) {
           content="Αναζητήστε καλλιτέχνες, παραστάσεις και θέατρα, δείτε στατιστικά και συγκρίνετε χρονικές περιόδους ή βρείτε μια παράσταση στην περιοχή σας!"
         />
       </Head>
-      <div className={classes.heroBackgroundWrapper}>
-        <div className={classes.heroBackground}>
+      <div className="pt-14 overflow-hidden absolute top-0 left-0 w-full h-full -z-10 opacity-70">
+        <div className="w-[103%] h-full">
           <HeroGraph />
         </div>
       </div>
-      <div className={classes.wrapper}>
-        <div className={classes.container}>
-          <div className={classes.heroSection}>
+      <div className="mb-6 sm:ml-14 md:py-5">
+        <div className="max-w-[1250px] mx-0 my-auto flex flex-col sect">
+          <div className="min-h-[calc(100vh-64px)] flex flex-col justify-center gap-[10px] px-0 py-5">
             <Typography variant="h1" style={{ marginTop: "auto" }}>
               Theatrical Analytics
             </Typography>
@@ -130,7 +126,7 @@ function Home({ artists, latestShows, articles }) {
               περιοχή σας!
             </Typography>
             <form onSubmit={handleSubmit}>
-              <div className={classes.searchInput}>
+              <div className="flex items-center gap-1 p-3 max-w-[182px] bg-purple-200 rounded-2xl border-1 border-purple-200 mt-3 shadow-sm">
                 <SearchIcon />
                 <InputBase
                   type="text"
@@ -140,28 +136,28 @@ function Home({ artists, latestShows, articles }) {
                 />
               </div>
             </form>
-            <div className={classes.scrollPromptContainer}>
+            <div className="mt-auto">
               <ScrollPrompt />
             </div>
           </div>
-          <section>
+          <section className="bg-primary-dark md:bg-transparent md:px-16 my-40 md:my-25 py-30 md:py-0">
             <Typography
-              className={classes.headingPadding}
+              className="px-0 py-5 md:p-0"
               variant="h3"
               component="h2"
             >
               Νεότερες Ειδήσεις
             </Typography>
-            <div className={classes.newsContainer}>
+            <div className="px-10 py-5 flex flex-wrap gap-12 justify-center md:justify-around">
               {articles.map((article) => (
                 <NewsCard key={article.url} article={article} />
               ))}
             </div>
           </section>
           <Hidden smDown>
-            <Divider className={classes.divider} flexItem />
+            <Divider className="h-1 mx-12 my-0" flexItem />
           </Hidden>
-          <section>
+          <section className="bg-primary-dark md:bg-transparent md:px-16 my-40 md:my-25 py-30 md:py-0">
             <ContentSlider
               title="Καλλιτέχνες"
               description="Δημοφιλείς Ηθοποιοί"
@@ -178,9 +174,9 @@ function Home({ artists, latestShows, articles }) {
             </ContentSlider>
           </section>
           <Hidden smDown>
-            <Divider className={classes.divider} flexItem />
+            <Divider className="h-1 mx-12 my-0" flexItem />
           </Hidden>
-          <section>
+          <section className="bg-primary-dark md:bg-transparent md:px-16 my-40 md:my-25 py-30 md:py-0">
             <ContentSlider title="Παραστάσεις" description="Νέες Κυκλοφορίες">
               {latestShows.results.map((item) => (
                 <ShowCard

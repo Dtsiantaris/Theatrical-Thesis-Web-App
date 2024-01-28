@@ -5,18 +5,16 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
-} from "@material-ui/core";
-import style from "../assets/jss/components/contentSliderStyle";
+} from "@mui/material";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
-import NavigateNextRoundedIcon from "@material-ui/icons/NavigateNextRounded";
-import NavigateBeforeRoundedIcon from "@material-ui/icons/NavigateBeforeRounded";
+import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
+import NavigateBeforeRoundedIcon from "@mui/icons-material/NavigateBeforeRounded";
 import clsx from "clsx";
-import SwiperCore, { Navigation } from "swiper";
+import SwiperCore from "swiper";
+import { Navigation } from "swiper/modules";
 
 SwiperCore.use([Navigation]);
-
-const useStyles = makeStyles(style);
 
 interface ContentSliderProps {
   title: string;
@@ -26,7 +24,6 @@ interface ContentSliderProps {
 }
 
 const ContentSlider: React.FC<ContentSliderProps> = (props) => {
-  const classes = useStyles();
   const theme = useTheme();
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
   const isLgUp = useMediaQuery(theme.breakpoints.up("lg"));
@@ -71,11 +68,15 @@ const ContentSlider: React.FC<ContentSliderProps> = (props) => {
   }, [slidesPerView, slideByAmount]);
 
   return (
-    <div className={classes.container}>
-      <div className={classes.headerContainer}>
+    <div className="flex flex-col">
+      <div className="flex justify-between items-center mb-4 ">
         <div>
           <Typography
-            className={clsx({ [classes.title]: props.decoratedTitle })}
+            className={
+              props.decoratedTitle
+                ? "relative pl-2 before:content-none before:absolute before:w-1 before:bg-purple-400 before:h-4/5 before:ml-[-0.5rem] before:top-1"
+                : ""
+            }
             variant="h3"
             component="h2"
           >
@@ -86,25 +87,25 @@ const ContentSlider: React.FC<ContentSliderProps> = (props) => {
           </Typography>
         </div>
         {slidesPerView < props.children.length && (
-          <div className={classes.buttonsContainer}>
+          <div className="hidden sm:block">
             <IconButton
               onClick={prevSlide}
               disabled={progress <= 0}
-              className={classes.button}
+              className="hover:text-purple-300"
             >
               <NavigateBeforeRoundedIcon />
             </IconButton>
             <IconButton
               onClick={nextSlide}
               disabled={progress >= 1}
-              className={classes.button}
+              className="hover:text-purple-300"
             >
               <NavigateNextRoundedIcon />
             </IconButton>
           </div>
         )}
       </div>
-      <div className={classes.swiper}>
+      <div className="mt-5">
         <Swiper
           onSwiper={(swiper) => {
             swiperRef = swiper;
@@ -116,7 +117,7 @@ const ContentSlider: React.FC<ContentSliderProps> = (props) => {
           }}
         >
           {props.children.map((child, index) => (
-            <SwiperSlide key={index} className={classes.slide}>
+            <SwiperSlide key={index} className="flex justify-center">
               {child}
             </SwiperSlide>
           ))}

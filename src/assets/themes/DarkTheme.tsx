@@ -1,4 +1,4 @@
-import { createMuiTheme, responsiveFontSizes, Theme } from "@material-ui/core";
+import { createTheme, responsiveFontSizes, Theme } from "@mui/material";
 
 // Define interface for custom color object used in the theme
 export interface CustomColor {
@@ -8,7 +8,7 @@ export interface CustomColor {
 }
 
 const DarkTheme = (secondaryColor?: CustomColor): Theme => {
-  let theme = createMuiTheme({
+  let theme = createTheme({
     breakpoints: {
       values: {
         xs: 0,
@@ -33,7 +33,6 @@ const DarkTheme = (secondaryColor?: CustomColor): Theme => {
         main: secondaryColor ? secondaryColor.main : "#81FFFF", // Slightly lighter than before
         dark: secondaryColor ? secondaryColor.dark : "#3EDCDC", // Slightly lighter than before
       },
-      type: "dark",
     },
     typography: {
       h1: {
@@ -70,12 +69,11 @@ export const DatePickerTheme = (color: DatePickerColor): Theme => {
   if (!color || !color.main) {
     throw new Error("Invalid color object. main property is required");
   }
-  return createMuiTheme({
+  return createTheme({
     palette: {
       primary: {
         main: color.main,
       },
-      type: "dark",
     },
   });
 };

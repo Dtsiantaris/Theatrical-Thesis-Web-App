@@ -1,10 +1,10 @@
-import { makeStyles, Drawer, Fab, Hidden, Button } from "@material-ui/core";
-import { Typography } from "@material-ui/core";
+import { makeStyles, Drawer, Fab, Hidden, Button } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
-import FilterListIcon from "@material-ui/icons/FilterList";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import PaginationPage from "../../src/components/PaginationPage";
 import { Venue } from "../../src/types/Venue";
 import { mainFetcher } from "../../src/utils/AxiosInstances";

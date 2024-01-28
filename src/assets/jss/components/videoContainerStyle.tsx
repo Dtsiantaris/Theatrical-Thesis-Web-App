@@ -1,4 +1,4 @@
-import { Theme, createStyles } from "@material-ui/core/styles";
+import { Theme, createStyles } from "@mui/material";
 
 const videoContainerStyle = (theme: Theme) =>
   createStyles({

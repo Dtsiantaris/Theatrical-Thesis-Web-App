@@ -11,7 +11,7 @@ import {
   ListItem,
   ListItemText,
   Divider,
-} from "@material-ui/core";
+} from "@mui/material";
 import CallMadeIcon from "@mui/icons-material/CallMade";
 import { Venue } from "../types/Venue";
 import { useRouter } from "next/router";

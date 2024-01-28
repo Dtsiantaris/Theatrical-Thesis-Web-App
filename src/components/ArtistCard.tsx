@@ -6,16 +6,13 @@ import {
   useMediaQuery,
   useTheme,
   Button,
-} from "@material-ui/core";
-import style from "../assets/jss/components/artistCardStyle";
+} from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
 import { mainFetcher } from "../utils/AxiosInstances";
 import CopyrightIcon from "@mui/icons-material/Copyright";
 import ClaimPersonDialog from "./ClaimPersonDialog";
 import { Person } from "../types/Person";
-
-const useStyles = makeStyles(style);
 
 // Define the prop types for ArtistCard component
 export interface ArtistCardProps {
@@ -35,7 +32,6 @@ const ArtistCard: React.FC<ArtistCardProps> = ({
   isDetails,
 }) => {
   console.log("ArtistCard Props:", id, fullname, image);
-  const classes = useStyles();
   const theme = useTheme();
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
 
@@ -81,10 +77,10 @@ const ArtistCard: React.FC<ArtistCardProps> = ({
   const imageToRender = fetchedImage || image;
   return (
     <React.Fragment>
-      <div className={classes.container}>
+      <div className="flex flex-col items-center text-center w-32 p-2 sm:w-44">
         <Avatar
-          className={`${classes.avatar} ${
-            imageToRender && classes.transparent
+          className={`w-32 h-32 border-2 border-transparent hover:border-purple-400 shadow-md transition-all z-20 sm:w-40 sm:h-40 mt-2  ${
+            imageToRender && "bg-transparent"
           }`}
           alt="Artist Photo"
         >
@@ -97,7 +93,7 @@ const ArtistCard: React.FC<ArtistCardProps> = ({
             />
           ) : null}
         </Avatar>
-        <Typography variant="body1" component="p" className={classes.name}>
+        <Typography variant="body1" component="p" className="mt-2">
           {fullname}
         </Typography>
         {!isClaimed && isDetails && (

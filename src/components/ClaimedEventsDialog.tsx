@@ -11,7 +11,7 @@ import {
   ListItem,
   ListItemText,
   Divider,
-} from "@material-ui/core";
+} from "@mui/material";
 import { Event } from "../types/Event";
 
 interface ClaimedEventsListProps {

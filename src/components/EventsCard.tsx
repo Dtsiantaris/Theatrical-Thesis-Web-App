@@ -1,8 +1,7 @@
-import { makeStyles, Typography, Button } from "@material-ui/core";
+import { makeStyles, Typography, Button } from "@mui/material";
 import style from "../assets/jss/components/eventsCardStyle";
 import Link from "next/link";
-import { FaExternalLinkAlt } from "react-icons/fa";
-import ScheduleIcon from "@material-ui/icons/Schedule";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 
 const useStyles = makeStyles(style);
 
@@ -65,9 +64,7 @@ const EventsCard: React.FC<EventsCardProps> = ({ show }) => {
             </div>
             <div>
               <Link href={`/venues/${event.venue.id}`}>
-                <a className={classes.link}>
-                  <Typography variant="body1">{event.venue.title}</Typography>
-                </a>
+                <Typography variant="body1">{event.venue.title}</Typography>
               </Link>
             </div>
             <div>

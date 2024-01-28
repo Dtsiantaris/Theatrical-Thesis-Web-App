@@ -9,7 +9,7 @@ import {
   TextField,
   ListItem,
   ListItemIcon,
-} from "@material-ui/core";
+} from "@mui/material";
 import PermPhoneMsgIcon from "@mui/icons-material/PermPhoneMsg";
 import { useUserMutations } from "../hooks/mutations/useUserMutations";
 import { useUserQueries } from "../hooks/queries/useUserQueries";

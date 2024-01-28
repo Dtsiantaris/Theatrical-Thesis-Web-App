@@ -9,7 +9,7 @@ import React, {
 import { User } from "../types/User";
 //utils & icons
 import { toast } from "react-toastify";
-import EmailIcon from "@material-ui/icons/Email";
+import EmailIcon from "@mui/icons-material/Email";
 
 interface UserContextData {
   isLoggedIn: boolean;

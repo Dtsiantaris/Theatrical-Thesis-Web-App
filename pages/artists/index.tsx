@@ -1,14 +1,19 @@
 import PaginationPage from "../../src/components/PaginationPage";
 import { mainFetcher } from "../../src/utils/AxiosInstances";
 import Head from "next/head";
-import { Typography } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { makeStyles, Hidden, Drawer, Fab, Button } from "@material-ui/core";
-import style from "../../src/assets/jss/layouts/artistsPageStyle";
-import FilterListIcon from "@material-ui/icons/FilterList";
+import {
+  makeStyles,
+  Hidden,
+  Drawer,
+  Fab,
+  Button,
+  TextField,
+  Autocomplete,
+} from "@mui/material";
+import FilterListIcon from "@mui/icons-material/FilterList";
 import { GetServerSideProps } from "next";
 import { Person } from "../../src/types/Person";
 import { ArtistCardProps } from "../../src/components/ArtistCard";
@@ -73,8 +78,6 @@ export const getServerSideProps: GetServerSideProps<
   };
 };
 
-const useStyles = makeStyles(style);
-
 const letters = [..."ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ"];
 const roles = [
   "Ηθοποιός",
@@ -112,7 +115,6 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
   pageCount,
   page,
 }) => {
-  const classes = useStyles();
   const router = useRouter();
   const [letterValue, setLetterValue] = useState(router.query.letter);
   const [roleValue, setRoleValue] = useState(router.query.role);
@@ -185,7 +187,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
   }, [orderValue]);
 
   const Filters = (
-    <div className={classes.filtersContainer}>
+    <div className="px-0 py-3 w-[300px] mt-12 -mr-14 flex flex-col items-start gap-5">
       <Typography variant="h3" style={{ marginBottom: 30 }}>
         Φίλτρα
       </Typography>
@@ -269,13 +271,13 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
         <title>Καλλιτέχνες | Theatrica</title>
       </Head>
       <Hidden mdUp>
-        <div className={classes.fab}>
+        <div className="fixed bottom-5 right-5 z-30">
           <Fab color="secondary" onClick={() => setDrawer(true)}>
             <FilterListIcon />
           </Fab>
         </div>
         <Drawer
-          classes={{ paper: classes.drawer }}
+          classes={{ paper: "overflow-hidden" }}
           anchor="left"
           open={drawer}
           onClose={() => setDrawer(false)}
@@ -283,7 +285,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
           {Filters}
         </Drawer>
       </Hidden>
-      <div className={classes.artistsContainer}>
+      <div className="max-w-[1250px] mx-0 my-auto flex p-4 md:pl-[70px]">
         <Hidden smDown>{Filters}</Hidden>
         <PaginationPage
           title="Καλλιτέχνες"

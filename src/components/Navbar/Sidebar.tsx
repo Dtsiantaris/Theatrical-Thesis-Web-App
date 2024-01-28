@@ -1,89 +1,131 @@
-import React, { FC, useContext } from "react";
-import clsx from "clsx";
-import {
-  makeStyles,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Drawer,
-  Hidden,
-  useMediaQuery,
-  useTheme,
-  Tooltip,
-} from "@material-ui/core";
-import routes from "../../routes";
-import style from "../../assets/jss/components/sidebarStyle";
+import * as React from "react";
+import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
+import MuiDrawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
 import { DrawerContext } from "../../contexts/DrawerContext";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import { Route } from "../../routes";
+import routes, { Route } from "../../routes";
 import { useUserContext } from "../../contexts/UserContext";
+import Link from "next/link";
+import { Tooltip } from "@mui/material";
+import { useRouter } from "next/router";
 
-const useStyles = makeStyles(style);
+const drawerWidth = 240;
 
-const Sidebar: FC = () => {
-  const classes = useStyles();
-  const { drawerOpen, closeDrawer } = useContext(DrawerContext);
-  const router = useRouter();
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: drawerWidth,
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: "hidden",
+});
 
-  const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up("sm"));
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: "hidden",
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up("sm")]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+  }),
+}));
+
+const Sidebar = () => {
   const { isLoggedIn } = useUserContext();
-
+  const router = useRouter();
   const filteredRoutes: Route[] = routes.filter((route) =>
     route.condition ? route.condition(isLoggedIn) : true
   );
+  const theme = useTheme();
+  const { drawerOpen, closeDrawer } = React.useContext(DrawerContext);
 
   return (
-    <Drawer
-      variant={isDesktop ? "permanent" : "temporary"}
-      anchor="left"
-      open={drawerOpen}
-      onClose={closeDrawer}
-      className={clsx(classes.drawer, {
-        [classes.drawerOpen]: drawerOpen || !isDesktop,
-        [classes.drawerClose]: !drawerOpen && isDesktop,
-      })}
-      classes={{
-        paper: clsx(classes.drawerPaper, {
-          [classes.drawerOpen]: drawerOpen || !isDesktop,
-          [classes.drawerClose]: !drawerOpen && isDesktop,
-        }),
-      }}
-    >
-      <Hidden xsDown>
-        <div className={classes.toolbar} />
-      </Hidden>
+    <Drawer variant="permanent" open={drawerOpen}>
+      <DrawerHeader>
+        <IconButton onClick={closeDrawer}>
+          {theme.direction === "rtl" ? (
+            <ChevronRightIcon />
+          ) : (
+            <ChevronLeftIcon />
+          )}
+        </IconButton>
+      </DrawerHeader>
+      <Divider />
       <List>
-        {filteredRoutes.map((route: Route) => {
-          return (
-            <Link href={route.pathOnClick || route.path} key={route.name}>
-              <a className="linksNoDecoration">
-                <Tooltip
-                  title={route.name}
-                  placement="right"
-                  arrow
-                  disableHoverListener={drawerOpen}
+        {filteredRoutes.map((route: Route) => (
+          <Link href={route.pathOnClick || route.path} key={route.name}>
+            <Tooltip
+              title={route.name}
+              placement="right"
+              arrow
+              disableHoverListener={drawerOpen}
+            >
+              <ListItemButton
+                sx={{
+                  color: "white",
+                  minHeight: 48,
+                  justifyContent: drawerOpen ? "initial" : "center",
+                  px: 2.5,
+                }}
+                selected={
+                  route.path === "/"
+                    ? router.pathname === "/"
+                    : router.pathname.startsWith(route.path)
+                }
+              >
+                <ListItemIcon
+                  sx={{
+                    color: "white",
+                    minWidth: 0,
+                    mr: drawerOpen ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
                 >
-                  <ListItem
-                    className={classes.item}
-                    classes={{ selected: classes.selected }}
-                    selected={
-                      route.path === "/"
-                        ? router.pathname === "/"
-                        : router.pathname.startsWith(route.path)
-                    }
-                    button
-                  >
-                    <ListItemIcon>{route.icon}</ListItemIcon>
-                    <ListItemText primary={route.name} />
-                  </ListItem>
-                </Tooltip>
-              </a>
-            </Link>
-          );
-        })}
+                  {route.icon}
+                </ListItemIcon>
+                <ListItemText
+                  primary={route.name}
+                  sx={{ opacity: drawerOpen ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </Tooltip>
+          </Link>
+        ))}
       </List>
     </Drawer>
   );

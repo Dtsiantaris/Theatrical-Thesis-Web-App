@@ -17,8 +17,8 @@ import ContentSlider from "../../src/components/ContentSlider";
 import ShowCard from "../../src/components/ShowCard";
 import LoadingScene from "../../src/components/LoadingScene";
 // utils & icons
-import { Button, makeStyles, Typography } from "@material-ui/core";
-import PhoneIcon from "@material-ui/icons/Phone";
+import { Button, makeStyles, Typography } from "@mui/material";
+import PhoneIcon from "@mui/icons-material/Phone";
 import Copyright from "@mui/icons-material/Copyright";
 import Image from "next/image";
 import Head from "next/head";

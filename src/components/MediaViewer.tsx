@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-import { makeStyles, IconButton, Typography } from "@material-ui/core";
-import NavigateNextRoundedIcon from "@material-ui/icons/NavigateNextRounded";
-import NavigateBeforeRoundedIcon from "@material-ui/icons/NavigateBeforeRounded";
-import CloseRoundedIcon from "@material-ui/icons/CloseRounded";
+import { makeStyles, IconButton, Typography } from "@mui/material";
+import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
+import NavigateBeforeRoundedIcon from "@mui/icons-material/NavigateBeforeRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import style from "../assets/jss/components/mediaViewerStyle";
 import { useEffect, useState } from "react";
 import useScrollbarSize from "react-scrollbar-size";

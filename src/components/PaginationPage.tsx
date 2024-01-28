@@ -1,7 +1,7 @@
 import React from "react";
-import { makeStyles, Grid, Typography } from "@material-ui/core";
+import { makeStyles, Grid, Typography } from "@mui/material";
 import style from "../assets/jss/layouts/paginationPageStyle";
-import { Pagination } from "@material-ui/lab";
+import { Pagination } from "@mui/material";
 import { ArtistCardProps } from "./ArtistCard";
 import { ShowCardProps } from "./ShowCard";
 import { VenueCardProps } from "./VenueCard";

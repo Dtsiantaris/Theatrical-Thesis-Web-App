@@ -12,7 +12,7 @@ import {
   MenuItem,
   Checkbox,
   ListItemText,
-} from "@material-ui/core";
+} from "@mui/material";
 import { Role } from "../types/Role";
 import { useRoleQueries } from "../hooks/queries/useRoleQueries";
 import { useUserMutations } from "../hooks/mutations/useUserMutations";

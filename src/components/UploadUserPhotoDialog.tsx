@@ -9,7 +9,7 @@ import {
   Box,
   Typography,
   CircularProgress,
-} from "@material-ui/core";
+} from "@mui/material";
 // utils & icons
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import LabelIcon from "@mui/icons-material/Label";

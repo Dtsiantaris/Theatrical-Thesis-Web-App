@@ -1,10 +1,10 @@
 import React, { createContext, useState, useEffect } from "react";
 import DarkTheme, { CustomColor } from "../assets/themes/DarkTheme"; // Replace 'CustomColor' with the actual type of your custom color.
 import dynamic from "next/dynamic";
-import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider as MuiThemeProvider } from "@mui/material";
 
 const ThemeProvider = dynamic(
-  () => import("@material-ui/core/styles").then((mod) => mod.ThemeProvider),
+  () => import("@mui/material").then((mod) => mod.ThemeProvider),
   { ssr: false }
 );
 

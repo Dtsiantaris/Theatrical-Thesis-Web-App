@@ -1,6 +1,6 @@
 import React from "react";
 import ArtistCard, { ArtistCardProps } from "./ArtistCard";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles } from "@mui/material";
 import style from "../assets/jss/components/itemsListStyle";
 import LoadingScene from "./LoadingScene";
 import clsx from "clsx";

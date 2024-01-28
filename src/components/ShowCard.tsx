@@ -6,18 +6,15 @@ import {
   Typography,
   IconButton,
   Tooltip,
-} from "@material-ui/core";
-import style from "../assets/jss/components/showCardStyle";
+} from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
-import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import useFavoriteShow from "../hooks/useFavoriteShow";
 import useWatchlist from "../hooks/useWatchlist";
-
-const useStyles = makeStyles(style);
 
 export interface ShowCardProps {
   id: number;
@@ -26,8 +23,6 @@ export interface ShowCardProps {
 }
 
 const ShowCard: React.FC<ShowCardProps> = ({ id, title, media }) => {
-  const classes = useStyles();
-
   const { isFavorite, setIsFavorite } = useFavoriteShow(id);
   const { inWatchlist, setInWatchlist } = useWatchlist(id);
 
@@ -40,44 +35,40 @@ const ShowCard: React.FC<ShowCardProps> = ({ id, title, media }) => {
   };
 
   return (
-    <div className={classes.cardContainer}>
-      <Card className={classes.card}>
-        <CardMedia className={classes.cardImg}>
+    <div className="ml-3 mr-4 my-0 hover:-translate-y-[10px] hover:rounded-lg hover:border hover:border-purple-400 hover:shadow-sm transition-all">
+      <Card className="h-80 w-16 flex flex-col rounded-xl sm:w-44">
+        <CardMedia className="relative w-full h-[70%] max-h-[70%]">
           <Link href={`/shows/${id}`}>
-            <a className="linksNoDecoration">
-              <div className={classes.imageContainer}>
-                <Image
-                  src={media ? media : "/DefaultShowImage.jpg"}
-                  alt={`${title} thumbnail`}
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </div>
-            </a>
+            <div className="relative h-full">
+              <Image
+                src={media ? media : "/DefaultShowImage.jpg"}
+                alt={`${title} thumbnail`}
+                layout="fill"
+                objectFit="cover"
+              />
+            </div>
           </Link>
         </CardMedia>
-        <div className={classes.cardTitle}>
+        <div className="px-[9px] py-[7px] h-1/3 max-h-[30%] flex flex-col justify-between last:pb-2 ">
           <Link href={`/shows/${id}`}>
-            <a className={classes.link}>
-              <Tooltip title={title}>
-                <Typography variant="body1" component="h2">
-                  {title}
-                </Typography>
-              </Tooltip>
-            </a>
+            <Tooltip title={title}>
+              <Typography variant="body1" component="h2">
+                {title}
+              </Typography>
+            </Tooltip>
           </Link>
         </div>
-        <div className={classes.icons}>
+        <div className="flex justify-between pl-0 py-2 pr[9px]">
           <IconButton
             size="small"
-            className={classes.button}
+            className="hover:bg-transparent"
             onClick={handleWatchlist}
           >
             {inWatchlist ? <PlaylistAddCheckIcon /> : <PlaylistAddIcon />}
           </IconButton>
           <IconButton
             size="small"
-            className={classes.button}
+            className="hover:bg-transparent"
             onClick={handleFavorite}
           >
             {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}

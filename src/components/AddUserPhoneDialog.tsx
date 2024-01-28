@@ -11,7 +11,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
-} from "@material-ui/core";
+} from "@mui/material";
 import { useUserMutations } from "../hooks/mutations/useUserMutations";
 import ConfirmUserPhoneDialog from "./ConfirmUserPhoneDialog";
 

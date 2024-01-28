@@ -11,7 +11,7 @@ import {
   IconButton,
   useTheme,
   Tooltip as MaterialTooltip,
-} from "@material-ui/core";
+} from "@mui/material";
 import style from "../../src/assets/jss/layouts/showDetailsStyle";
 import he from "he";
 import ItemsList from "../../src/components/ItemsList";
@@ -355,14 +355,12 @@ function ShowDetails({ show, people, images }: ShowDetailsProps) {
                   {artists.crew[Object.keys(artists.crew)[0]].map(
                     (artist, index) => (
                       <Link key={index} href={`/artists/${artist.id}`}>
-                        <a className={classes.link}>
-                          <Typography
-                            variant="body1"
-                            className={index > 0 ? "dotSeparator" : ""}
-                          >
-                            {artist.fullName}
-                          </Typography>
-                        </a>
+                        <Typography
+                          variant="body1"
+                          className={index > 0 ? "dotSeparator" : ""}
+                        >
+                          {artist.fullName}
+                        </Typography>
                       </Link>
                     )
                   )}
@@ -379,14 +377,12 @@ function ShowDetails({ show, people, images }: ShowDetailsProps) {
                   {artists.crew[Object.keys(artists.crew)[1]].map(
                     (artist, index) => (
                       <Link key={index} href={`/artists/${artist.id}`}>
-                        <a className={classes.link}>
-                          <Typography
-                            variant="body1"
-                            className={index > 0 ? "dotSeparator" : ""}
-                          >
-                            {artist.fullName}
-                          </Typography>
-                        </a>
+                        <Typography
+                          variant="body1"
+                          className={index > 0 ? "dotSeparator" : ""}
+                        >
+                          {artist.fullName}
+                        </Typography>
                       </Link>
                     )
                   )}
@@ -402,14 +398,12 @@ function ShowDetails({ show, people, images }: ShowDetailsProps) {
                   </Typography>
                   {artists.actors.slice(0, 3).map((artist, index) => (
                     <Link key={index} href={`/artists/${artist.id}`}>
-                      <a className={classes.link}>
-                        <Typography
-                          variant="body1"
-                          className={index > 0 ? "dotSeparator" : ""}
-                        >
-                          {artist.fullName}
-                        </Typography>
-                      </a>
+                      <Typography
+                        variant="body1"
+                        className={index > 0 ? "dotSeparator" : ""}
+                      >
+                        {artist.fullName}
+                      </Typography>
                     </Link>
                   ))}
                 </div>
