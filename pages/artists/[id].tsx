@@ -139,6 +139,10 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
     return <LoadingScene fullScreen />;
   }
 
+  if (!images) {
+    images = ["/kapoutzidis.jpg"];
+  }
+
   const handleFavorite = () => {
     setIsFavorite(!isFavorite);
   };
@@ -203,7 +207,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
             >
               Φωτογραφίες
             </Typography>
-            {/* <div className={classes.photographsContainer}>
+            <div className={classes.photographsContainer}>
               {images.length > 0 ? (
                 <>
                   {images.map((url, index) => {
@@ -231,9 +235,9 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
                   Δεν υπάρχουν φωτογραφίες
                 </Typography>
               )}
-            </div> */}
+            </div>
           </section>
-          <section>
+          {/* <section>
             <Typography
               variant="h4"
               component="h3"
@@ -242,7 +246,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
             >
               Παραστάσεις
             </Typography>
-            {/* {productionGroups.acting.length > 0 && (
+            {productionGroups.acting.length > 0 && (
               <Accordion
                 square
                 expanded={expanded === "acting"}
@@ -344,8 +348,8 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
                   </List>
                 </Accordion>
               )
-            )} */}
-          </section>
+            )}
+          </section> */}
           <section>
             <Typography
               variant="h4"
