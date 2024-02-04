@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 // interfaces
-import { User } from "../types/User";
+import { User } from "../types/entities/User";
 //utils & icons
 import { toast } from "react-toastify";
 import EmailIcon from "@mui/icons-material/Email";

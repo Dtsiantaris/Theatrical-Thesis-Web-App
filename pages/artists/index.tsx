@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { GetServerSideProps } from "next";
-import { Person } from "../../src/types/Person";
+import { Person } from "../../src/types/entities/Person";
 import { ArtistCardProps } from "../../src/components/ArtistCard";
 
 interface ArtistsPaginationProps {

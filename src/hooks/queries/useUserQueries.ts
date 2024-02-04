@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { mainAxios } from "../../utils/AxiosInstances";
 //interfaces
-import { User } from "../../types/User";
+import { User } from "../../types/entities/User";
 //hooks
 import { useUserContext } from "../../contexts/UserContext";
 

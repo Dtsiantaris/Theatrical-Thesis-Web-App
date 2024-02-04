@@ -44,10 +44,10 @@ import {
   LabelList,
 } from "recharts";
 import { GetStaticPaths, GetStaticProps } from "next";
-import { Production } from "../../src/types/Production";
+import { Production } from "../../src/types/entities/Production";
 import Copyright from "@mui/icons-material/Copyright";
 import ClaimEventDialog from "../../src/components/ClaimEventDialog";
-import { Person } from "../../src/types/Person";
+import { Person } from "../../src/types/entities/Person";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const latestShows = await mainFetcher(`/productions?page=0&size=10`);

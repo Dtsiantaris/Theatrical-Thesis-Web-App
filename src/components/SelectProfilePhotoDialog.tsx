@@ -12,7 +12,7 @@ import {
   Avatar,
 } from "@mui/material";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import { UserPhoto } from "../types/User";
+import { UserPhoto } from "../types/entities/User";
 import { useUserMutations } from "../hooks/mutations/useUserMutations";
 import { useUserQueries } from "../hooks/queries/useUserQueries";
 

@@ -20,8 +20,8 @@ const DarkTheme = (secondaryColor?: CustomColor): Theme => {
     },
     palette: {
       background: {
-        default: "#212121", // Slightly lighter than before
-        paper: "#323232", // Slightly lighter than before
+        default: "#6b7280", // Slightly lighter than before
+        paper: "#9ca3af", // Slightly lighter than before
       },
       primary: {
         light: "#424242", // Slightly lighter than before

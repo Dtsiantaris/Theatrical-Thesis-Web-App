@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { mainAxios } from "../../utils/AxiosInstances";
-import { Role } from "../../types/Role";
+import { Role } from "../../types/entities/Role";
 
 export const useRoleQueries = () => {
   const [loading, setLoading] = useState(false);

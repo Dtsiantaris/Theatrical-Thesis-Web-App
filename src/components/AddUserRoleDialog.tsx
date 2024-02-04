@@ -13,7 +13,7 @@ import {
   Checkbox,
   ListItemText,
 } from "@mui/material";
-import { Role } from "../types/Role";
+import { Role } from "../types/entities/Role";
 import { useRoleQueries } from "../hooks/queries/useRoleQueries";
 import { useUserMutations } from "../hooks/mutations/useUserMutations";
 import { useUserQueries } from "../hooks/queries/useUserQueries";

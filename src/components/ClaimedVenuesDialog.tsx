@@ -13,7 +13,7 @@ import {
   Divider,
 } from "@mui/material";
 import CallMadeIcon from "@mui/icons-material/CallMade";
-import { Venue } from "../types/Venue";
+import { Venue } from "../types/entities/Venue";
 import { useRouter } from "next/router";
 
 interface ClaimedVenuesListProps {

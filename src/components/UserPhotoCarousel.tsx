@@ -12,7 +12,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import SwipeableViews from "react-swipeable-views";
 import { autoPlay } from "react-swipeable-views-utils";
 import ConfirmationPrompt from "./ConfirmationPrompt";
-import { UserPhoto } from "../types/User";
+import { UserPhoto } from "../types/entities/User";
 import UploadUserPhotoDialog from "./UploadUserPhotoDialog";
 import { useUserMutations } from "../hooks/mutations/useUserMutations";
 import { useUserQueries } from "../hooks/queries/useUserQueries";

@@ -32,7 +32,7 @@ import {
   Cell,
   LabelList,
 } from "recharts";
-import { Person } from "../../src/types/Person";
+import { Person } from "../../src/types/entities/Person";
 import { GetServerSideProps } from "next";
 import ArtistCard from "../../src/components/ArtistCard";
 

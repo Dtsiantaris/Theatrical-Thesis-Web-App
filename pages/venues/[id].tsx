@@ -2,9 +2,9 @@ import { useState } from "react";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 // interfaces
-import { Production } from "../../src/types/Production";
-import { GoogleGeocodingResult } from "../../src/types/GoogleGeoResult";
-import { Venue } from "../../src/types/Venue";
+import { Production } from "../../src/types/entities/Production";
+import { GoogleGeocodingResult } from "../../src/types/entities/GoogleGeoResult";
+import { Venue } from "../../src/types/entities/Venue";
 // hooks
 import { useUserMutations } from "../../src/hooks/mutations/useUserMutations";
 import {

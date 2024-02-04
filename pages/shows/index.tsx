@@ -3,7 +3,7 @@ import PaginationPage from "../../src/components/PaginationPage";
 import { mainFetcher } from "../../src/utils/AxiosInstances";
 import getShowImage from "../../src/utils/getShowImage";
 import Head from "next/head";
-import { Production } from "../../src/types/Production";
+import { Production } from "../../src/types/entities/Production";
 import { ShowCardProps } from "../../src/components/ShowCard";
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {

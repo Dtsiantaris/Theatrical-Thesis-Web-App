@@ -11,7 +11,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 // interfaces
-import { User } from "../src/types/User";
+import { User } from "../src/types/entities/User";
 // hooks
 import { useUserContext } from "../src/contexts/UserContext";
 import { useUserQueries } from "../src/hooks/queries/useUserQueries";

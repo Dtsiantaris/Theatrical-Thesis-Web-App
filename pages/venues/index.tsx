@@ -6,7 +6,7 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import PaginationPage from "../../src/components/PaginationPage";
-import { Venue } from "../../src/types/Venue";
+import { Venue } from "../../src/types/entities/Venue";
 import { mainFetcher } from "../../src/utils/AxiosInstances";
 import style from "../../src/assets/jss/layouts/venuesPageStyle";
 import Head from "next/head";

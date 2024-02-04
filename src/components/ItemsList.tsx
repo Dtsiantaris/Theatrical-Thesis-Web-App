@@ -7,7 +7,7 @@ import clsx from "clsx";
 import ShowCard, { ShowCardProps } from "./ShowCard";
 import VenueCard, { VenueCardProps } from "./VenueCard";
 import Link from "next/link";
-import { Person } from "../../src/types/Person";
+import { Person } from "../types/entities/Person";
 
 const useStyles = makeStyles(style);
 

@@ -85,17 +85,33 @@ const Sidebar = () => {
           )}
         </IconButton>
       </DrawerHeader>
-      <Divider />
-      <List>
+      <List className="bg-primary h-full">
         {filteredRoutes.map((route: Route) => (
           <Link href={route.pathOnClick || route.path} key={route.name}>
             <Tooltip
+              slotProps={{
+                tooltip: {
+                  className: "!bg-secondary",
+                },
+                arrow: {
+                  className: "!text-secondary",
+                },
+              }}
               title={route.name}
               placement="right"
               arrow
               disableHoverListener={drawerOpen}
             >
               <ListItemButton
+                className={
+                  (
+                    route.path === "/"
+                      ? router.pathname === "/"
+                      : router.pathname.startsWith(route.path)
+                  )
+                    ? "!text-secondary"
+                    : "!text-white"
+                }
                 sx={{
                   color: "white",
                   minHeight: 48,
@@ -110,7 +126,7 @@ const Sidebar = () => {
               >
                 <ListItemIcon
                   sx={{
-                    color: "white",
+                    color: "inherit",
                     minWidth: 0,
                     mr: drawerOpen ? 3 : "auto",
                     justifyContent: "center",

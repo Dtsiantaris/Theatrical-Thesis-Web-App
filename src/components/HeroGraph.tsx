@@ -67,20 +67,20 @@ const HeroGraph: React.FC = () => {
           bottom: 5,
         }}
       >
-        <CartesianGrid opacity={0.25} strokeDasharray="3 3" />
-        <Line
-          type="monotone"
-          dataKey="pv"
-          stroke={theme.palette.secondary.main}
-          fill={theme.palette.secondary.main}
-          strokeWidth={2}
-        />
+        <CartesianGrid opacity={0.6} strokeDasharray="3 3" />
         <Line
           type="monotone"
           dataKey="uv"
-          stroke="#fd2155"
-          fill="#fd2155"
-          strokeWidth={2}
+          stroke="#F98D67"
+          fill="#F98D67"
+          strokeWidth={3}
+        />
+        <Line
+          type="natural"
+          dataKey="pv"
+          stroke="#0d3266"
+          fill="#0d3266"
+          strokeWidth={3}
         />
       </LineChart>
     </ResponsiveContainer>

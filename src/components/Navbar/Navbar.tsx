@@ -23,6 +23,7 @@ import NextNprogress from "nextjs-progressbar";
 import { useTheme } from "@mui/material";
 import { useRouter } from "next/router";
 import { useUserContext } from "../../contexts/UserContext";
+import Image from "next/image";
 
 const Navbar: FC = () => {
   const { toggleDrawer } = useContext(DrawerContext);
@@ -67,9 +68,17 @@ const Navbar: FC = () => {
     <>
       <AppBar className="!z-[2000] !bg-primary" id="navbar">
         <Toolbar className="flex justify-between">
-          <IconButton className="!text-white" onClick={toggleDrawer}>
+          <IconButton className="!text-secondary" onClick={toggleDrawer}>
             <MenuIcon />
           </IconButton>
+          {/* Logo name only */}
+          <Image
+            src="logos/logo-name.svg"
+            alt="Logo"
+            width={40}
+            height={40}
+            className="w-40 ml-2"
+          />
           <form
             onSubmit={handleSubmit}
             className="bg-white w-3/4 flex max-w-xl m-auto "
@@ -89,7 +98,7 @@ const Navbar: FC = () => {
               }}
             />
             <Button
-              className="!bg-gray-300 !rounded-full !mr-0.5"
+              className="!bg-secondary !rounded-full !mr-0.5"
               type="submit"
             >
               <SearchIcon />
@@ -98,7 +107,7 @@ const Navbar: FC = () => {
           {isLoggedIn ? (
             <>
               <IconButton
-                className="!text-white"
+                className="!text-secondary"
                 onClick={handleIconClick}
                 aria-controls={menuOpen ? "composition-menu" : undefined}
                 aria-expanded={menuOpen ? "true" : undefined}

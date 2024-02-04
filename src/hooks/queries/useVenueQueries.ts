@@ -1,8 +1,8 @@
 import { mainFetcher } from "../../utils/AxiosInstances";
 // interfaces
-import { GoogleGeocodingResult } from "../../types/GoogleGeoResult";
-import { Production } from "../../types/Production";
-import { Venue } from "../../types/Venue";
+import { GoogleGeocodingResult } from "../../types/entities/GoogleGeoResult";
+import { Production } from "../../types/entities/Production";
+import { Venue } from "../../types/entities/Venue";
 
 export const fetchVenueById = async (id: number): Promise<Venue | null> => {
   try {

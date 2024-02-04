@@ -12,7 +12,7 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
-import { Event } from "../types/Event";
+import { Event } from "../types/entities/Event";
 
 interface ClaimedEventsListProps {
   claimedEvents: Event[];

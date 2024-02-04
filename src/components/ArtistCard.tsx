@@ -12,7 +12,7 @@ import Link from "next/link";
 import { mainFetcher } from "../utils/AxiosInstances";
 import CopyrightIcon from "@mui/icons-material/Copyright";
 import ClaimPersonDialog from "./ClaimPersonDialog";
-import { Person } from "../types/Person";
+import { Person } from "../types/entities/Person";
 
 // Define the prop types for ArtistCard component
 export interface ArtistCardProps {

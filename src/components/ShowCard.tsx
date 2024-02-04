@@ -15,14 +15,9 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 import useFavoriteShow from "../hooks/useFavoriteShow";
 import useWatchlist from "../hooks/useWatchlist";
+import { ShowCardProps } from "../types/cards/ShowCardProps";
 
-export interface ShowCardProps {
-  id: number;
-  title: string;
-  media: string;
-}
-
-const ShowCard: React.FC<ShowCardProps> = ({ id, title, media }) => {
+const ShowCard: React.FC<ShowCardProps> = ({ id, title, mediaUrl }) => {
   const { isFavorite, setIsFavorite } = useFavoriteShow(id);
   const { inWatchlist, setInWatchlist } = useWatchlist(id);
 
@@ -41,7 +36,7 @@ const ShowCard: React.FC<ShowCardProps> = ({ id, title, media }) => {
           <Link href={`/shows/${id}`}>
             <div className="relative h-full">
               <Image
-                src={media ? media : "/DefaultShowImage.jpg"}
+                src={mediaUrl ? mediaUrl : "/DefaultShowImage.jpg"}
                 alt={`${title} thumbnail`}
                 layout="fill"
                 objectFit="cover"

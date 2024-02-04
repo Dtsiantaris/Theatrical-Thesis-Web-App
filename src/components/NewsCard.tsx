@@ -1,22 +1,17 @@
-import { Typography } from "@mui/material";
-import Image from "next/image";
 import { useState } from "react";
-
-interface NewsCardProps {
-  article: {
-    url: string;
-    urlToImage: string;
-    title: string;
-    description: string;
-  };
-}
+import Image from "next/image";
+import { Typography } from "@mui/material";
+import { NewsCardProps } from "../types/cards/NewsCardProps";
 
 const NewsCard: React.FC<NewsCardProps> = ({ article }) => {
   const [imageSrc, setImageSrc] = useState(article.urlToImage);
 
   return (
-    <a href={article.url} className="linksNoDecoration">
-      <div className="flex flex-col max-w-xs bg-[#2a2a2a] rounded-[4%] overflow-hidden shadow-sm border-2 border-transparent hover:border-purple-400 hover:shadow-md transition-all">
+    <a
+      href={article.url}
+      className="linksNoDecoration hover:scale-105 transition-transform hover:border-secondary"
+    >
+      <div className="flex flex-col max-w-xs bg-gray-400 rounded-[4%] overflow-hidden shadow-sm border-2 border-transparent hover:border-secondary hover:shadow-md transition-all">
         <div className="relative h-44">
           <Image
             onError={() => setImageSrc("/DefaultShowImage.jpg")}

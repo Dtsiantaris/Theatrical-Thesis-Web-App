@@ -20,6 +20,9 @@ import { useRouter } from "next/router";
 import ScrollPrompt from "../src/components/ScrollPrompt";
 import HeroGraph from "../src/components/HeroGraph";
 import { getHomeData } from "./api/getHomeData";
+import Image from "next/image";
+import { NewsCardProps } from "../src/types/cards/NewsCardProps";
+import { HomePageProps } from "../src/types/pages/HomePageProps";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -32,7 +35,7 @@ export const getStaticProps = async () => {
   const articlesResponse = await newsFetcher(
     encodeURI("/everything?q=παράσταση θέατρο&sortBy=publishedAt&pageSize=3")
   );
-  const articles = articlesResponse?.articles;
+  const articles = articlesResponse?.articles as NewsCardProps["article"][];
 
   articles?.forEach((article) => {
     article.urlToImage = cloudinary.url(encodeURI(article.urlToImage), {
@@ -47,7 +50,8 @@ export const getStaticProps = async () => {
   //const { getArtists, getLatestShows } = getHomeData();
 
   let artists = (await getHomeData()).getArtists;
-  let latestShows = (await getHomeData()).getLatestShows;
+  let latestShows = (await getHomeData()).getLatestShows.results;
+  console.log("latestShows", latestShows);
   // Comment this too
   //console.log("Static Artists: ", artists);
   //console.log("Static shows: ", latestShows);
@@ -75,7 +79,7 @@ export const getStaticProps = async () => {
   };
 };
 
-function Home({ artists, latestShows, articles }) {
+const Home = ({ artists, latestShows, articles }: HomePageProps) => {
   const [searchValue, setSearchValue] = useState("");
   const router = useRouter();
 
@@ -110,21 +114,28 @@ function Home({ artists, latestShows, articles }) {
         />
       </Head>
       <div className="pt-14 overflow-hidden absolute top-0 left-0 w-full h-full -z-10 opacity-70">
-        <div className="w-[103%] h-full">
+        <div className="w-[105%] h-full">
           <HeroGraph />
         </div>
       </div>
       <div className="mb-6 sm:ml-14 md:py-5">
         <div className="max-w-[1250px] mx-0 my-auto flex flex-col sect">
           <div className="min-h-[calc(100vh-64px)] flex flex-col justify-center gap-[10px] px-0 py-5">
-            <Typography variant="h1" style={{ marginTop: "auto" }}>
-              Theatrical Analytics
-            </Typography>
-            <Typography variant="body2">
-              Αναζητήστε καλλιτέχνες, παραστάσεις και θέατρα, δείτε στατιστικά
-              και συγκρίνετε χρονικές περιόδους ή βρείτε μια παράσταση στην
-              περιοχή σας!
-            </Typography>
+            {/* Logo full */}
+            <div className="bg-gray-50 bg-opacity-20 mt-auto w-fit p-5 rounded-xl shadow-xl">
+              <Image
+                src="logos/logo-full.svg"
+                alt="Logo"
+                width={40}
+                height={40}
+                className="mt-auto w-[30rem]"
+              />
+              <Typography variant="body2">
+                Αναζητήστε καλλιτέχνες, παραστάσεις και θέατρα, δείτε στατιστικά
+                και συγκρίνετε χρονικές περιόδους ή βρείτε μια παράσταση στην
+                περιοχή σας!
+              </Typography>
+            </div>
             <form onSubmit={handleSubmit}>
               <div className="flex items-center gap-1 p-3 max-w-[182px] bg-purple-200 rounded-2xl border-1 border-purple-200 mt-3 shadow-sm">
                 <SearchIcon />
@@ -148,7 +159,7 @@ function Home({ artists, latestShows, articles }) {
             >
               Νεότερες Ειδήσεις
             </Typography>
-            <div className="px-10 py-5 flex flex-wrap gap-12 justify-center md:justify-around">
+            <div className="px-10 py-5 flex flex-wrap gap-5 justify-center md:justify-around">
               {articles.map((article) => (
                 <NewsCard key={article.url} article={article} />
               ))}
@@ -178,11 +189,12 @@ function Home({ artists, latestShows, articles }) {
           </Hidden>
           <section className="bg-primary-dark md:bg-transparent md:px-16 my-40 md:my-25 py-30 md:py-0">
             <ContentSlider title="Παραστάσεις" description="Νέες Κυκλοφορίες">
-              {latestShows.results.map((item) => (
+              {latestShows.map((item) => (
+                // TODO: Check types. Whats needed and what not. Maybe add some stuff??
                 <ShowCard
                   id={item.id}
                   title={item.title}
-                  media={item.image}
+                  mediaUrl={item.mediaUrl}
                   key={item.id}
                 />
               ))}
@@ -192,6 +204,6 @@ function Home({ artists, latestShows, articles }) {
       </div>
     </>
   );
-}
+};
 
 export default Home;

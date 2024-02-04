@@ -21,7 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <CssBaseline />
       <DrawerContextProvider>
         <Navbar />
-        <div className="fixed sm:static ">
+        <div className="fixed sm:static">
           <Sidebar />
         </div>
       </DrawerContextProvider>
