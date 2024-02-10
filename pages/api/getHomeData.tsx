@@ -23,7 +23,7 @@ export const getHomeData = async () => {
     })
   );
 
-  let getLatestShows = await mainFetcher(`/Productions?page=1&size=4`);
+  let getLatestShows = await mainFetcher(`/Productions?page=1&size=10`);
 
   // if (getLatestShows === undefined) {
   //   getLatestShows = null;

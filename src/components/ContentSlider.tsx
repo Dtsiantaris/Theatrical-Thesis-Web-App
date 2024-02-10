@@ -76,7 +76,7 @@ const ContentSlider: React.FC<ContentSliderProps> = (props) => {
           <Typography
             className={
               props.decoratedTitle
-                ? "relative pl-2 before:content-none before:absolute before:w-1 before:bg-purple-400 before:h-4/5 before:ml-[-0.5rem] before:top-1"
+                ? "relative pl-2 before:content-none before:absolute before:w-1 before:bg-secondary before:h-4/5 before:ml-[-0.5rem] before:top-1"
                 : ""
             }
             variant="h3"
@@ -93,14 +93,14 @@ const ContentSlider: React.FC<ContentSliderProps> = (props) => {
             <IconButton
               onClick={prevSlide}
               disabled={progress <= 0}
-              className="hover:text-purple-300"
+              className="hover:text-secondary"
             >
               <NavigateBeforeRoundedIcon />
             </IconButton>
             <IconButton
               onClick={nextSlide}
               disabled={progress >= 1}
-              className="hover:text-purple-300"
+              className="hover:text-secondary"
             >
               <NavigateNextRoundedIcon />
             </IconButton>
@@ -119,9 +119,8 @@ const ContentSlider: React.FC<ContentSliderProps> = (props) => {
           }}
         >
           {props.children.map((child, index) => (
-            // TODO: this overflows and breaks sometimes
-            <SwiperSlide key={index} className="flex justify-center gap-2 p-3">
-              {child}
+            <SwiperSlide key={index}>
+              <div className="p-3">{child}</div>
             </SwiperSlide>
           ))}
         </Swiper>
