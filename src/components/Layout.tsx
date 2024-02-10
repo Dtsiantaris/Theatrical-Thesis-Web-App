@@ -1,15 +1,13 @@
 import React, { ReactNode } from "react";
+// mui
+import CssBaseline from "@mui/material/CssBaseline";
 // components
 import { DrawerContextProvider } from "../contexts/DrawerContext";
 import Navbar from "./Navbar/Navbar";
 import Sidebar from "./Navbar/Sidebar";
-import { ToastContainer } from "react-toastify";
-// themes & styles
-import CssBaseline from "@mui/material/CssBaseline";
-import { Theme, createStyles } from "@mui/material";
-import "react-toastify/dist/ReactToastify.css";
 //utils
-import { mainFetcher } from "../utils/AxiosInstances";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface LayoutProps {
   children: ReactNode;
@@ -21,7 +19,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <CssBaseline />
       <DrawerContextProvider>
         <Navbar />
-        <div className="fixed sm:static">
+        <div className="fixed sm:static z-50">
           <Sidebar />
         </div>
       </DrawerContextProvider>

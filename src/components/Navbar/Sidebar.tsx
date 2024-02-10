@@ -1,20 +1,24 @@
 import * as React from "react";
+// next
+import { useRouter } from "next/router";
+import Link from "next/link";
+// mui
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import { Tooltip } from "@mui/material";
+//icons
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+// context
 import { DrawerContext } from "../../contexts/DrawerContext";
-import routes, { Route } from "../../routes";
 import { useUserContext } from "../../contexts/UserContext";
-import Link from "next/link";
-import { Tooltip } from "@mui/material";
-import { useRouter } from "next/router";
+// routes
+import routes, { Route } from "../../routes";
 
 const drawerWidth = 240;
 
@@ -57,11 +61,17 @@ const Drawer = styled(MuiDrawer, {
   boxSizing: "border-box",
   ...(open && {
     ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
+    "& .MuiDrawer-paper": {
+      ...openedMixin(theme),
+      borderRight: "none", // Override border-right style
+    },
   }),
   ...(!open && {
     ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
+    "& .MuiDrawer-paper": {
+      ...closedMixin(theme),
+      borderRight: "none", // Override border-right style
+    },
   }),
 }));
 

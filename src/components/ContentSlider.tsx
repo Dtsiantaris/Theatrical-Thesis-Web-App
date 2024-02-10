@@ -1,12 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 // mui
-import {
-  IconButton,
-  makeStyles,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { IconButton, Typography, useMediaQuery, useTheme } from "@mui/material";
 // icons
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
 import NavigateBeforeRoundedIcon from "@mui/icons-material/NavigateBeforeRounded";

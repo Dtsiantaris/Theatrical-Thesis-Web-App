@@ -33,7 +33,7 @@ export const getStaticProps = async () => {
   });
 
   const articlesResponse = await newsFetcher(
-    encodeURI("/everything?q=παράσταση θέατρο&sortBy=publishedAt&pageSize=3")
+    encodeURI("/everything?q=παράσταση θέατρο&sortBy=publishedAt&pageSize=4")
   );
   const articles = articlesResponse?.articles as NewsCardProps["article"][];
 
@@ -90,7 +90,7 @@ const Home = ({ artists, latestShows, articles }: HomePageProps) => {
         </div>
       </div>
       <div className="mb-6 sm:ml-14 md:py-5">
-        <div className="max-w-[1250px] mx-0 my-auto flex flex-col sect">
+        <div className="mx-0 my-auto flex flex-col sect">
           <div className="min-h-[calc(100vh-64px)] flex flex-col justify-center gap-[10px] px-0 py-5">
             {/* Logo full */}
             <div className="bg-gray-50 bg-opacity-20 mt-auto w-fit p-5 rounded-xl shadow-xl">
