@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { useTheme } from "@mui/material";
 // icons
+import LoginIcon from "@mui/icons-material/Login";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -28,6 +29,7 @@ import SearchIcon from "@mui/icons-material/Search";
 // context
 import { DrawerContext } from "../../contexts/DrawerContext";
 import { useUserContext } from "../../contexts/UserContext";
+import SearchDropdown from "./SearchDropdown";
 
 const Navbar: FC = () => {
   const { toggleDrawer } = useContext(DrawerContext);
@@ -85,28 +87,9 @@ const Navbar: FC = () => {
           />
           <form
             onSubmit={handleSubmit}
-            className="bg-white w-3/4 flex max-w-xl m-auto "
+            className="bg-transparent lg:w-3/4 flex max-w-xl m-auto"
           >
-            <InputBase
-              type="search"
-              placeholder="Αναζήτηση"
-              value={searchValue}
-              onChange={handleChange}
-              slotProps={{
-                input: {
-                  className: "!pl-3 !pr-3 !border  text-black",
-                },
-                root: {
-                  className: "!w-full",
-                },
-              }}
-            />
-            <Button
-              className="!bg-secondary !rounded-full !mr-0.5"
-              type="submit"
-            >
-              <SearchIcon />
-            </Button>
+            <SearchDropdown onChange={handleChange} value={searchValue} />
           </form>
           {isLoggedIn ? (
             <>
@@ -177,7 +160,10 @@ const Navbar: FC = () => {
               className="normal-case !bg-white hover:!bg-secondary"
               onClick={() => router.push("login")}
             >
-              Σύνδεση / Εγγραφή
+              <div className="hidden sm:block">Σύνδεση / Εγγραφή</div>
+              <div className="sm:hidden">
+                <LoginIcon />
+              </div>
             </Button>
           )}
         </Toolbar>
