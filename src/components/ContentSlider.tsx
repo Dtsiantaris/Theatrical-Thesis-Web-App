@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
+// mui
 import {
   IconButton,
   makeStyles,
@@ -6,13 +7,14 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/swiper-bundle.css";
+// icons
 import NavigateNextRoundedIcon from "@mui/icons-material/NavigateNextRounded";
 import NavigateBeforeRoundedIcon from "@mui/icons-material/NavigateBeforeRounded";
-import clsx from "clsx";
+// swiper
 import SwiperCore from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
+import "swiper/swiper-bundle.css";
 
 SwiperCore.use([Navigation]);
 
@@ -117,7 +119,8 @@ const ContentSlider: React.FC<ContentSliderProps> = (props) => {
           }}
         >
           {props.children.map((child, index) => (
-            <SwiperSlide key={index} className="flex justify-center">
+            // TODO: this overflows and breaks sometimes
+            <SwiperSlide key={index} className="flex justify-center gap-2 p-3">
               {child}
             </SwiperSlide>
           ))}

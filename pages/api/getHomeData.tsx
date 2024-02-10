@@ -15,7 +15,6 @@ export const getHomeData = async () => {
         //     value === undefined ? null : value
         //   )
         // );
-
         return artist;
       } catch (error) {
         console.error(`Failed to fetch artist ${id}:`, error);

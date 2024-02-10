@@ -1,4 +1,9 @@
 import React, { FC, useContext, useState, ChangeEvent, FormEvent } from "react";
+// next
+import { useRouter } from "next/router";
+import NextNprogress from "nextjs-progressbar";
+import Image from "next/image";
+// mui
 import {
   AppBar,
   Toolbar,
@@ -13,17 +18,16 @@ import {
   MenuList,
   Popper,
 } from "@mui/material";
+import { useTheme } from "@mui/material";
+// icons
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import SearchIcon from "@mui/icons-material/Search";
+// context
 import { DrawerContext } from "../../contexts/DrawerContext";
-import NextNprogress from "nextjs-progressbar";
-import { useTheme } from "@mui/material";
-import { useRouter } from "next/router";
 import { useUserContext } from "../../contexts/UserContext";
-import Image from "next/image";
 
 const Navbar: FC = () => {
   const { toggleDrawer } = useContext(DrawerContext);
@@ -170,7 +174,7 @@ const Navbar: FC = () => {
             </>
           ) : (
             <Button
-              className="normal-case bg-purple-200 hover:bg-purple-500"
+              className="normal-case !bg-white hover:!bg-secondary"
               onClick={() => router.push("login")}
             >
               Σύνδεση / Εγγραφή

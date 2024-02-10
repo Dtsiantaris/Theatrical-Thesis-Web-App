@@ -1,28 +1,28 @@
-import {
-  makeStyles,
-  Hidden,
-  Divider,
-  Typography,
-  InputBase,
-} from "@mui/material";
+import { ChangeEvent, FormEvent, useState } from "react";
+// next
+import Head from "next/head";
+import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/router";
+// mui
+import { Hidden, Divider, Typography, InputBase } from "@mui/material";
+// mui icons
+import SearchIcon from "@mui/icons-material/Search";
+// components
 import ContentSlider from "../src/components/ContentSlider";
 import ArtistCard from "../src/components/ArtistCard";
 import ShowCard from "../src/components/ShowCard";
-import { mainFetcher } from "../src/utils/AxiosInstances";
-import getShowImage from "../src/utils/getShowImage";
-import Head from "next/head";
 import NewsCard from "../src/components/NewsCard";
-import { v2 as cloudinary } from "cloudinary";
-import { newsFetcher } from "../src/utils/AxiosInstances";
-import { useEffect, useState } from "react";
-import SearchIcon from "@mui/icons-material/Search";
-import { useRouter } from "next/router";
-import ScrollPrompt from "../src/components/ScrollPrompt";
 import HeroGraph from "../src/components/HeroGraph";
+import ScrollPrompt from "../src/components/ScrollPrompt";
+// api
 import { getHomeData } from "./api/getHomeData";
-import Image from "next/image";
+// interfaces
 import { NewsCardProps } from "../src/types/cards/NewsCardProps";
 import { HomePageProps } from "../src/types/pages/HomePageProps";
+// utils
+import { v2 as cloudinary } from "cloudinary";
+import { newsFetcher } from "../src/utils/AxiosInstances";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
@@ -50,28 +50,11 @@ export const getStaticProps = async () => {
   //const { getArtists, getLatestShows } = getHomeData();
 
   let artists = (await getHomeData()).getArtists;
+  // console.log("================ARTISTS================");
+  // console.log(artists);
   let latestShows = (await getHomeData()).getLatestShows.results;
-  console.log("latestShows", latestShows);
-  // Comment this too
-  //console.log("Static Artists: ", artists);
-  //console.log("Static shows: ", latestShows);
-
-  // try {
-  //   console.log(artists);
-  //   console.log(latestShows);
-  // } catch (error) {
-  //   console.error(error);
-  // }
-
-  //let artists = getArtists.filter(Boolean);
-
-  // ffffff
-  // Check latestShowsResponse.
-  // const latestShows = getLatestShows?.map((show) => ({
-  //   id: show.id,
-  //   title: show.title,
-  //   image: getShowImage(show.mediaURL),
-  // }));
+  // console.log("================SHOWS================");
+  // console.log(latestShows);
 
   return {
     props: { artists, latestShows, articles },
@@ -83,26 +66,14 @@ const Home = ({ artists, latestShows, articles }: HomePageProps) => {
   const [searchValue, setSearchValue] = useState("");
   const router = useRouter();
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (searchValue) router.push(`/results?search_query=${searchValue}`);
   };
-
-  async function handleRes() {
-    // const latestShows = await mainFetcher(`/Productions?page=1&size=4`);
-    // const artists = await mainFetcher(`/People/8158`);
-    // Giati exoume function poy apla kanei console.log??
-    //console.log("Artists inside useEffect:", artists);
-    //console.log("LatestShows inside useEffect:", latestShows);
-  }
-
-  useEffect(() => {
-    handleRes();
-  }, []);
 
   return (
     <>
@@ -137,7 +108,7 @@ const Home = ({ artists, latestShows, articles }: HomePageProps) => {
               </Typography>
             </div>
             <form onSubmit={handleSubmit}>
-              <div className="flex items-center gap-1 p-3 max-w-[182px] bg-purple-200 rounded-2xl border-1 border-purple-200 mt-3 shadow-sm">
+              <div className="flex items-center gap-1 p-3 max-w-[350px] bg-white rounded-2xl border-1 border-purple-200 mt-3 shadow-sm">
                 <SearchIcon />
                 <InputBase
                   type="text"
@@ -173,14 +144,27 @@ const Home = ({ artists, latestShows, articles }: HomePageProps) => {
               title="Καλλιτέχνες"
               description="Δημοφιλείς Ηθοποιοί"
             >
+              {/* TODO: make this a component like show card and maybe use it in artists/index too */}
               {artists.map((artist, index) => (
-                <ArtistCard
-                  id={artist.id}
-                  fullName={artist.fullName}
-                  image={artist.image}
+                <div
                   key={index}
-                  delay={index}
-                />
+                  className="bg-gray-400 border-2 border-transparent hover:border-secondary hover:scale-105 hover:cursor-pointer transition-all rounded-xl"
+                >
+                  <Link href={`/artists/${artist.id}`}>
+                    <div className="flex flex-col justify-center items-center transition-all">
+                      <ArtistCard
+                        id={artist.id}
+                        fullname={artist.fullname}
+                        image={
+                          artist?.images && artist.images.length > 0
+                            ? artist.images[0].imageUrl
+                            : undefined
+                        }
+                        systemId={artist.systemID}
+                      />
+                    </div>
+                  </Link>
+                </div>
               ))}
             </ContentSlider>
           </section>
@@ -190,12 +174,16 @@ const Home = ({ artists, latestShows, articles }: HomePageProps) => {
           <section className="bg-primary-dark md:bg-transparent md:px-16 my-40 md:my-25 py-30 md:py-0">
             <ContentSlider title="Παραστάσεις" description="Νέες Κυκλοφορίες">
               {latestShows.map((item) => (
-                // TODO: Check types. Whats needed and what not. Maybe add some stuff??
                 <ShowCard
+                  key={item.id}
                   id={item.id}
                   title={item.title}
                   mediaUrl={item.mediaUrl}
-                  key={item.id}
+                  description={item.description}
+                  duration={item.duration}
+                  organizerId={item.organizerId}
+                  producer={item.producer}
+                  url={item.url}
                 />
               ))}
             </ContentSlider>

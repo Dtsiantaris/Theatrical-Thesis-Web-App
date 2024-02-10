@@ -1,7 +1,7 @@
 export interface Person {
   id: number;
   fullname: string;
-  systemID?: string;
+  systemID: number;
   birthdate?: string;
   bio?: string;
   description?: string;
