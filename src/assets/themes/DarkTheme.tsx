@@ -30,7 +30,7 @@ const DarkTheme = (secondaryColor?: CustomColor): Theme => {
       },
       secondary: {
         light: secondaryColor ? secondaryColor.light : "#BBFFFF", // Slightly lighter than before
-        main: secondaryColor ? secondaryColor.main : "#81FFFF", // Slightly lighter than before
+        main: secondaryColor ? secondaryColor.main : "#F98D67", // Slightly lighter than before
         dark: secondaryColor ? secondaryColor.dark : "#3EDCDC", // Slightly lighter than before
       },
     },

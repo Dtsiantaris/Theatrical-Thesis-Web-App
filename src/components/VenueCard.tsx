@@ -11,11 +11,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import useFavoriteVenue from "../hooks/useFavoriteVenue";
 import { FC } from "react";
-
-export interface VenueCardProps {
-  id: number;
-  title: string;
-}
+import { VenueCardProps } from "../types/cards/VenueCardProps";
 
 const VenueCard: FC<VenueCardProps> = ({ id, title }) => {
   const { isFavorite, setIsFavorite } = useFavoriteVenue(id);

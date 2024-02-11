@@ -155,11 +155,7 @@ const Home = ({ artists, latestShows, articles }: HomePageProps) => {
                       <ArtistCard
                         id={artist.id}
                         fullname={artist.fullname}
-                        image={
-                          artist?.images && artist.images.length > 0
-                            ? artist.images[0].imageUrl
-                            : undefined
-                        }
+                        images={artist.images}
                         systemId={artist.systemID}
                       />
                     </div>

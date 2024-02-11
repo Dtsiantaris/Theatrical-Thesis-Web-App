@@ -1,14 +1,15 @@
 import React from "react";
-import { makeStyles, Grid, Typography } from "@mui/material";
-import style from "../assets/jss/layouts/paginationPageStyle";
-import { Pagination } from "@mui/material";
-import { ArtistCardProps } from "./ArtistCard";
-import { ShowCardProps } from "./ShowCard";
-import { VenueCardProps } from "./VenueCard";
-import ItemsList from "./ItemsList";
+// next
 import { useRouter } from "next/router";
-
-const useStyles = makeStyles(style);
+// mui
+import { Grid, Typography } from "@mui/material";
+import { Pagination } from "@mui/material";
+// components
+import ItemsList from "./ItemsList";
+// interfaces
+import { ArtistCardProps } from "../types/cards/ArtistCardProps";
+import { ShowCardProps } from "../types/cards/ShowCardProps";
+import { VenueCardProps } from "../types/cards/VenueCardProps";
 
 interface PaginationPageProps {
   items?: (ArtistCardProps | ShowCardProps | VenueCardProps)[];
@@ -25,7 +26,6 @@ const PaginationPage: React.FC<PaginationPageProps> = ({
   path,
   title,
 }) => {
-  const classes = useStyles();
   const router = useRouter();
 
   // Ensure that the path is one of "/artists", "/shows", or "/venues"
@@ -44,22 +44,26 @@ const PaginationPage: React.FC<PaginationPageProps> = ({
   };
 
   return (
-    <Grid container className={classes.grid} justify="center">
+    <Grid
+      container
+      justifyContent={"center"}
+      className="flex-grow min-w-0 py-0 pl-2 pr-20 mt-5 sm:pl-16 sm:mt-10"
+    >
       {title && (
         <Grid item xs={12}>
-          <div className={classes.headingContainer}>
+          <div className="max-w-6xl mx-0 my-auto pl-2">
             <Typography variant="h2" component="h1">
               {title}
             </Typography>
           </div>
         </Grid>
       )}
-      <Grid item xs={12} className={classes.list}>
+      <Grid item xs={12} className="my-0 ml-7 mr-12">
         {/* Pass the type prop to the ItemsList component */}
         <ItemsList items={items} type={type} />
       </Grid>
       <Grid item xs={12}>
-        <div className={classes.paginationContainer}>
+        <div className="flex justify-center items-center">
           <Pagination
             count={pageCount || 10}
             page={page}

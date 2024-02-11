@@ -1,16 +1,17 @@
 import React from "react";
-import ArtistCard, { ArtistCardProps } from "./ArtistCard";
-import { makeStyles } from "@mui/material";
-import style from "../assets/jss/components/itemsListStyle";
-import LoadingScene from "./LoadingScene";
-import clsx from "clsx";
-import ShowCard, { ShowCardProps } from "./ShowCard";
-import VenueCard, { VenueCardProps } from "./VenueCard";
+// next
 import Link from "next/link";
-import { Person } from "../types/entities/Person";
-
-const useStyles = makeStyles(style);
-
+// components
+import LoadingScene from "./LoadingScene";
+import ArtistCard from "./ArtistCard";
+import ShowCard from "./ShowCard";
+import VenueCard from "./VenueCard";
+// interfaces
+import { ShowCardProps } from "../types/cards/ShowCardProps";
+import { ArtistCardProps } from "../types/cards/ArtistCardProps";
+import { VenueCardProps } from "../types/cards/VenueCardProps";
+// utils
+import clsx from "clsx";
 export interface ItemsListProps {
   items?: (ArtistCardProps | ShowCardProps | VenueCardProps)[];
   type: "/artists" | "/shows" | "/venues";
@@ -18,13 +19,15 @@ export interface ItemsListProps {
 
 const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
   // console.log("ItemsList Props:", items, type);
-  const classes = useStyles();
 
   return (
     <div
-      className={clsx(classes.container, {
-        [classes.isLoading]: !items,
-      })}
+      className={clsx(
+        "flex w-full mx-0 my-auto flex-wrap gap-5 justify-center items-center p-3",
+        {
+          ["p-52"]: !items,
+        }
+      )}
     >
       {items ? (
         items.map((item, index) => {
@@ -34,12 +37,13 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
 
             return (
               <Link href={`/artists/${item.id}`} key={item.id}>
-                <div className="linksNoDecoration">
+                <div className="linksNoDecoration hover:scale-105 transition-all">
                   <ArtistCard
                     id={item.id}
                     fullname={item.fullname}
-                    image={item.image}
+                    images={item.images}
                     systemId={item.systemId}
+                    roles={item.roles}
                   />
                 </div>
               </Link>
@@ -48,11 +52,7 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
             return (
               <Link href={`/shows/${item.id}`} key={item.id}>
                 <div className="linksNoDecoration">
-                  <ShowCard
-                    id={item.id}
-                    title={item.title}
-                    media={item.media}
-                  />
+                  <ShowCard {...(item as ShowCardProps)} />
                 </div>
               </Link>
             );

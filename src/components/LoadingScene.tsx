@@ -1,27 +1,25 @@
 import React from "react";
-import { Typography, LinearProgress, makeStyles } from "@mui/material";
-import style from "../assets/jss/components/loadingSceneStyle";
+import { Typography, LinearProgress } from "@mui/material";
 import clsx from "clsx";
-
-const useStyles = makeStyles(style);
 
 interface LoadingSceneProps {
   fullScreen?: boolean;
 }
 
 const LoadingScene: React.FC<LoadingSceneProps> = ({ fullScreen }) => {
-  const classes = useStyles();
-
   return (
     <div
-      className={clsx(classes.loading, {
-        [classes.fullScreen]: fullScreen,
-      })}
+      className={clsx(
+        "h-full w-full flex flex-col items-center justify-center",
+        {
+          ["h-[calc(100vh-64px)]"]: fullScreen,
+        }
+      )}
     >
-      <Typography variant="h5" className={classes.title}>
+      <Typography variant="h5" className="p-4 mb-[3%]">
         Interviewing actors. Please wait...
       </Typography>
-      <LinearProgress color="secondary" className={classes.progressBar} />
+      <LinearProgress color="secondary" className="w-3/5" />
     </div>
   );
 };

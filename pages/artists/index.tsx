@@ -1,11 +1,11 @@
-import PaginationPage from "../../src/components/PaginationPage";
-import { mainFetcher } from "../../src/utils/AxiosInstances";
-import Head from "next/head";
-import { Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+// next
+import Head from "next/head";
 import { useRouter } from "next/router";
+import { GetServerSideProps } from "next";
+// mui
+import { Typography } from "@mui/material";
 import {
-  makeStyles,
   Hidden,
   Drawer,
   Fab,
@@ -13,13 +13,17 @@ import {
   TextField,
   Autocomplete,
 } from "@mui/material";
+// icons
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { GetServerSideProps } from "next";
-import { Person } from "../../src/types/entities/Person";
-import { ArtistCardProps } from "../../src/components/ArtistCard";
+// components
+import PaginationPage from "../../src/components/PaginationPage";
+//utils
+import { mainFetcher } from "../../src/utils/AxiosInstances";
+// interfaces
+import { ArtistCardProps } from "../../src/types/cards/ArtistCardProps";
 
 interface ArtistsPaginationProps {
-  artists: Person[];
+  artists: ArtistCardProps[];
   pageCount: number;
   page: number;
 }
@@ -143,8 +147,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       });
       setDrawer(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [letterValue]);
+  }, [letterValue, router]);
 
   useEffect(() => {
     if (roleValue) {
@@ -157,8 +160,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       });
       setDrawer(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roleValue]);
+  }, [roleValue, router]);
 
   useEffect(() => {
     if (claimedValue) {
@@ -171,7 +173,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       });
       setDrawer(false);
     }
-  }, [claimedValue]);
+  }, [claimedValue, router]);
 
   useEffect(() => {
     if (orderValue) {
@@ -184,7 +186,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       });
       setDrawer(false);
     }
-  }, [orderValue]);
+  }, [orderValue, router]);
 
   const Filters = (
     <div className="px-0 py-3 w-[300px] mt-12 -mr-14 flex flex-col items-start gap-5">
@@ -193,7 +195,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       </Typography>
       <Autocomplete
         value={letterValue}
-        onChange={(event, newValue) => {
+        onChange={(_event, newValue) => {
           if (newValue != null) setLetterValue(newValue);
         }}
         id="controllable-states-demo"
@@ -210,7 +212,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       />
       <Autocomplete
         value={roleValue}
-        onChange={(event, newValue) => {
+        onChange={(_event, newValue) => {
           if (newValue != null) setRoleValue(newValue);
         }}
         id="controllable-states-demo"
@@ -227,7 +229,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       />
       <Autocomplete
         value={claimedValue}
-        onChange={(event, newValue) => {
+        onChange={(_event, newValue) => {
           if (newValue != null) setClaimedValue(newValue);
         }}
         id="controllable-states-demo"
@@ -244,7 +246,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       />
       <Autocomplete
         value={orderValue}
-        onChange={(event, newValue) => {
+        onChange={(_event, newValue) => {
           if (newValue != null) setOrderValue(newValue);
         }}
         id="controllable-states-demo"
@@ -285,8 +287,8 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
           {Filters}
         </Drawer>
       </Hidden>
-      <div className="max-w-[1250px] mx-0 my-auto flex p-4 md:pl-[70px]">
-        <Hidden smDown>{Filters}</Hidden>
+      <div className="mx-0 my-auto flex p-4 md:pl-[70px]">
+        <Hidden mdDown>{Filters}</Hidden>
         <PaginationPage
           title="Καλλιτέχνες"
           items={artists}

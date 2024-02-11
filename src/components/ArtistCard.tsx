@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-// next
 import Image from "next/image";
 import Link from "next/link";
-// mui
 import {
   Typography,
   Avatar,
@@ -10,35 +8,19 @@ import {
   useTheme,
   Button,
 } from "@mui/material";
-// icons
 import CopyrightIcon from "@mui/icons-material/Copyright";
 import ClaimPersonDialog from "./ClaimPersonDialog";
-
-// Define the prop types for ArtistCard component
-export interface ArtistCardProps {
-  id: number; // Assuming it's a string, update the type accordingly if it's different
-  fullname: string;
-  systemId: number;
-  isDetails?: boolean;
-  image?: string; // Optional image URL, indicated by "?"
-  isClaimed?: boolean;
-}
+import { ArtistCardProps } from "../types/cards/ArtistCardProps";
 
 const ArtistCard: React.FC<ArtistCardProps> = ({
   id,
   fullname,
-  image,
+  images,
   isClaimed,
+  roles,
   isDetails,
 }) => {
-  console.log("ArtistCard Props:", id, fullname, image);
   const theme = useTheme();
-  const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
-
-  const [fetchedImage, setFetchedImage] = useState<string | undefined>(
-    undefined
-  );
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleOpenDialog = () => {
@@ -49,39 +31,75 @@ const ArtistCard: React.FC<ArtistCardProps> = ({
     setIsDialogOpen(false);
   };
 
-  const imageToRender = fetchedImage || image;
+  const imageToRender =
+    images && images.length > 0 ? images[0].imageUrl : undefined;
+
   return (
     <React.Fragment>
-      <div className="flex flex-col items-center text-center w-32 p-2 sm:w-44">
-        <Avatar
-          className={`w-32 h-32 border-2 border-transparent hover:border-secondary shadow-md transition-all z-20 sm:w-40 sm:h-40 mt-2  ${
-            imageToRender && "bg-transparent"
-          }`}
-          alt="Artist Photo"
-        >
-          {imageToRender ? (
-            <Image
-              src={imageToRender}
-              alt="Artist Photo"
-              width={300}
-              height={450}
-            />
-          ) : null}
-        </Avatar>
-        <Typography variant="body1" component="p" className="mt-2">
-          {fullname}
-        </Typography>
-        {!isClaimed && isDetails && (
-          <Button
-            style={{ textTransform: "none" }}
-            variant="outlined"
-            color="secondary"
-            onClick={handleOpenDialog}
-            endIcon={<CopyrightIcon />}
+      <div className="flex gap-4 text-center !w-96 h-40 p-2 bg-gray-400 rounded-md border-2 border-transparent hover:border-secondary">
+        {/* Avatar Column */}
+        <div className="flex-shrink-0 flex items-center">
+          <Avatar
+            className="!w-24 !h-24 border border-primary hover:border-secondary shadow-lg transition-all"
+            alt="Artist Photo"
+            src={imageToRender || ""}
+            style={{ width: "100%", height: "auto", background: "transparent" }}
           >
-            Claim profile
-          </Button>
-        )}
+            {/* {!imageToRender && <Typography>{fullname[0]}</Typography>}{" "} */}
+            {/* Show initials if no image */}
+          </Avatar>
+        </div>
+        {/* Info Column */}
+        <div className="flex flex-col justify-center">
+          <Typography variant="body1" component="p" className="!font-semibold">
+            {fullname}
+          </Typography>
+          <div className="flex flex-wrap items-center">
+            {roles?.length ? (
+              roles?.map((role, index) => (
+                <React.Fragment key={index}>
+                  <Typography
+                    variant="body1"
+                    component="span"
+                    className="italic !text-sm"
+                  >
+                    {role}
+                  </Typography>
+                  {index < roles.length - 1 && (
+                    <Typography
+                      variant="body1"
+                      component="span"
+                      className="!mx-2 !font-bold"
+                    >
+                      •
+                    </Typography>
+                  )}
+                </React.Fragment>
+              ))
+            ) : (
+              <Typography
+                variant="body1"
+                component="span"
+                className="italic !text-xs"
+              >
+                Δεν υπάρχουν διαθέσιμοι ρόλοι
+              </Typography>
+            )}
+          </div>
+          {/* TODO: Add most recent production */}
+          {/* Include more artist info here */}
+          {!isClaimed && isDetails && (
+            <Button
+              style={{ textTransform: "none" }}
+              variant="outlined"
+              color="secondary"
+              onClick={handleOpenDialog}
+              endIcon={<CopyrightIcon />}
+            >
+              Claim profile
+            </Button>
+          )}
+        </div>
       </div>
       <ClaimPersonDialog
         personId={id}
