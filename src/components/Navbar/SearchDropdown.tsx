@@ -66,14 +66,15 @@ const SearchDropdown: React.FC<SearchDropdownProps> = ({ value, onChange }) => {
                   placement === "bottom-start" ? "left top" : "left bottom",
               }}
             >
-              <Paper className="!bg-white !pl-2">
+              <Paper className="!bg-white !pl-2 !-translate-x-2">
                 <ClickAwayListener onClickAway={handleClose}>
-                  <div>
+                  <div className="mt-5">
                     <InputBase
                       placeholder="Αναζήτηση..."
                       value={value}
                       onChange={onChange}
                       inputProps={{ "aria-label": "Αναζήτηση.." }}
+                      className="w-80"
                     />
                     <Button
                       className="!bg-secondary !rounded-full !mr-0.5"

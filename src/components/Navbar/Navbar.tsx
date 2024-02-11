@@ -43,6 +43,7 @@ const Navbar: FC = () => {
   const router = useRouter();
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    console.log("handleSubmit");
     event.preventDefault();
     if (searchValue) router.push(`/results?search_query=${searchValue}`);
   };
