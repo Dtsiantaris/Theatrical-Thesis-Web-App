@@ -21,6 +21,8 @@ import PaginationPage from "../../src/components/PaginationPage";
 import { mainFetcher } from "../../src/utils/AxiosInstances";
 // interfaces
 import { ArtistCardProps } from "../../src/types/cards/ArtistCardProps";
+import { useRoleQueries } from "../../src/hooks/queries/useRoleQueries";
+import { Role } from "../../src/types/entities/Role";
 
 interface ArtistsPaginationProps {
   artists: ArtistCardProps[];
@@ -83,33 +85,33 @@ export const getServerSideProps: GetServerSideProps<
 };
 
 const letters = [..."ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ"];
-const roles = [
-  "Ηθοποιός",
-  "Παίζουν",
-  "Σκηνοθεσία",
-  "Βοηθός σκηνοθέτη",
-  "Φωτισμοί",
-  "Φωτογραφίες",
-  "Μουσική",
-  "Παραγωγή",
-  "Μετάφραση",
-  "Σκηνικά",
-  "Κοστούμια",
-  "Ερμηνεύουν",
-  "Κείμενο",
-  "Ηθοποιοί",
-  "Μουσική επιμέλεια",
-  "Συγγραφέας",
-  "Επικοινωνία",
-  "Πρωταγωνιστούν",
-  "Σχεδιασμός Φωτισμών",
-  "Χορογραφίες",
-  "Επιμέλεια Κίνησης",
-  "Παίζουν οι ηθοποιοί",
-  "Οργάνωση παραγωγής",
-  "Σκηνικά-Κοστούμια",
-  "Ερμηνεία",
-];
+// const roles = [
+//   "Ηθοποιός",
+//   "Παίζουν",
+//   "Σκηνοθεσία",
+//   "Βοηθός σκηνοθέτη",
+//   "Φωτισμοί",
+//   "Φωτογραφίες",
+//   "Μουσική",
+//   "Παραγωγή",
+//   "Μετάφραση",
+//   "Σκηνικά",
+//   "Κοστούμια",
+//   "Ερμηνεύουν",
+//   "Κείμενο",
+//   "Ηθοποιοί",
+//   "Μουσική επιμέλεια",
+//   "Συγγραφέας",
+//   "Επικοινωνία",
+//   "Πρωταγωνιστούν",
+//   "Σχεδιασμός Φωτισμών",
+//   "Χορογραφίες",
+//   "Επιμέλεια Κίνησης",
+//   "Παίζουν οι ηθοποιοί",
+//   "Οργάνωση παραγωγής",
+//   "Σκηνικά-Κοστούμια",
+//   "Ερμηνεία",
+// ];
 
 const claimed = ["True", "False"];
 const order = ["True", "False"];
@@ -120,11 +122,31 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
   page,
 }) => {
   const router = useRouter();
-  const [letterValue, setLetterValue] = useState(router.query.letter);
-  const [roleValue, setRoleValue] = useState(router.query.role);
-  const [claimedValue, setClaimedValue] = useState(router.query.claimed);
-  const [orderValue, setOrderValue] = useState(router.query.order);
+  const { loading: rolesLoading, fetchAvailableRoles } = useRoleQueries();
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [letterValue, setLetterValue] = useState(
+    (router.query.letter as string) || null
+  );
+  const [roleValue, setRoleValue] = useState(
+    (router.query.role as string) || null
+  );
+  const [claimedValue, setClaimedValue] = useState(
+    (router.query.claimed as string) || null
+  );
+  const [orderValue, setOrderValue] = useState(
+    (router.query.order as string) || null
+  );
   const [drawer, setDrawer] = useState(false);
+
+  useEffect(() => {
+    const loadRoles = async () => {
+      const availableRoles = await fetchAvailableRoles();
+      if (availableRoles) {
+        setRoles(availableRoles);
+      }
+    };
+    loadRoles();
+  }, [fetchAvailableRoles]);
 
   const handleClear = () => {
     router.push({
@@ -133,60 +155,64 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
         page: 1,
       },
     });
+    setLetterValue(null);
+    setRoleValue(null);
+    setClaimedValue(null);
+    setOrderValue(null);
     setDrawer(false);
   };
 
   useEffect(() => {
-    if (letterValue) {
-      router.push({
-        pathname: "/artists",
-        query: {
-          page: 1,
-          letter: letterValue,
-        },
-      });
-      setDrawer(false);
-    }
-  }, [letterValue, router]);
+    router.push({
+      pathname: "/artists",
+      query: {
+        page: 1,
+        ...(letterValue ? { letter: letterValue } : {}),
+      },
+    });
+    setDrawer(false);
+    setLetterValue(letterValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [letterValue]);
 
   useEffect(() => {
-    if (roleValue) {
-      router.push({
-        pathname: "/artists",
-        query: {
-          page: 1,
-          role: roleValue,
-        },
-      });
-      setDrawer(false);
-    }
-  }, [roleValue, router]);
+    router.push({
+      pathname: "/artists",
+      query: {
+        page: 1,
+        ...(roleValue ? { role: roleValue } : {}),
+      },
+    });
+    setDrawer(false);
+    setRoleValue(roleValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roleValue]);
 
   useEffect(() => {
-    if (claimedValue) {
-      router.push({
-        pathname: "/artists",
-        query: {
-          page: 1,
-          claimed: claimedValue,
-        },
-      });
-      setDrawer(false);
-    }
-  }, [claimedValue, router]);
+    router.push({
+      pathname: "/artists",
+      query: {
+        page: 1,
+        ...(claimedValue ? { claimed: claimedValue } : {}),
+      },
+    });
+    setDrawer(false);
+    setClaimedValue(claimedValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [claimedValue]);
 
   useEffect(() => {
-    if (orderValue) {
-      router.push({
-        pathname: "/artists",
-        query: {
-          page: 1,
-          order: orderValue,
-        },
-      });
-      setDrawer(false);
-    }
-  }, [orderValue, router]);
+    router.push({
+      pathname: "/artists",
+      query: {
+        page: 1,
+        ...(orderValue ? { order: orderValue } : {}),
+      },
+    });
+    setDrawer(false);
+    setOrderValue(orderValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderValue]);
 
   const Filters = (
     <div className="px-0 py-3 w-[300px] mt-12 -mr-14 flex flex-col items-start gap-5">
@@ -196,7 +222,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       <Autocomplete
         value={letterValue}
         onChange={(_event, newValue) => {
-          if (newValue != null) setLetterValue(newValue);
+          setLetterValue(newValue);
         }}
         id="controllable-states-demo"
         options={letters}
@@ -213,10 +239,10 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       <Autocomplete
         value={roleValue}
         onChange={(_event, newValue) => {
-          if (newValue != null) setRoleValue(newValue);
+          setRoleValue(newValue);
         }}
         id="controllable-states-demo"
-        options={roles}
+        options={roles.map((role) => role.role)}
         style={{ width: 200 }}
         renderInput={(params) => (
           <TextField
@@ -230,7 +256,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       <Autocomplete
         value={claimedValue}
         onChange={(_event, newValue) => {
-          if (newValue != null) setClaimedValue(newValue);
+          setClaimedValue(newValue);
         }}
         id="controllable-states-demo"
         options={claimed}
@@ -247,7 +273,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
       <Autocomplete
         value={orderValue}
         onChange={(_event, newValue) => {
-          if (newValue != null) setOrderValue(newValue);
+          setOrderValue(newValue);
         }}
         id="controllable-states-demo"
         options={order}
