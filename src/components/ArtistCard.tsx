@@ -50,7 +50,7 @@ const ArtistCard: React.FC<ArtistCardProps> = ({
           </Avatar>
         </div>
         {/* Info Column */}
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center items-start">
           <Typography variant="body1" component="p" className="!font-semibold">
             {fullname}
           </Typography>

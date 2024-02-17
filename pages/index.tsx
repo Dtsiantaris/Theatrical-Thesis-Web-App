@@ -144,23 +144,18 @@ const Home = ({ artists, latestShows, articles }: HomePageProps) => {
               title="Καλλιτέχνες"
               description="Δημοφιλείς Ηθοποιοί"
             >
-              {/* TODO: make this a component like show card and maybe use it in artists/index too */}
               {artists.map((artist, index) => (
-                <div
-                  key={index}
-                  className="bg-gray-400 border-2 border-transparent hover:border-secondary hover:scale-105 hover:cursor-pointer transition-all rounded-xl"
-                >
-                  <Link href={`/artists/${artist.id}`}>
-                    <div className="flex flex-col justify-center items-center transition-all">
-                      <ArtistCard
-                        id={artist.id}
-                        fullname={artist.fullname}
-                        images={artist.images}
-                        systemId={artist.systemID}
-                      />
-                    </div>
-                  </Link>
-                </div>
+                <Link key={index} href={`/artists/${artist.id}`}>
+                  <div className="hover:scale-105 transition-all">
+                    <ArtistCard
+                      roles={artist.roles}
+                      id={artist.id}
+                      fullname={artist.fullname}
+                      images={artist.images}
+                      systemId={artist.systemID}
+                    />
+                  </div>
+                </Link>
               ))}
             </ContentSlider>
           </section>

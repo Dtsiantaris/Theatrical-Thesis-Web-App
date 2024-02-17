@@ -80,7 +80,7 @@ const Navbar: FC = () => {
           </IconButton>
           {/* Logo name only */}
           <Image
-            src="logos/logo-name.svg"
+            src="/logos/logo-name.svg"
             alt="Logo"
             width={40}
             height={40}

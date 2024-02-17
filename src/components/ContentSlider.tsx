@@ -13,7 +13,7 @@ import "swiper/swiper-bundle.css";
 SwiperCore.use([Navigation]);
 
 interface ContentSliderProps {
-  title: string;
+  title?: string;
   description?: string;
   decoratedTitle?: boolean;
   children: React.ReactNode[];
@@ -69,12 +69,9 @@ const ContentSlider: React.FC<ContentSliderProps> = (props) => {
         <div>
           <Typography
             className={
-              props.decoratedTitle
-                ? "relative pl-2 before:content-none before:absolute before:w-1 before:bg-secondary before:h-4/5 before:ml-[-0.5rem] before:top-1"
-                : ""
+              props.decoratedTitle ? "pl-2 border-l-4 border-secondary" : ""
             }
-            variant="h3"
-            component="h2"
+            variant="h4"
           >
             {props.title}
           </Typography>
@@ -101,7 +98,7 @@ const ContentSlider: React.FC<ContentSliderProps> = (props) => {
           </div>
         )}
       </div>
-      <div className="mt-5">
+      <div className="my-2">
         <Swiper
           onSwiper={(swiper) => {
             swiperRef = swiper;
