@@ -49,7 +49,7 @@ const ShowCard: React.FC<ShowCardProps> = ({
           <CardMedia className="relative w-full h-[70%] max-h-[70%]">
             <div className="relative h-full">
               <Image
-                src={mediaUrl ? mediaUrl : "/DefaultShowImage.jpg"}
+                src={mediaUrl ? mediaUrl : "/show-placeholder.jpg"}
                 alt={`${title} thumbnail`}
                 layout="fill"
                 objectFit="cover"

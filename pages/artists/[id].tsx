@@ -44,6 +44,8 @@ import {
 import { Person } from "../../src/types/entities/Person";
 import { Production } from "../../src/types/entities/Production";
 import ContentSlider from "../../src/components/ContentSlider";
+import ShowCard from "../../src/components/ShowCard";
+import { Role } from "../../src/types/entities/Role";
 
 const placeHolderBio =
   "Quisque tincidunt porta neque, vitae aliquet quam hendrerit id. Nulla facilisi. Sed hendrerit elit eu vulputate auctor. Mauris ac tincidunt dui. Suspendisse nec sagittis neque, et efficitur nisl. Proin molestie mollis tortor, id sodales risus. Phasellus mi ante, viverra vel euismod eget, vulputate vel libero. Curabitur sem tellus, posuere id est eu, auctor imperdiet mauris. Morbi euismod facilisis dolor, in vestibulum mauris mattis non. Donec sit amet tempor augue, a elementum nisl.";
@@ -68,14 +70,13 @@ export const getServerSideProps: GetServerSideProps<
 
     // Fetch artist data based on the artistId (e.g., using mainFetcher)
     const artist = (await mainFetcher(`/people/${artistId}`)) as Person;
-    console.log(
-      "================================ ARTIST ===================================="
-    );
-    console.log(artist);
+    // console.log(
+    //   "================================ ARTIST ===================================="
+    // );
+    // console.log(artist);
 
-    const productions = (await mainFetcher(
-      `/people/${artistId}/productions`
-    )) as Production[];
+    const productions = (await mainFetcher(`/people/${artistId}/productions`))
+      .results as { production: Production; role: Role }[];
     console.log(
       "================================ PRODUCTIONS ===================================="
     );
@@ -115,7 +116,7 @@ export const getServerSideProps: GetServerSideProps<
 //FIXME: wtf
 interface ArtistDetailsProps {
   artist: Person; // Update the type based on your data structure
-  productions: Production[]; // Update the type based on your data structure
+  productions: { production: Production; role: Role }[]; // Update the type based on your data structure
   // productionsByRole: any[]; // Update the type based on your data structure
   // images: string[]; // Update the type based on your data structure
 }
@@ -124,7 +125,6 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
   artist,
   productions,
   // productionsByRole,
-  // images,
 }) => {
   // placeholder:
   const testBio = `Γεννήθηκε στις 31 Ιουλίου 1972 στις Σέρρες, όπου και μεγάλωσε. Στην ηλικία των 18 ετών εγκαταστάθηκε στη Θεσσαλονίκη και πέρασε στο τμήμα Νομικής του Αριστοτελείου Πανεπιστημίου Θεσσαλονίκης.
@@ -198,6 +198,38 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
                 {/* Name and birthdate */}
                 <span>
                   <Typography variant="h3">{artist.fullname}</Typography>
+                  <div className="flex flex-wrap items-center">
+                    {artist?.roles && artist.roles.length ? (
+                      artist.roles.map((role, index) => (
+                        <React.Fragment key={index}>
+                          <Typography
+                            variant="body1"
+                            component="span"
+                            className="italic !text-sm"
+                          >
+                            {role}
+                          </Typography>
+                          {artist.roles && index < artist?.roles.length - 1 && (
+                            <Typography
+                              variant="body1"
+                              component="span"
+                              className="!mx-2 !font-bold"
+                            >
+                              •
+                            </Typography>
+                          )}
+                        </React.Fragment>
+                      ))
+                    ) : (
+                      <Typography
+                        variant="body1"
+                        component="span"
+                        className="italic !text-xs"
+                      >
+                        Δεν υπάρχουν διαθέσιμοι ρόλοι
+                      </Typography>
+                    )}
+                  </div>
                   <Typography
                     variant="body1"
                     className="row-start-4 sm:row-start-3"
@@ -269,143 +301,26 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
             )}
           </section>
           <section>
-            <Typography
-              variant="h4"
-              component="h3"
-              className="font-medium relative pl-2 border-l-4 border-secondary"
-              style={{ marginBottom: 20 }}
-            >
-              Παραστάσεις
-            </Typography>
-            {productions.length > 0 && (
-              <Accordion
-                square
-                expanded={expanded === "acting"}
-                onChange={handleChange("acting")}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="acting-content"
-                  id="acting-header"
-                >
-                  <Typography variant="h5" component="h3">
-                    Ηθοποιός
-                  </Typography>
-                </AccordionSummary>
-                {/* <List className="m-2 border-2 border-primary-light">
-                  {productions.map(
-                    (
-                      play: {
-                        productionId: number;
-                        title:
-                          | boolean
-                          | React.ReactChild
-                          | React.ReactFragment
-                          | React.ReactPortal
-                          | null
-                          | undefined;
-                      },
-                      index: React.Key | null | undefined
-                    ) => (
-                      <ListItem
-                        key={index}
-                        className="border-b border-gray-700 last:border-b-0"
-                      >
-                        <Link href={`/shows/${play.productionId}`}>
-                          <ListItemText primary={play.title} />
-                        </Link>
-                        <Link href="/stats/2022">
-                          <ListItemText
-                            className="ml-auto flex-shrink-0 pl-4"
-                            primary="2022"
-                          />
-                        </Link>
-                      </ListItem>
-                    )
-                  )}
-                </List> */}
-              </Accordion>
-            )}
-            {Object.entries(productions).map(([key, value], index) => (
-              <Accordion
-                square
-                key={index}
-                expanded={expanded === key}
-                onChange={handleChange(key)}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls={`${key}-content`}
-                  id={`${key}-heading`}
-                >
-                  <Typography variant="h5" component="h3">
-                    {key}
-                  </Typography>
-                </AccordionSummary>
-                <List className="m-2 border-2 border-primary-light">
-                  {value.map(
-                    (
-                      play: {
-                        productionId: any;
-                        title: React.ReactNode; // Specify the type here
-                      },
-                      index: React.Key | null | undefined
-                    ) => (
-                      <ListItem
-                        key={index}
-                        className="border-b border-gray-700 last:border-b-0"
-                      >
-                        <Link href={`/shows/${play.productionId}`}>
-                          <ListItemText primary={play.title} />
-                        </Link>
-                        <Link href="/stats/2022">
-                          <ListItemText
-                            className="ml-auto flex-shrink-0 pl-4"
-                            primary="2022"
-                          />
-                        </Link>
-                      </ListItem>
-                    )
-                  )}
-                </List>
-              </Accordion>
-            ))}
-          </section>
-          {/* <section>
-            <Typography
-              variant="h4"
-              component="h2"
-              className="font-medium relative pl-2 before:w-1 before:bg-secondary before:absolute before:h-4 before:-ml-2 before:top-0.5"
-            >
-              Παραγωγές ανά Ρόλο
-            </Typography>
-            <ResponsiveContainer width="100%" height={400}>
-              <PieChart>
-                <Pie data={productionsByRole} dataKey="value">
-                  {productionsByRole.map((prod, index) => (
-                    <Cell
-                      key={prod.name}
-                      fill={COLORS[index]}
-                      stroke={theme.palette.background.default}
-                      strokeWidth={2}
-                    />
-                  ))}
-                  <Cell
-                    fill="#fd2155"
-                    stroke={theme.palette.background.default}
-                    strokeWidth={2}
+            {productions ? (
+              <ContentSlider decoratedTitle title="Παραστάσεις">
+                {productions.map((item, index) => (
+                  <ShowCard
+                    key={index}
+                    id={item.production.id}
+                    title={item.production.title}
+                    mediaUrl={item.production.mediaUrl}
+                    description={item.production.description}
+                    duration={item.production.duration}
+                    organizerId={item.production.organizerId.toString()}
+                    producer={item.production.producer}
+                    url={item.production.url}
                   />
-                  <LabelList dataKey="value" strokeWidth={0} fill="#000" />
-                </Pie>
-                <Tooltip
-                  contentStyle={{ backgroundColor: "#373737", border: 0 }}
-                  itemStyle={{ color: "#fff" }}
-                  formatter={(value) => `${value} παραγωγές`}
-                />
-                <Legend verticalAlign="top" wrapperStyle={{ bottom: 0 }} />
-              </PieChart>
-            </ResponsiveContainer>
-          </section> */}
+                ))}
+              </ContentSlider>
+            ) : (
+              <Typography>Δεν υπάρχουν διαθέσιμες παραγωγές</Typography>
+            )}
+          </section>
           <section>
             <Typography
               variant="h4"
