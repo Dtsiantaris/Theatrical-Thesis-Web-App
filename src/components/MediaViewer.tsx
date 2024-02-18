@@ -94,27 +94,29 @@ const MediaViewer: React.FC<MediaViewerProps> = ({
       </div>
 
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col gap-2 items-center">
-        <Image
-          src={media[mediaIndex]}
-          alt="Profile picture"
-          layout="responsive"
-          loading="lazy"
-          width={400}
-          height={400}
-        />
+        <div className="w-[400px] h-[400px] flex justify-center">
+          <Image
+            src={media[mediaIndex]}
+            alt="Profile picture"
+            layout="responsive"
+            loading="lazy"
+            width={400}
+            height={400}
+          />
+        </div>
         <Typography
           className=" text-white bg-primary p-1 px-3 rounded-2xl"
           variant="body1"
         >{`${mediaIndex + 1} / ${media.length}`}</Typography>
         {/* Preview images */}
-        <div className="flex no-wrap justify-center items-center gap-1 mt-2">
+        <div className=" flex no-wrap justify-center items-center gap-1 mt-2">
           {media.map((image, index) => (
             <div
               key={index}
               className={
                 mediaIndex === index
-                  ? "hover:cursor-pointer w-16 h-16 flex no-wrap border-2 border-secondary"
-                  : "hover:cursor-pointer w-16 h-16 flex no-wrap opacity-40"
+                  ? "hover:cursor-pointer w-16 h-16 scale-105 flex no-wrap border-2 border-secondary transition-transform"
+                  : "hover:cursor-pointer w-16 h-16 scale-90 flex no-wrap opacity-40 transition-transform"
               }
               onClick={() => setMediaIndex(index)}
             >
@@ -122,8 +124,8 @@ const MediaViewer: React.FC<MediaViewerProps> = ({
                 src={image}
                 alt={`Preview ${index}`}
                 layout="fixed"
-                width={60}
-                height={60}
+                width={80}
+                height={80}
               />
             </div>
           ))}

@@ -1,63 +1,30 @@
 import React, { useMemo, useState } from "react";
 // next
 import Head from "next/head";
-import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 // mui
-import {
-  Avatar,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-  IconButton,
-  useMediaQuery,
-  useTheme,
-  AccordionSummary,
-  Accordion,
-} from "@mui/material";
+import { Avatar, Typography, IconButton, List, ListItem } from "@mui/material";
 // icons
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 // components
 import LoadingScene from "../../src/components/LoadingScene";
 import MediaViewer from "../../src/components/MediaViewer";
-import ArtistCard from "../../src/components/ArtistCard";
+import ContentSlider from "../../src/components/ContentSlider";
+import ShowCard from "../../src/components/ShowCard";
 // hooks
 import useFavoriteArtist from "../../src/hooks/useFavoriteArtist";
 // utils
-import { mainFetcher, tmdbFetcher } from "../../src/utils/AxiosInstances";
-import {
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LabelList,
-} from "recharts";
+import { mainFetcher } from "../../src/utils/AxiosInstances";
 // inetrfaces
 import { Person } from "../../src/types/entities/Person";
 import { Production } from "../../src/types/entities/Production";
-import ContentSlider from "../../src/components/ContentSlider";
-import ShowCard from "../../src/components/ShowCard";
 import { Role } from "../../src/types/entities/Role";
 
 const placeHolderBio =
   "Quisque tincidunt porta neque, vitae aliquet quam hendrerit id. Nulla facilisi. Sed hendrerit elit eu vulputate auctor. Mauris ac tincidunt dui. Suspendisse nec sagittis neque, et efficitur nisl. Proin molestie mollis tortor, id sodales risus. Phasellus mi ante, viverra vel euismod eget, vulputate vel libero. Curabitur sem tellus, posuere id est eu, auctor imperdiet mauris. Morbi euismod facilisis dolor, in vestibulum mauris mattis non. Donec sit amet tempor augue, a elementum nisl.";
-
-const COLORS = [
-  "#71FFFA",
-  "#fff642",
-  "#ed66ff",
-  "#91ff55",
-  "#fd2155",
-  "#fff9f9",
-];
 
 export const getServerSideProps: GetServerSideProps<
   ArtistDetailsProps
@@ -100,19 +67,6 @@ export const getServerSideProps: GetServerSideProps<
   }
 };
 
-// export const getStaticPaths = async () => {
-//   const artists: Person[] = await mainFetcher("/People");
-
-//   const paths = artists.map((artist) => ({
-//     params: { id: artist.id.toString() },
-//   }));
-
-//   return {
-//     paths,
-//     fallback: true,
-//   };
-// };
-
 //FIXME: wtf
 interface ArtistDetailsProps {
   artist: Person; // Update the type based on your data structure
@@ -133,13 +87,9 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
     "Ο Γιώργος Καπουτζίδης (Σέρρες, 31 Ιουλίου 1972) είναι Έλληνας σεναριογράφος, ηθοποιός, παρουσιαστής, και στιχουργός. Έχει γράψει τα σίριαλ Στο Παρά 5, Σαββατογεννημένες και Εθνική Ελλάδος. Η καταγωγή του είναι από το Λιβαδοχώρι Σερρών.";
 
   const router = useRouter();
-  const theme = useTheme();
-
-  const mdDown = useMediaQuery("(max-width:960px)");
 
   const [mediaViewerOpen, setMediaViewerOpen] = useState(false);
   const [mediaIndex, setMediaIndex] = useState(0);
-  const [expanded, setExpanded] = useState<string | false>(false);
 
   const { isFavorite, setIsFavorite } = useFavoriteArtist(
     artist && artist.id.toString()
@@ -160,10 +110,6 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
     return <LoadingScene fullScreen />;
   }
 
-  // if (!artist.images[0]) {
-  //   artist.images.push("kapoutzidis")
-  // }
-
   const handleFavorite = () => {
     setIsFavorite(!isFavorite);
   };
@@ -173,11 +119,6 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
     setMediaViewerOpen(true);
   };
 
-  const handleChange =
-    (panel: string) => (event: React.ChangeEvent<{}>, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
-    };
-
   return (
     <>
       <Head>
@@ -186,66 +127,32 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
       <div className="pageWrapper md:px-0 py-5">
         <div className="pageContent flex flex-col overflow-x-auto ">
           <section className="mb-[4em] flex flex-col ">
-            <div className="relative flex flex-col md:!flex-row !no-wrap gap-2">
+            <div className="flex flex-col md:!flex-row !no-wrap gap-2">
               {/* Image */}
               <div className="flex flex-col gap-1">
                 <Avatar
                   alt="Artist Photo"
                   src={artist.images[0].imageUrl}
                   variant="square"
-                  className="bg-transparent text-white !w-full !h-72 md:!w-80 md:!h-72 mt-1 col-span-2 md:col-span-1 justify-self-center !rounded-md !shadow-lg"
+                  className="bg-transparent text-white !w-full !h-72 md:!w-80 md:!h-72 mt-1 col-span-2 md:col-span-1 justify-self-center !rounded-lg !shadow-lg"
                 ></Avatar>
-                {/* Name and birthdate */}
-                <span>
-                  <Typography variant="h3">{artist.fullname}</Typography>
-                  <div className="flex flex-wrap items-center">
-                    {artist?.roles && artist.roles.length ? (
-                      artist.roles.map((role, index) => (
-                        <React.Fragment key={index}>
-                          <Typography
-                            variant="body1"
-                            component="span"
-                            className="italic !text-sm"
-                          >
-                            {role}
-                          </Typography>
-                          {artist.roles && index < artist?.roles.length - 1 && (
-                            <Typography
-                              variant="body1"
-                              component="span"
-                              className="!mx-2 !font-bold"
-                            >
-                              •
-                            </Typography>
-                          )}
-                        </React.Fragment>
-                      ))
-                    ) : (
-                      <Typography
-                        variant="body1"
-                        component="span"
-                        className="italic !text-xs"
-                      >
-                        Δεν υπάρχουν διαθέσιμοι ρόλοι
-                      </Typography>
-                    )}
-                  </div>
-                  <Typography
-                    variant="body1"
-                    className="row-start-4 sm:row-start-3"
-                  >
-                    <strong>Ημερομηνία Γέννησης: </strong>
-                    {stringBirthday || "N/A"}
-                  </Typography>
-                </span>
               </div>
               {/* description and bio */}
               <div className="flex flex-col gap-3 p-2">
+                {/* Name and actions */}
+                <div className="flex flex-nowrap gap-2">
+                  <Typography variant="h2">{artist.fullname}</Typography>
+                  <IconButton
+                    size="small"
+                    className="hover:bg-transparent"
+                    onClick={handleFavorite}
+                  >
+                    {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+                  </IconButton>
+                  {/* TODO: add here claim button */}
+                </div>
                 {/* Description */}
-                <Typography
-                  variant="body1"
-                  className="col-start-1 col-span-2 row-start-3 sm:col-start-2 sm:col-span-2 sm:row-start-2"
-                >
+                <Typography variant="body1" className="italic">
                   {testDesc}
                 </Typography>
                 <div>
@@ -255,13 +162,53 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
                   </Typography>
                 </div>
               </div>
-              <IconButton
-                size="small"
-                className="hover:bg-transparent !absolute -bottom-2 md:-top-2 md:bottom-auto -right-5"
-                onClick={handleFavorite}
+            </div>
+            {/* Info */}
+            <div className="flex flex-col no-wrap">
+              <Typography
+                className="border-l-4 border-secondary pl-2"
+                variant="h4"
               >
-                {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-              </IconButton>
+                Πληροφορίες
+              </Typography>
+              <div className="grid grid-cols-1 gap-1 md:grid-cols-2 p-3">
+                <div className="flex flex-col border-l-4 border-primary pl-2">
+                  <Typography variant="body1">
+                    <strong>Ημερομηνία Γέννησης:</strong>{" "}
+                    {stringBirthday || "N/A"}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Βάρος:</strong> {artist.weight || "N/A"}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Ύψος:</strong> {artist.height || "N/A"}
+                  </Typography>
+                  <Typography variant="body1">
+                    <strong>Χρώμα ματιών:</strong> {artist.eyeColor || "N/A"}
+                  </Typography>
+                </div>
+                <div className="flex flex-col border-l-4 border-primary pl-2">
+                  <Typography variant="body1">
+                    <strong>Ρόλοι</strong>
+                  </Typography>
+                  {artist.roles ? (
+                    <List sx={{ listStyleType: "disc" }} className="!pl-3">
+                      {artist.roles.map((role, index) => (
+                        <ListItem
+                          sx={{ display: "list-item", padding: 0 }}
+                          key={index}
+                        >
+                          <Typography variant="body1">{role}</Typography>
+                        </ListItem>
+                      ))}
+                    </List>
+                  ) : (
+                    <Typography className="italic" variant="body2">
+                      Δεν υπάρχουν διαθέσιμοι ρόλοι
+                    </Typography>
+                  )}
+                </div>
+              </div>
             </div>
           </section>
           <section>
