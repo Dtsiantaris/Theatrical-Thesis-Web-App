@@ -84,3 +84,132 @@ button {
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
 }
+
+/* LOGIN */
+.login-container {
+  background: #0d3266;
+  background: -webkit-linear-gradient(to right, #0d3266, #23528c);
+  background: linear-gradient(to right, #0d3266, #23528c);
+  border-radius: 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  position: relative;
+  overflow: hidden;
+  width: 768px;
+  max-width: 100%;
+  min-height: 480px;
+}
+
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+  left: 0;
+  width: 50%;
+  z-index: 2;
+}
+
+.login-container.right-panel-active .sign-in-container {
+  transform: translateX(100%);
+}
+
+.sign-up-container {
+  left: 0;
+  width: 50%;
+  opacity: 0;
+  z-index: 1;
+}
+
+.login-container.right-panel-active .sign-up-container {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: show 0.6s;
+}
+
+@keyframes show {
+  0%,
+  49.99% {
+    opacity: 0;
+    z-index: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 1;
+    z-index: 5;
+  }
+}
+
+.login-overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+}
+
+.login-container.right-panel-active .login-overlay-container {
+  transform: translateX(-100%);
+}
+
+.login-overlay {
+  background: #0d3266;
+  background: -webkit-linear-gradient(to right, #0d3266, #23528c);
+  background: linear-gradient(to right, #0d3266, #23528c);
+
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 0;
+  color: #ffffff;
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+}
+
+.login-container.right-panel-active .login-overlay {
+  transform: translateX(50%);
+}
+
+.login-overlay-panel {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+}
+
+.login-overlay-left {
+  transform: translateX(-20%);
+}
+
+.login-container.right-panel-active .login-overlay-left {
+  transform: translateX(0);
+}
+
+.login-overlay-right {
+  right: 0;
+  transform: translateX(0);
+}
+
+.login-container.right-panel-active .login-overlay-right {
+  transform: translateX(20%);
+}
+
+/* animation */

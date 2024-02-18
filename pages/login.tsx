@@ -1,32 +1,35 @@
 import { FormEventHandler, useState } from "react";
+// next
 import Head from "next/head";
+import Image from "next/image";
 import { useRouter } from "next/router";
+// mui
 import {
   Typography,
-  makeStyles,
   Paper,
   TextField,
   Button,
   Container,
   CircularProgress,
+  IconButton,
 } from "@mui/material";
+// icons
+import FacebookIcon from "@mui/icons-material/Facebook";
+import GoogleIcon from "@mui/icons-material/Google";
+import LinkedInIcon from "@mui/icons-material/LinkedIn";
 // interfaces
 import { User } from "../src/types/entities/User";
 // hooks
 import { useUserContext } from "../src/contexts/UserContext";
 import { useUserQueries } from "../src/hooks/queries/useUserQueries";
-// utils and icons
-import { mainAxios } from "../src/utils/AxiosInstances";
-import style from "../src/assets/jss/layouts/loginPageStyles";
 import { useUserMutations } from "../src/hooks/mutations/useUserMutations";
-
-const useStyles = makeStyles(style);
+// utils
+import { mainAxios } from "../src/utils/AxiosInstances";
 
 const LoginPage = () => {
   const { fetchUserInfo } = useUserQueries();
   const { loginUser, loading: loadingMutation } = useUserMutations();
 
-  const classes = useStyles();
   const router = useRouter();
 
   const [isLogin, setIsLogin] = useState(true);
@@ -95,6 +98,10 @@ const LoginPage = () => {
     }
   };
 
+  const handleTogglePanel = (isSignIn: boolean) => {
+    setIsLogin(isSignIn);
+  };
+
   return (
     <>
       <Head>
@@ -103,103 +110,189 @@ const LoginPage = () => {
       <Container
         component="form"
         onSubmit={handleSubmit}
-        className={classes.outerContainer}
+        className="!flex !no-wrap justify-center items-center !min-h-[calc(100vh-64px)]  !pl-0 !pr-0 !w-full"
       >
-        <Paper elevation={2} className={classes.paperContainer}>
-          <Typography variant="h3" component="h1">
-            {isLogin ? "Login" : "Sign Up" || (twoFactorFlag && "Two")}
-          </Typography>
-          {error && (
-            <Typography className={classes.errorText}>{error}</Typography>
-          )}
+        {/* Sliding container */}
+        <div
+          className={`login-container ${isLogin ? "" : "right-panel-active"}`}
+        >
+          {/* Sign in card */}
 
-          {!twoFactorFlag && (
-            <TextField
-              InputLabelProps={{ required: false }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              label="Email"
-              variant="outlined"
-              color="secondary"
-              type="email"
-              required
-            />
-          )}
-          {!twoFactorFlag && (
-            <TextField
-              InputLabelProps={{ required: false }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              label="Password"
-              type="password"
-              variant="outlined"
-              color="secondary"
-              required
-            />
-          )}
-          {!isLogin && !twoFactorFlag && (
-            <TextField
-              InputLabelProps={{ required: false }}
-              value={confirmPassword}
-              onChange={(e) => {
-                setPasswordError(false);
-                setConfirmPassword(e.target.value);
-              }}
-              label="Confirm Password"
-              type="password"
-              variant="outlined"
-              color="secondary"
-              error={passwordError}
-              helperText={passwordError && "Password do not match!"}
-              required
-            />
-          )}
-          {twoFactorFlag && (
-            <TextField
-              InputLabelProps={{ required: false }}
-              value={twoFactorValue}
-              onChange={(e) => {
-                setPasswordError(false);
-                setTwoFactorValue(parseFloat(e.target.value));
-              }}
-              label="Confirm two-factor password"
-              type="text"
-              variant="outlined"
-              color="secondary"
-              required={twoFactorFlag}
-            />
-          )}
-          <Button
-            type="submit"
-            disabled={loadingMutation}
-            variant="contained"
-            color="secondary"
-          >
-            {loadingMutation ? (
-              <CircularProgress color="secondary" />
-            ) : isLogin ? (
-              "Login"
-            ) : (
-              "Sign Up"
-            )}
-          </Button>
-          {!twoFactorFlag && (
-            <div>
-              <Typography variant="overline" display="inline">
-                {isLogin
-                  ? "Don't have an account?"
-                  : "Already have an account?"}
+          <div className="sign-in-container form-container">
+            <Paper
+              elevation={2}
+              className="flex flex-col justify-center items-center gap-5 h-full"
+            >
+              <Typography variant="h3" component="h1">
+                Σύνδεση
               </Typography>
-              <Button
-                onClick={() => setIsLogin((prev) => !prev)}
-                variant="text"
+              {error && (
+                <Typography className="text-[#f44336]">{error}</Typography>
+              )}
+              {/* Social media */}
+              <div className="flex w-full justify-center items-center">
+                <IconButton color="info">
+                  <FacebookIcon />
+                </IconButton>
+                <IconButton color="success">
+                  <GoogleIcon />
+                </IconButton>
+                <IconButton>
+                  <LinkedInIcon color="primary" />
+                </IconButton>
+              </div>
+              <Typography variant="caption">ή με υπάρχον λογαριασμό</Typography>
+              <TextField
+                InputLabelProps={{ required: false }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                label="Email"
+                variant="outlined"
                 color="secondary"
+                type="email"
+                required
+              />
+              <TextField
+                InputLabelProps={{ required: false }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                label="Κωδικός"
+                type="password"
+                variant="outlined"
+                color="secondary"
+                required
+              />
+              <Button
+                type="submit"
+                disabled={loadingMutation}
+                variant="contained"
+                className="!bg-secondary hover:!bg-opacity-80"
               >
-                {isLogin ? "Sign Up" : "Login"}
+                {loadingMutation ? (
+                  <CircularProgress color="secondary" />
+                ) : (
+                  "Σύνδεση"
+                )}
               </Button>
+            </Paper>
+          </div>
+          {/* Sign up card*/}
+          <div className="sign-up-container form-container">
+            <Paper
+              elevation={2}
+              className="flex flex-col justify-center items-center gap-5 h-full"
+            >
+              <Typography variant="h3" component="h1">
+                Εγγραφή
+              </Typography>
+              {error && (
+                <Typography className="text-[#f44336]">{error}</Typography>
+              )}
+              {/* Social media */}
+              <div className="flex w-full justify-center items-center">
+                <IconButton color="info">
+                  <FacebookIcon />
+                </IconButton>
+                <IconButton color="success">
+                  <GoogleIcon />
+                </IconButton>
+                <IconButton>
+                  <LinkedInIcon color="primary" />
+                </IconButton>
+              </div>
+              <Typography variant="caption">ή με δικό σας email</Typography>
+              <TextField
+                InputLabelProps={{ required: false }}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                label="Email"
+                variant="outlined"
+                color="secondary"
+                type="email"
+                required
+              />
+              <TextField
+                InputLabelProps={{ required: false }}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                label="Κωδικός"
+                type="password"
+                variant="outlined"
+                color="secondary"
+                required
+              />
+              <TextField
+                InputLabelProps={{ required: false }}
+                value={confirmPassword}
+                onChange={(e) => {
+                  setPasswordError(false);
+                  setConfirmPassword(e.target.value);
+                }}
+                label="Επιβεβαίωση κωδικού"
+                type="password"
+                variant="outlined"
+                color="secondary"
+                error={passwordError}
+                helperText={passwordError && "Passwords do not match!"}
+                required
+              />
+              <Button
+                type="submit"
+                disabled={loadingMutation}
+                variant="contained"
+                className="!bg-secondary hover:!bg-opacity-80"
+              >
+                {loadingMutation ? (
+                  <CircularProgress color="secondary" />
+                ) : (
+                  "Εγγραφή"
+                )}
+              </Button>
+            </Paper>
+          </div>
+          {/* Overlay card */}
+          <div className="login-overlay-container">
+            <div className="login-overlay">
+              <div className="login-overlay-panel login-overlay-left">
+                <Typography variant="h2">Καλώς ήρθατε στο</Typography>
+                <Image
+                  src="/logos/logo-name.svg"
+                  alt="Logo"
+                  width={40}
+                  height={40}
+                  className="w-40 ml-2"
+                />
+
+                <Typography variant="caption">Έχετε ήδη λογαριασμό;</Typography>
+                <Button
+                  className="!rounded-2xl !text-white !bg-secondary hover:!bg-opacity-80"
+                  variant="outlined"
+                  onClick={() => handleTogglePanel(true)}
+                >
+                  Σύνδεση
+                </Button>
+              </div>
+              <div className="login-overlay-panel login-overlay-right">
+                <Typography variant="h2">Συνδεθείτε στο</Typography>
+                <Image
+                  src="/logos/logo-name.svg"
+                  alt="Logo"
+                  width={40}
+                  height={40}
+                  className="w-40 ml-2"
+                />
+                <Typography variant="caption">Δεν έχετε λογαριασμό;</Typography>
+                <Button
+                  className="!rounded-2xl !text-white !bg-secondary hover:!bg-opacity-80"
+                  variant="outlined"
+                  onClick={() => handleTogglePanel(false)}
+                >
+                  Εγγραφή
+                </Button>
+              </div>
             </div>
-          )}
-        </Paper>
+          </div>
+        </div>
       </Container>
     </>
   );
