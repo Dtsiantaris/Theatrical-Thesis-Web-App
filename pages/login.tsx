@@ -34,7 +34,7 @@ const LoginPage = () => {
 
   const [isLogin, setIsLogin] = useState(true);
   const [twoFactorFlag, setTwoFactorFlag] = useState(false);
-  const [twoFactorValue, setTwoFactorValue] = useState<number>();
+  const [twoFactorValue, setTwoFactorValue] = useState<string>();
   // const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -62,6 +62,7 @@ const LoginPage = () => {
     const response = await loginUser(email, password);
     if (response === -1) {
       setTwoFactorFlag(true);
+      handleTogglePanel(false);
     } else {
       router.push("/");
     }
@@ -143,134 +144,193 @@ const LoginPage = () => {
               </div>
               <Typography variant="caption">ή με υπάρχον λογαριασμό</Typography>
               <TextField
-                InputLabelProps={{ required: false }}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 label="Email"
                 variant="outlined"
                 color="secondary"
                 type="email"
-                required
+                InputProps={{
+                  style: { backgroundColor: "white" },
+                }}
               />
               <TextField
-                InputLabelProps={{ required: false }}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 label="Κωδικός"
                 type="password"
                 variant="outlined"
                 color="secondary"
-                required
+                InputProps={{
+                  style: { backgroundColor: "white" },
+                }}
               />
               <Button
                 type="submit"
-                disabled={loadingMutation}
+                disabled={loadingMutation || password.length < 3 || !email}
                 variant="contained"
                 className="!bg-secondary hover:!bg-opacity-80"
               >
                 {loadingMutation ? (
-                  <CircularProgress color="secondary" />
+                  <CircularProgress className="!text-white" />
                 ) : (
                   "Σύνδεση"
                 )}
               </Button>
             </Paper>
           </div>
-          {/* Sign up card*/}
+          {/* Sign up card and 2fa*/}
           <div className="sign-up-container form-container">
-            <Paper
-              elevation={2}
-              className="flex flex-col justify-center items-center gap-5 h-full"
-            >
-              <Typography variant="h3" component="h1">
-                Εγγραφή
-              </Typography>
-              {error && (
-                <Typography className="text-[#f44336]">{error}</Typography>
-              )}
-              {/* Social media */}
-              <div className="flex w-full justify-center items-center">
-                <IconButton color="info">
-                  <FacebookIcon />
-                </IconButton>
-                <IconButton color="success">
-                  <GoogleIcon />
-                </IconButton>
-                <IconButton>
-                  <LinkedInIcon color="primary" />
-                </IconButton>
-              </div>
-              <Typography variant="caption">ή με δικό σας email</Typography>
-              <TextField
-                InputLabelProps={{ required: false }}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                label="Email"
-                variant="outlined"
-                color="secondary"
-                type="email"
-                required
-              />
-              <TextField
-                InputLabelProps={{ required: false }}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                label="Κωδικός"
-                type="password"
-                variant="outlined"
-                color="secondary"
-                required
-              />
-              <TextField
-                InputLabelProps={{ required: false }}
-                value={confirmPassword}
-                onChange={(e) => {
-                  setPasswordError(false);
-                  setConfirmPassword(e.target.value);
-                }}
-                label="Επιβεβαίωση κωδικού"
-                type="password"
-                variant="outlined"
-                color="secondary"
-                error={passwordError}
-                helperText={passwordError && "Passwords do not match!"}
-                required
-              />
-              <Button
-                type="submit"
-                disabled={loadingMutation}
-                variant="contained"
-                className="!bg-secondary hover:!bg-opacity-80"
+            {/* Sign up */}
+            {!twoFactorFlag ? (
+              <Paper
+                elevation={2}
+                className="flex flex-col justify-center items-center gap-5 h-full"
               >
-                {loadingMutation ? (
-                  <CircularProgress color="secondary" />
-                ) : (
-                  "Εγγραφή"
+                <Typography variant="h3" component="h1">
+                  Εγγραφή
+                </Typography>
+                {error && (
+                  <Typography className="text-[#f44336]">{error}</Typography>
                 )}
-              </Button>
-            </Paper>
+                {/* Social media */}
+                <div className="flex w-full justify-center items-center">
+                  <IconButton color="info">
+                    <FacebookIcon />
+                  </IconButton>
+                  <IconButton color="success">
+                    <GoogleIcon />
+                  </IconButton>
+                  <IconButton>
+                    <LinkedInIcon color="primary" />
+                  </IconButton>
+                </div>
+                <Typography variant="caption">ή με δικό σας email</Typography>
+                <TextField
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  label="Email"
+                  variant="outlined"
+                  color="secondary"
+                  type="email"
+                  InputProps={{
+                    style: { backgroundColor: "white" },
+                  }}
+                />
+                <TextField
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  label="Κωδικός"
+                  type="password"
+                  variant="outlined"
+                  color="secondary"
+                  InputProps={{
+                    style: { backgroundColor: "white" },
+                  }}
+                />
+                <TextField
+                  InputLabelProps={{ required: false }}
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setPasswordError(false);
+                    setConfirmPassword(e.target.value);
+                  }}
+                  label="Επιβεβαίωση κωδικού"
+                  type="password"
+                  variant="outlined"
+                  color="secondary"
+                  error={passwordError}
+                  helperText={passwordError && "Passwords do not match!"}
+                  InputProps={{
+                    style: { backgroundColor: "white" },
+                  }}
+                />
+                <Button
+                  type="submit"
+                  disabled={
+                    loadingMutation ||
+                    !email ||
+                    password.length < 3 ||
+                    confirmPassword.length < 3
+                  }
+                  variant="contained"
+                  className="!bg-secondary hover:!bg-opacity-80"
+                >
+                  {loadingMutation ? (
+                    <CircularProgress color="secondary" />
+                  ) : (
+                    "Εγγραφή"
+                  )}
+                </Button>
+              </Paper>
+            ) : (
+              // 2FA
+              <Paper
+                elevation={2}
+                className="flex flex-col justify-center items-center gap-5 h-full"
+              >
+                <Typography variant="h3" component="h1">
+                  Επιβεβαίωση κωδικού
+                </Typography>
+                <TextField
+                  InputLabelProps={{ required: false }}
+                  value={twoFactorValue}
+                  onChange={(e) => setTwoFactorValue(e.target.value)}
+                  label="Κωδικός Επιβεβαίωσης"
+                  type="text"
+                  variant="outlined"
+                  color="secondary"
+                  InputProps={{
+                    style: { backgroundColor: "white" },
+                  }}
+                />
+                <Button
+                  type="submit"
+                  disabled={loadingMutation}
+                  variant="contained"
+                  className="!bg-secondary hover:!bg-opacity-80"
+                >
+                  Επιβεβαίωση
+                </Button>
+              </Paper>
+            )}
           </div>
           {/* Overlay card */}
           <div className="login-overlay-container">
             <div className="login-overlay">
               <div className="login-overlay-panel login-overlay-left">
-                <Typography variant="h2">Καλώς ήρθατε στο</Typography>
-                <Image
-                  src="/logos/logo-name.svg"
-                  alt="Logo"
-                  width={40}
-                  height={40}
-                  className="w-40 ml-2"
-                />
+                {!twoFactorFlag ? (
+                  <div className="flex flex-col">
+                    <Typography variant="h2">Καλώς ήρθατε στο</Typography>
+                    <Image
+                      src="/logos/logo-name.svg"
+                      alt="Logo"
+                      width={40}
+                      height={40}
+                      className="w-40 ml-2"
+                    />
 
-                <Typography variant="caption">Έχετε ήδη λογαριασμό;</Typography>
-                <Button
-                  className="!rounded-2xl !text-white !bg-secondary hover:!bg-opacity-80"
-                  variant="outlined"
-                  onClick={() => handleTogglePanel(true)}
-                >
-                  Σύνδεση
-                </Button>
+                    <Typography variant="caption">
+                      Έχετε ήδη λογαριασμό;
+                    </Typography>
+                    <Button
+                      className="!rounded-2xl !text-white !bg-secondary hover:!bg-opacity-80"
+                      variant="outlined"
+                      onClick={() => handleTogglePanel(true)}
+                    >
+                      Σύνδεση
+                    </Button>
+                  </div>
+                ) : (
+                  // 2fa
+                  <div className="flex flex-col">
+                    <Typography variant="h2">Επαλήθευση 2FA</Typography>
+                    <Typography variant="caption">
+                      Παρακαλώ ελέγξτε το email σας. Σας έχουμε στείλει έναν
+                      κωδικό μίας χρήσης.
+                    </Typography>
+                  </div>
+                )}
               </div>
               <div className="login-overlay-panel login-overlay-right">
                 <Typography variant="h2">Συνδεθείτε στο</Typography>
