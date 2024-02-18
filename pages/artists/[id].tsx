@@ -5,15 +5,24 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { GetServerSideProps } from "next";
 // mui
-import { Avatar, Typography, IconButton, List, ListItem } from "@mui/material";
+import {
+  Avatar,
+  Typography,
+  IconButton,
+  List,
+  ListItem,
+  Tooltip,
+} from "@mui/material";
 // icons
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import LockPersonRoundedIcon from "@mui/icons-material/LockPersonRounded";
 // components
 import LoadingScene from "../../src/components/LoadingScene";
 import MediaViewer from "../../src/components/MediaViewer";
 import ContentSlider from "../../src/components/ContentSlider";
 import ShowCard from "../../src/components/ShowCard";
+import ClaimPersonDialog from "../../src/components/ClaimPersonDialog";
 // hooks
 import useFavoriteArtist from "../../src/hooks/useFavoriteArtist";
 // utils
@@ -22,6 +31,7 @@ import { mainFetcher } from "../../src/utils/AxiosInstances";
 import { Person } from "../../src/types/entities/Person";
 import { Production } from "../../src/types/entities/Production";
 import { Role } from "../../src/types/entities/Role";
+import { useUserContext } from "../../src/contexts/UserContext";
 
 const placeHolderBio =
   "Quisque tincidunt porta neque, vitae aliquet quam hendrerit id. Nulla facilisi. Sed hendrerit elit eu vulputate auctor. Mauris ac tincidunt dui. Suspendisse nec sagittis neque, et efficitur nisl. Proin molestie mollis tortor, id sodales risus. Phasellus mi ante, viverra vel euismod eget, vulputate vel libero. Curabitur sem tellus, posuere id est eu, auctor imperdiet mauris. Morbi euismod facilisis dolor, in vestibulum mauris mattis non. Donec sit amet tempor augue, a elementum nisl.";
@@ -90,6 +100,8 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
 
   const [mediaViewerOpen, setMediaViewerOpen] = useState(false);
   const [mediaIndex, setMediaIndex] = useState(0);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { isLoggedIn } = useUserContext();
 
   const { isFavorite, setIsFavorite } = useFavoriteArtist(
     artist && artist.id.toString()
@@ -119,6 +131,14 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
     setMediaViewerOpen(true);
   };
 
+  const handleOpenDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+  };
+
   return (
     <>
       <Head>
@@ -140,7 +160,7 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
               {/* description and bio */}
               <div className="flex flex-col gap-3 p-2">
                 {/* Name and actions */}
-                <div className="flex flex-nowrap gap-2">
+                <div className="flex flex-nowrap gap-1">
                   <Typography variant="h2">{artist.fullname}</Typography>
                   <IconButton
                     size="small"
@@ -149,7 +169,29 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
                   >
                     {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
                   </IconButton>
-                  {/* TODO: add here claim button */}
+                  {/* Claim artist */}
+                  {!artist.isClaimed && !isLoggedIn && (
+                    <Tooltip
+                      slotProps={{
+                        tooltip: {
+                          className: "!bg-secondary",
+                        },
+                        arrow: {
+                          className: "!text-secondary",
+                        },
+                      }}
+                      title={"Αίτηση κατοχής προφίλ καλλιτέχνη"}
+                      placement="bottom"
+                      arrow
+                    >
+                      <IconButton
+                        className=" hover:!text-secondary"
+                        onClick={handleOpenDialog}
+                      >
+                        <LockPersonRoundedIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
                 </div>
                 {/* Description */}
                 <Typography variant="body1" className="italic">
@@ -323,6 +365,11 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
           </section>
         </div>
       </div>
+      <ClaimPersonDialog
+        personId={artist.id}
+        isOpen={isDialogOpen}
+        onClose={handleCloseDialog}
+      />
     </>
   );
 };

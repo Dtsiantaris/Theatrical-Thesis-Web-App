@@ -1,15 +1,7 @@
-import React, { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import {
-  Typography,
-  Avatar,
-  useMediaQuery,
-  useTheme,
-  Button,
-} from "@mui/material";
-import CopyrightIcon from "@mui/icons-material/Copyright";
-import ClaimPersonDialog from "./ClaimPersonDialog";
+import React from "react";
+// mui
+import { Typography, Avatar, useTheme } from "@mui/material";
+// interfaces
 import { ArtistCardProps } from "../types/cards/ArtistCardProps";
 
 const ArtistCard: React.FC<ArtistCardProps> = ({
@@ -21,15 +13,6 @@ const ArtistCard: React.FC<ArtistCardProps> = ({
   isDetails,
 }) => {
   const theme = useTheme();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const handleOpenDialog = () => {
-    setIsDialogOpen(true);
-  };
-
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
-  };
 
   const imageToRender =
     images && images.length > 0 ? images[0].imageUrl : undefined;
@@ -44,10 +27,7 @@ const ArtistCard: React.FC<ArtistCardProps> = ({
             alt="Artist Photo"
             src={imageToRender || ""}
             style={{ width: "100%", height: "auto", background: "transparent" }}
-          >
-            {/* {!imageToRender && <Typography>{fullname[0]}</Typography>}{" "} */}
-            {/* Show initials if no image */}
-          </Avatar>
+          ></Avatar>
         </div>
         {/* Info Column */}
         <div className="flex flex-col justify-center items-start">
@@ -88,24 +68,8 @@ const ArtistCard: React.FC<ArtistCardProps> = ({
           </div>
           {/* TODO: Add most recent production */}
           {/* Include more artist info here */}
-          {!isClaimed && isDetails && (
-            <Button
-              style={{ textTransform: "none" }}
-              variant="outlined"
-              color="secondary"
-              onClick={handleOpenDialog}
-              endIcon={<CopyrightIcon />}
-            >
-              Claim profile
-            </Button>
-          )}
         </div>
       </div>
-      <ClaimPersonDialog
-        personId={id}
-        isOpen={isDialogOpen}
-        onClose={handleCloseDialog}
-      />
     </React.Fragment>
   );
 };
