@@ -55,7 +55,7 @@ const MediaViewer: React.FC<MediaViewerProps> = ({
   return (
     <div
       id="modal"
-      className="fixed inset-0 z-50 bg-black bg-opacity-90"
+      className="fixed inset-0 z-50 bg-black glass"
       onClick={handleClickAway}
     >
       {/* Close button */}

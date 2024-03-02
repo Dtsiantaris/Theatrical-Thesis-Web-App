@@ -16,6 +16,7 @@ interface ContentSliderProps {
   title?: string;
   description?: string;
   decoratedTitle?: boolean;
+  minHeight?: number; // in rem
   children: React.ReactNode[];
 }
 
@@ -111,7 +112,12 @@ const ContentSlider: React.FC<ContentSliderProps> = (props) => {
         >
           {props.children.map((child, index) => (
             <SwiperSlide key={index}>
-              <div className="p-3">{child}</div>
+              <div
+                className="p-3"
+                style={{ minHeight: `${props.minHeight}rem` }}
+              >
+                {child}
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>

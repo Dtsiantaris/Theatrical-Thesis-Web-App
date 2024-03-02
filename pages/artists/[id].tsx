@@ -32,6 +32,11 @@ import { Person } from "../../src/types/entities/Person";
 import { Production } from "../../src/types/entities/Production";
 import { Role } from "../../src/types/entities/Role";
 import { useUserContext } from "../../src/contexts/UserContext";
+import {
+  FacebookEmbed,
+  InstagramEmbed,
+  XEmbed,
+} from "react-social-media-embed";
 
 const placeHolderBio =
   "Quisque tincidunt porta neque, vitae aliquet quam hendrerit id. Nulla facilisi. Sed hendrerit elit eu vulputate auctor. Mauris ac tincidunt dui. Suspendisse nec sagittis neque, et efficitur nisl. Proin molestie mollis tortor, id sodales risus. Phasellus mi ante, viverra vel euismod eget, vulputate vel libero. Curabitur sem tellus, posuere id est eu, auctor imperdiet mauris. Morbi euismod facilisis dolor, in vestibulum mauris mattis non. Donec sit amet tempor augue, a elementum nisl.";
@@ -264,13 +269,13 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
             {/* Images */}
             {artist.images.length > 0 ? (
               <>
-                <ContentSlider decoratedTitle title="Φωτογραφίες">
+                <ContentSlider decoratedTitle title="Φωτογραφίες" minHeight={8}>
                   {artist.images.map((image, index) => {
                     return (
                       <div
                         key={index}
                         onClick={() => handleImageClick(index)}
-                        className="hover:cursor-pointer hover:scale-105 hover:absolute hover:border-2 border-secondary transition-transform rounded-md shadow-md w-[8rem] h-[8rem] flex justify-center overflow-hidden"
+                        className="hover:cursor-pointer hover:scale-105 hover:absolute hover:border-2 border-secondary transition-transform rounded-md shadow-md !w-[8rem] !h-[8rem] flex justify-center overflow-hidden"
                       >
                         <Image
                           data-index={index}
@@ -363,6 +368,24 @@ const ArtistDetails: React.FC<ArtistDetailsProps> = ({
               </a>
             </div>
           </section>
+          {/* TODO: instagram api? */}
+          {/* <section>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <InstagramEmbed
+                url="https://www.instagram.com/ykapoutzidis?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                width={328}
+              />
+            </div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <FacebookEmbed
+                url="https://www.facebook.com/ykapoutzidis"
+                width={328}
+              />
+            </div>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <XEmbed url="https://x.com/YKapoutzidis?s=20" width={328} />
+            </div>
+          </section> */}
         </div>
       </div>
       <ClaimPersonDialog
