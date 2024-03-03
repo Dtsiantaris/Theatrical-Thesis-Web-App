@@ -20,20 +20,19 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
-  Chip,
   ListItemSecondaryAction,
   Switch,
   TextField,
   Button,
   CircularProgress,
   Backdrop,
+  Chip,
 } from "@mui/material";
 import EnhancedEncryptionIcon from "@mui/icons-material/EnhancedEncryption";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import PermIdentity from "@mui/icons-material/PermIdentity";
 import EmailIcon from "@mui/icons-material/Email";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+
 import CloseIcon from "@mui/icons-material/Close";
 import { Facebook as FacebookIcon } from "@mui/icons-material";
 import InstagramIcon from "@mui/icons-material/Instagram";
@@ -53,6 +52,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import AddIcCallIcon from "@mui/icons-material/AddIcCall";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import SelectProfilePhotoDialog from "../../src/components/SelectProfilePhotoDialog";
+import { VerifiedChip } from "../../src/components/user/VerifiedChip";
 
 const UserProfile = () => {
   const { user } = useUserContext();
@@ -204,16 +204,6 @@ const UserProfile = () => {
   if (!user) {
     return <p>Loading user data...</p>;
   }
-
-  const VerifiedChip: React.FC<{ isVerified: boolean }> = ({ isVerified }) => (
-    <Chip
-      icon={isVerified ? <CheckCircleOutlineIcon /> : <HighlightOffIcon />}
-      label={isVerified ? "Verified" : "Not Verified"}
-      variant="outlined"
-      size="small"
-      className={isVerified ? "!bg-green-500" : "!bg-red-500"}
-    />
-  );
 
   return (
     <div className="flex justify-center mt-10">

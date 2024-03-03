@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// mui
 import {
   Button,
   Dialog,
@@ -8,11 +9,14 @@ import {
   List,
   ListItem,
   ListItemText,
-  CircularProgress,
   Avatar,
+  IconButton,
 } from "@mui/material";
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+// icons
+import CloseIcon from "@mui/icons-material/Close";
+// interfaces
 import { UserPhoto } from "../types/entities/User";
+// hooks
 import { useUserMutations } from "../hooks/mutations/useUserMutations";
 import { useUserQueries } from "../hooks/queries/useUserQueries";
 
@@ -52,7 +56,17 @@ const SelectProfilePhotoDialog: React.FC<SelectProfilePhotoDialogProps> = ({
 
   return (
     <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={onClose}>
-      <DialogTitle className="text-2xl">Select Profile Photo</DialogTitle>
+      <DialogTitle className="text-2xl !p-0">
+        <div className="bg-primary p-4 flex w-full justify-between items-center">
+          <span className="text-xl text-white">Select Profile Photo</span>
+          <IconButton
+            className="!text-white hover:!text-secondary"
+            onClick={onClose}
+          >
+            <CloseIcon />
+          </IconButton>
+        </div>
+      </DialogTitle>
       <DialogContent>
         <List>
           {existingPhotos.map((photo) => (
@@ -80,17 +94,24 @@ const SelectProfilePhotoDialog: React.FC<SelectProfilePhotoDialogProps> = ({
           ))}
         </List>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="secondary">
-          Cancel
-        </Button>
-        <Button
-          onClick={handleConfirm}
-          color="secondary"
-          disabled={selectedPhotoId === null}
-        >
-          Confirm
-        </Button>
+      <DialogActions className="!p-0">
+        <div className="bg-primary p-3 flex w-full justify-end gap-2 items-center">
+          <Button
+            onClick={onClose}
+            variant="contained"
+            className="text-white !bg-gray-500 hover:!bg-opacity-80"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleConfirm}
+            variant="contained"
+            className="text-white !bg-secondary hover:!bg-opacity-80"
+            disabled={selectedPhotoId === null}
+          >
+            Confirm
+          </Button>
+        </div>
       </DialogActions>
     </Dialog>
   );
