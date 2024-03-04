@@ -11,6 +11,7 @@ import { GeneralUserInfoTab } from "./GeneralUserInfoTab";
 import { TheatricalUserInfoTab } from "./TheatricalUserInfoTab";
 import { MediaUserInfoTab } from "./MediaUserInfoTab";
 import { ContactUserInfoTab } from "./ContactUserInfoTab";
+import UserProfilePhoto from "./UserProfilePhoto";
 // utils
 import { cn } from "../../utils/cn";
 
@@ -49,14 +50,17 @@ export function UserTabs() {
     <div
       className={cn(
         `flex ${
-          isVertical ? "flex-row" : "flex-col"
-        } h-[40rem] md:h-[40rem] [perspective:1000px] mx-auto w-full items-start justify-start my-40`
+          isVertical ? "flex-row justify-center" : "flex-col justify-start"
+        } justify-start h-[40rem] md:h-[40rem] [perspective:1000px] mx-auto w-full items-start my-10 md:my-40`
       )}
     >
       <DynamicTabs
         tabs={tabs}
         vertical={isVertical}
         activeTabClassName="!bg-primary"
+        aboveTitlesSlot={
+          <UserProfilePhoto />
+        }
       />
     </div>
   );

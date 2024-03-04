@@ -2,6 +2,7 @@ import { useState } from "react";
 // utils
 import { motion } from "framer-motion";
 import { cn } from "../../utils/cn";
+import { Tooltip } from "@mui/material";
 
 export type DynamicTab = {
   title: string;
@@ -17,6 +18,7 @@ export const DynamicTabs = ({
   tabClassName,
   contentClassName,
   vertical = false,
+  aboveTitlesSlot
 }: {
   tabs: DynamicTab[];
   containerClassName?: string;
@@ -24,6 +26,7 @@ export const DynamicTabs = ({
   tabClassName?: string;
   contentClassName?: string;
   vertical?: boolean;
+  aboveTitlesSlot?: string | React.ReactNode | any;
 }) => {
   const [active, setActive] = useState<DynamicTab>(propTabs[0]);
   const [tabs, setTabs] = useState<DynamicTab[]>(propTabs);
@@ -40,47 +43,67 @@ export const DynamicTabs = ({
 
   return (
     <>
-      <div
+      <div 
         className={cn(
-          `flex ${
-            vertical ? "flex-col w-[20%]" : "flex-row w-full"
-          } items-center justify-start [perspective:1000px] min-h-[3rem] relative overflow-auto sm:overflow-visible no-visible-scrollbar`,
-          containerClassName
+          `flex flex-col ${
+              vertical ? "w-[20%]" : "w-full"
+            } items-center justify-center`,
         )}
       >
-        {propTabs.map((tab, idx) => (
-          <button
-            key={tab.title}
-            onClick={() => {
-              moveSelectedTabToTop(idx);
-            }}
-            onMouseEnter={() => setHovering(true)}
-            onMouseLeave={() => setHovering(false)}
-            className={cn("relative px-4 py-2 rounded-full", tabClassName)}
-            style={{
-              transformStyle: "preserve-3d",
-            }}
-          >
-            {active.value === tab.value && (
-              <motion.div
-                layoutId="clickedbutton"
-                transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
-                className={cn(
-                  "absolute inset-0 bg-gray-200 dark:bg-zinc-800 rounded-full ",
-                  activeTabClassName
-                )}
-              />
-            )}
-
-            <div className="relative text-black dark:text-white flex items-center gap-2">
-              <span className={cn(`${!vertical && "hidden"}`)}>
-                {tab.title}
-              </span>
-              {tab.titleIcon}
-            </div>
-          </button>
-        ))}
-      </div>
+        { aboveTitlesSlot }
+        <div
+          className={cn(
+            `flex w-full ${
+              vertical ? "flex-col" : "flex-row"
+            } items-center justify-center [perspective:1000px] min-h-[3rem] relative  no-visible-scrollbar`,
+            containerClassName
+          )}
+        >
+      
+          {propTabs.map((tab, idx) => (
+            <Tooltip key={idx}
+              slotProps={{
+              tooltip: {className: '!bg-secondary'},
+              arrow: {className: '!text-secondary'},
+              }}
+              title={tab.title}
+              placement="bottom"
+              arrow
+              disableHoverListener={vertical}
+            >
+            <button
+              key={idx}
+              onClick={() => {
+                moveSelectedTabToTop(idx);
+              }}
+              onMouseEnter={() => setHovering(true)}
+              onMouseLeave={() => setHovering(false)}
+              className={cn("relative px-4 py-2 rounded-full", tabClassName)}
+              style={{
+                transformStyle: "preserve-3d",
+              }}
+            >
+              {active.value === tab.value && (
+                <motion.div
+                  layoutId="clickedbutton"
+                  transition={{ type: "spring", bounce: 0.3, duration: 0.6 }}
+                  className={cn(
+                    "absolute inset-0 bg-gray-200 dark:bg-zinc-800 rounded-full ",
+                    activeTabClassName
+                  )}
+                />
+              )}
+              <div className="relative text-black dark:text-white flex items-center gap-2">
+                <span className={cn(`${!vertical && "hidden"}`)}>
+                  {tab.title}
+                </span>
+                {tab.titleIcon}
+              </div>
+            </button>
+            </Tooltip>
+          ))}
+        </div>
+    </div>
       <FadeInDiv
         tabs={tabs}
         active={active}
@@ -117,6 +140,7 @@ export const FadeInDiv = ({
             top: hovering ? idx * -50 : 0,
             zIndex: -idx,
             opacity: idx < 3 ? 1 - idx * 0.1 : 0,
+            height: "auto",
           }}
           animate={{
             y: isActive(tab) ? [0, 40, 0] : 0,
