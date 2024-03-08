@@ -44,7 +44,7 @@ export const DynamicTabs = ({
         className={cn(
           `flex ${
             vertical ? "flex-col w-[20%]" : "flex-row w-full"
-          } items-center justify-start [perspective:1000px] min-h-[3rem] relative overflow-auto sm:overflow-visible no-visible-scrollbar`,
+          } items-center justify-start [perspective:1000px] min-h-[3rem] relative`,
           containerClassName
         )}
       >
@@ -86,7 +86,10 @@ export const DynamicTabs = ({
         active={active}
         key={active.value}
         hovering={hovering}
-        className={cn(`${!vertical && "mt-20"}`, contentClassName)}
+        className={cn(
+          `${!vertical && "h-[calc(100%+110px)] mt-20"}`,
+          contentClassName
+        )}
       />
     </>
   );
