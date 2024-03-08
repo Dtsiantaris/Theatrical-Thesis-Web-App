@@ -12,4 +12,5 @@ export interface ArtistCardProps {
   ];
   roles?: string[];
   isClaimed?: boolean;
+  width?: number;
 }

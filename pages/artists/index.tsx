@@ -215,7 +215,7 @@ const ArtistsPagination: React.FC<ArtistsPaginationProps> = ({
   }, [orderValue]);
 
   const Filters = (
-    <div className="px-0 py-3 w-[300px] mt-12 -mr-14 flex flex-col items-start gap-5">
+    <div className="w-[300px] mt-20 flex flex-col items-center gap-5">
       <Typography variant="h3" style={{ marginBottom: 30 }}>
         Φίλτρα
       </Typography>

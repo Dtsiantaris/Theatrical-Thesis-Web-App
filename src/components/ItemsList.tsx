@@ -36,25 +36,30 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
             // console.log("Item in loop checked:", item);
 
             return (
-              <Link href={`/artists/${item.id}`} key={item.id}>
-                <div className="linksNoDecoration hover:scale-105 transition-all">
-                  <ArtistCard
-                    id={item.id}
-                    fullname={item.fullname}
-                    images={item.images}
-                    systemId={item.systemId}
-                    roles={item.roles}
-                  />
-                </div>
-              </Link>
+              <ArtistCard
+                key={index}
+                id={item.id}
+                fullname={item.fullname}
+                images={item.images}
+                systemId={item.systemId}
+                roles={item.roles}
+                width={380}
+              />
             );
-          } else if (type === "/shows" && "title" in item && "media" in item)
+          } else if (type === "/shows" && "duration" in item)
             return (
-              <Link href={`/shows/${item.id}`} key={item.id}>
-                <div className="linksNoDecoration">
-                  <ShowCard {...(item as ShowCardProps)} />
-                </div>
-              </Link>
+              <ShowCard
+                key={index}
+                id={item.id}
+                description={item.description}
+                mediaUrl={item.mediaUrl}
+                duration={item.duration}
+                organizerId={item.organizerId}
+                title={item.title}
+                producer={item.producer}
+                url={item.url}
+                width={380}
+              />
             );
           else if (type === "/venues" && "title" in item)
             return (

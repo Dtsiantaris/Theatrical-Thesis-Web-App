@@ -4,9 +4,17 @@ import { mainFetcher } from "../../src/utils/AxiosInstances";
 import getShowImage from "../../src/utils/getShowImage";
 import Head from "next/head";
 import { Production } from "../../src/types/entities/Production";
-import { ShowCardProps } from "../../src/components/ShowCard";
+import { ShowCardProps } from "../../src/types/cards/ShowCardProps";
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+interface ShowsPaginationProps {
+  shows: Production[];
+  pageCount: number;
+  page: number;
+}
+
+export const getServerSideProps: GetServerSideProps<
+  ShowsPaginationProps
+> = async ({ query }) => {
   if (!query.page) {
     return {
       redirect: {
@@ -17,7 +25,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   }
 
   const page = Number(query.page);
-  const data = await mainFetcher(`/productions?page=${page - 1}&size=20`);
+  const data = await mainFetcher(`/productions?page=${page - 1}&size=12`);
 
   if (!data) {
     return {
@@ -43,37 +51,39 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   };
 };
 
-interface ArtistsPaginationProps {
-  shows: Production[]; // Assuming Production is the correct type for shows
-  page: number;
-}
-
 const mapProductionToShowCardProps = (
   production: Production
 ): ShowCardProps => {
   return {
     id: production.id,
     title: production.title,
-    media: getShowImage(production.mediaUrl),
+    description: production.description,
+    duration: production.duration,
+    organizerId: production.organizerId.toString(),
+    producer: production.producer,
+    url: production.url,
+    mediaUrl: getShowImage(production.mediaUrl),
   };
 };
 
-const ArtistsPagination = ({ shows, page }: ArtistsPaginationProps) => {
+const ShowsPagination = ({ shows, page, pageCount }: ShowsPaginationProps) => {
   const showCardPropsArray = shows.map(mapProductionToShowCardProps);
   return (
     <>
       <Head>
         <title>Θεατρικές Παραστάσεις | Theatrica</title>
       </Head>
-      <PaginationPage
-        title="Παραστάσεις"
-        items={showCardPropsArray}
-        // pageCount={pageCount}
-        page={page}
-        path="/shows"
-      />
+      <div className="mx-0 my-auto flex p-4 md:pl-[70px]">
+        <PaginationPage
+          title="Παραστάσεις"
+          items={showCardPropsArray}
+          pageCount={pageCount}
+          page={page}
+          path="/shows"
+        />
+      </div>
     </>
   );
 };
 
-export default ArtistsPagination;
+export default ShowsPagination;

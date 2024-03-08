@@ -7,4 +7,5 @@ export interface ShowCardProps {
   producer: string;
   mediaUrl: string;
   duration: string;
+  width?: number;
 }

@@ -52,7 +52,11 @@ const PaginationPage: React.FC<PaginationPageProps> = ({
       {title && (
         <Grid item xs={12}>
           <div className="max-w-6xl mx-0 my-auto pl-2">
-            <Typography variant="h2" component="h1">
+            <Typography
+              variant="h2"
+              component="h1"
+              className="border-l-4 border-secondary pl-2"
+            >
               {title}
             </Typography>
           </div>

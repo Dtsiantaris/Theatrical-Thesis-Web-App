@@ -29,6 +29,7 @@ const ShowCard: React.FC<ShowCardProps> = ({
   mediaUrl,
   duration,
   producer,
+  width,
 }) => {
   const { isFavorite, setIsFavorite } = useFavoriteShow(id);
   const { inWatchlist, setInWatchlist } = useWatchlist(id);
@@ -42,8 +43,10 @@ const ShowCard: React.FC<ShowCardProps> = ({
   };
 
   return (
-    // TODO: maybe the h-80 needs to be dynamic??
-    <div className="relative hover:scale-105 hover:border-secondary transition-transform">
+    <div
+      style={width ? { width: width } : undefined}
+      className="relative hover:scale-105 hover:border-secondary transition-transform"
+    >
       <Link href={`/shows/${id}`}>
         <Card className="flex flex-col !rounded-[4%] h-96 bg-gray-400 overflow-hidden shadow-sm border-2 border-transparent hover:border-secondary hover:shadow-md transition-all">
           <CardMedia className="relative w-full h-[70%] max-h-[70%]">

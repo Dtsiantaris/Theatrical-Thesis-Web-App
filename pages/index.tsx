@@ -145,17 +145,14 @@ const Home = ({ artists, latestShows, articles }: HomePageProps) => {
               description="Δημοφιλείς Ηθοποιοί"
             >
               {artists.map((artist, index) => (
-                <Link key={index} href={`/artists/${artist.id}`}>
-                  <div className="hover:scale-105 transition-all">
-                    <ArtistCard
-                      roles={artist.roles}
-                      id={artist.id}
-                      fullname={artist.fullname}
-                      images={artist.images}
-                      systemId={artist.systemID}
-                    />
-                  </div>
-                </Link>
+                <ArtistCard
+                  key={index}
+                  roles={artist.roles}
+                  id={artist.id}
+                  fullname={artist.fullname}
+                  images={artist.images}
+                  systemId={artist.systemID}
+                />
               ))}
             </ContentSlider>
           </section>
