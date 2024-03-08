@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   } else {
     data = await mainFetcher(`/venues?page=${page - 1}&size=12`);
   }
-
+  console.log(data);
   if (!data) {
     return {
       notFound: true,
@@ -189,7 +189,7 @@ const VenuesPagination = ({
         </Drawer>
       </Hidden>
 
-      <div className="max-w-[1250px] mx-0 my-auto flex p-4 md:pl-[70px]">
+      <div className="mx-0 my-auto flex p-4 md:pl-[70px]">
         <Hidden mdDown>{Filters}</Hidden>
         <PaginationPage
           title="Θέατρα"

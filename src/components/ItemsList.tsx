@@ -61,13 +61,15 @@ const ItemsList: React.FC<ItemsListProps> = ({ items, type }) => {
                 width={380}
               />
             );
-          else if (type === "/venues" && "title" in item)
+          else if (type === "/venues" && "address" in item)
             return (
-              <Link href={`/venues/${item.id}`} key={item.id}>
-                <div className="linksNoDecoration">
-                  <VenueCard id={item.id} title={item.title} />
-                </div>
-              </Link>
+              <VenueCard
+                key={index}
+                id={item.id}
+                title={item.title}
+                address={item.address}
+                width={380}
+              />
             );
           return null;
         })
