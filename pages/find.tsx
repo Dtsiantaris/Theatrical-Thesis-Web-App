@@ -1,5 +1,4 @@
 import {
-  makeStyles,
   Typography,
   TextField,
   Slider,
@@ -10,12 +9,11 @@ import {
   Radio,
   ThemeProvider,
   useTheme,
+  Autocomplete,
 } from "@mui/material";
-import style from "../src/assets/jss/layouts/findStyle";
-import { useReducer, useEffect, useState, useRef } from "react";
+import { useReducer, useEffect, useState, useRef, Reducer } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
-import Autocomplete from "@material-ui/lab/Autocomplete";
 import Script from "next/script";
 import { useRouter } from "next/router";
 // import events from "../public/eventsVeryNew.json";
@@ -24,22 +22,26 @@ import EventsCard from "../src/components/EventsCard";
 import { Pagination } from "@mui/material";
 import Head from "next/head";
 import DateFnsUtils from "@date-io/date-fns";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import grLocale from "date-fns/locale/el";
 import { DatePickerTheme } from "../src/assets/themes/DarkTheme";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { Event } from "../src/types/entities/Event";
+import { Venue } from "../src/types/entities/Venue";
+import { Production } from "../src/types/entities/Production";
 
-let sessionToken;
+// loading of the Google Maps Autocomplete and set the Autocomplete service
+let sessionToken: google.maps.places.AutocompleteSessionToken;
 const date = new Date();
 
 // loading of the Google Maps Autocomplete and set the Autocomplete service
-function handleScriptLoad(setService) {
+function handleScriptLoad(
+  setService: (service: google.maps.places.AutocompleteService) => void
+) {
   sessionToken = new google.maps.places.AutocompleteSessionToken();
   const autocompleteService = new google.maps.places.AutocompleteService();
   setService(autocompleteService);
 }
-
-const useStyles = makeStyles(style);
-
 const initialFormData = {
   address: "",
   dateStart: date,
@@ -53,27 +55,35 @@ const initialErrorData = {
   dateEnd: "",
 };
 
-const reducer = (state, { field, value }) => {
+type State = {
+  [key: string]: any;
+};
+
+type Action = {
+  field: string;
+  value: any;
+};
+const reducer: Reducer<State, Action> = (state, action) => {
   return {
     ...state,
-    [field]: value,
+    [action.field]: action.value,
   };
 };
 
 export const getServerSideProps = async ({ query }) => {
-  let filteredEvents = [];
-  let filteredVenues = [];
+  let filteredEvents: Event[] = [];
+  let filteredVenues: Venue[] = [];
   // initialize events
   const response = await mainFetcher(`/events`);
-  const events = response.results;
+  const events = response.results as Event[];
 
   //initialize productions
   const apiProductions = await mainFetcher("/productions");
-  const productionsResult = apiProductions.results;
+  const productionsResult = apiProductions.results as Production[];
 
   // initialize venues
   const apiVenues = await mainFetcher("/venues");
-  const venuesResult = apiVenues.results;
+  const venuesResult = apiVenues.results as Venue[];
 
   if (query.dateStart) {
     const dateStart = new Date(query.dateStart);
@@ -111,6 +121,7 @@ export const getServerSideProps = async ({ query }) => {
 
       filteredVenues = await Promise.all(
         filteredVenues.map(async (venue) => {
+          // FIXME: nice query bro
           if (venue.id === 81) {
             return venue;
           }
@@ -175,7 +186,6 @@ export const getServerSideProps = async ({ query }) => {
 };
 
 const FindShow = ({ shows }) => {
-  const classes = useStyles();
   const theme = useTheme();
   const router = useRouter();
 
@@ -221,7 +231,7 @@ const FindShow = ({ shows }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const query = "";
+    let query = "";
     if (validateForm()) {
       query += `dateStart=${formData.dateStart.toISOString().split("T")[0]}`;
       if (radioState === "b") {
@@ -278,7 +288,11 @@ const FindShow = ({ shows }) => {
   }, [autocompleteService, formData.address]);
 
   return (
-    <LocalizationProvider utils={DateFnsUtils} locale={grLocale}>
+    <LocalizationProvider
+      utils={DateFnsUtils}
+      locale={grLocale}
+      dateAdapter={AdapterDateFns}
+    >
       <Head>
         <title>Εύρεση Παράστασης | Theatrica</title>
       </Head>
@@ -293,17 +307,17 @@ const FindShow = ({ shows }) => {
           <Typography
             variant="h3"
             component="h1"
-            className={classes.underlineDecoration}
+            className="relative inline-block"
           >
             Βρες Μια Παράσταση
           </Typography>
           <form
             id="searchForm"
             onSubmit={handleSubmit}
-            className={classes.form}
+            className="flex flex-col ml-10 mt-16 gap-16"
           >
             <div>
-              <div className={classes.radioButtons}>
+              <div className="mb-6">
                 <FormControlLabel
                   control={
                     <Radio
@@ -331,34 +345,31 @@ const FindShow = ({ shows }) => {
                   DatePickerTheme({ main: theme.palette.secondary.main })
                 }
               >
-                <div className={classes.formDates}>
+                <div className="flex gap-12 self-stretch flex-wrap">
                   <div>
                     {radioState === "b" && (
-                      <label className={classes.label} htmlFor="dateStart">
+                      <label className="text-[1rem]" htmlFor="dateStart">
                         Από:
                       </label>
                     )}
-                    <div className={classes.datepicker}>
+                    <div className="mt-3">
                       <DatePicker
                         label={radioState === "a" ? "Ημερομηνία" : "Από:"}
                         value={formData.dateStart}
                         onChange={(date) =>
                           handleDateChange("dateStart", new Date(date))
                         }
-                        error={errorText.dateStart ? true : false}
-                        helperText={errorText.dateStart}
-                        autoOk
-                        variant="static"
-                        openTo="date"
+                        // onError={errorText.dateStart ? true : false}
+                        openTo="month"
                       />
                     </div>
                   </div>
                   {radioState === "b" && (
                     <div>
-                      <label className={classes.label} htmlFor="dateEnd">
+                      <label className="text-[1rem]" htmlFor="dateEnd">
                         Έως:
                       </label>
-                      <div className={classes.datepicker}>
+                      <div className="mt-3">
                         <DatePicker
                           id="dateEnd"
                           label="Έως:"
@@ -366,14 +377,7 @@ const FindShow = ({ shows }) => {
                           onChange={(date) =>
                             handleDateChange("dateEnd", new Date(date))
                           }
-                          error={
-                            radioState === "b" && errorText.dateEnd
-                              ? true
-                              : false
-                          }
-                          helperText={radioState === "b" && errorText.dateEnd}
-                          variant="static"
-                          openTo="date"
+                          openTo="month"
                         />
                       </div>
                     </div>
@@ -381,7 +385,7 @@ const FindShow = ({ shows }) => {
                 </div>
               </ThemeProvider>
             </div>
-            <div className={classes.addressWrapper}>
+            <div className="flex flex-col items-start gap-6">
               <FormControlLabel
                 control={
                   <Switch
@@ -430,7 +434,7 @@ const FindShow = ({ shows }) => {
                   />
                 )}
               />
-              <div className={classes.sliderWrapper}>
+              <div className="self-stretch">
                 <Typography gutterBottom>
                   <b>Μέγιστη Απόσταση: </b> {formData.maxDistance} χιλιόμετρα
                 </Typography>
@@ -441,10 +445,10 @@ const FindShow = ({ shows }) => {
                   min={1}
                   value={formData.maxDistance}
                   onChange={handleSliderChange}
-                  className={classes.slider}
+                  className="w-[95%] max-w-[420px]"
                   disabled={!checked}
                   classes={{
-                    valueLabel: classes.sliderLabel,
+                    valueLabel: "text-white",
                   }}
                 />
               </div>
@@ -454,21 +458,21 @@ const FindShow = ({ shows }) => {
               type="submit"
               variant="outlined"
               startIcon={<SearchIcon fontSize="large" />}
-              className={classes.button}
+              className="px-3 py-5 rounded-xl"
             >
               Αναζήτηση
             </Button>
           </form>
           {router.query.dateStart && (
-            <div className={classes.resultsWrapper}>
+            <div className="ml-10 mt-16">
               <Typography
                 variant="h3"
                 component="h1"
-                className={classes.underlineDecoration}
+                className="relative inline-block"
               >
                 Αποτελέσματα
               </Typography>
-              <div className={classes.resultsContainer}>
+              <div className="ml-10 mt-16 flex flex-col gap-4">
                 {shows.length > 0 ? (
                   <>
                     {shows.slice((page - 1) * 5, page * 5).map((show) => (
@@ -479,8 +483,8 @@ const FindShow = ({ shows }) => {
                         count={Math.ceil(shows.length / 5)}
                         page={page}
                         color="secondary"
-                        style={{ alignSelf: "center" }}
                         onChange={handlePagination}
+                        className="flex !justify-center"
                       />
                     )}
                   </>
