@@ -10,6 +10,7 @@ import { User } from "../types/entities/User";
 //utils & icons
 import { toast } from "react-toastify";
 import EmailIcon from "@mui/icons-material/Email";
+import { mainAxios } from "../utils/AxiosInstances";
 
 interface UserContextData {
   isLoggedIn: boolean;
@@ -82,6 +83,40 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
       localStorage.removeItem("user");
     }
   }, [isLoggedIn, user]);
+
+  // // In the user context
+  // useEffect(() => {
+  //   const authToken = localStorage.getItem("authToken");
+  //   const authExpirationString = localStorage.getItem("authTokenExpiration");
+
+  //   if (authToken && authExpirationString) {
+  //     const expirationTime = parseInt(authExpirationString);
+  //     const now = Date.now();
+
+  //     if (now >= expirationTime) {
+  //       // Token has expired, clear user and auth data
+  //       localStorage.removeItem("authToken");
+  //       localStorage.removeItem("user");
+  //     } else {
+  //       // Token is still valid, refresh it if needed
+  //       const timeUntilExpiration = expirationTime - now;
+
+  //       // Refresh the token a few minutes before it expires
+  //       if (timeUntilExpiration > 5 * 60 * 1000) {
+  //         // Check if more than 5 minutes left before expiration
+  //         const refreshTimeout = setTimeout(() => {
+  //           mainAxios.get("User/refresh-token");
+  //         }, timeUntilExpiration - 5 * 60 * 1000);
+
+  //         return () => clearTimeout(refreshTimeout); // Clear timeout on unmount
+  //       }
+  //     }
+  //   } else {
+  //     // No auth data found, clear localStorage
+  //     localStorage.removeItem("authToken");
+  //     localStorage.removeItem("user");
+  //   }
+  // }, []);
 
   const contextValue: UserContextData = {
     isLoggedIn,

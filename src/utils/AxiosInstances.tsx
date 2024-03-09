@@ -31,8 +31,13 @@ mainAxios.interceptors.response.use(
     }
     // If a new token is provided in the response, update it in localStorage
     if (typeof window !== "undefined" && response.data.data?.access_token) {
-      const token = response.data.data.access_token;
+      const token = response.data.data.access_token as string;
+      // const expires_in = response.data.data.expires_in as number;
+
+      // const expirationDate = new Date(Date.now() + expires_in);
+      console.log("ACCESS_TOKEN", response.data);
       localStorage.setItem("authToken", token);
+      // localStorage.setItem("authTokenExpiration", expirationDate.toISOString());
     }
     return response;
   },

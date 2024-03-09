@@ -23,7 +23,6 @@ import Copyright from "@mui/icons-material/Copyright";
 import Image from "next/image";
 import Head from "next/head";
 // styles
-import style from "../../src/assets/jss/layouts/venueDetailsStyle";
 import EditVenueDialog from "../../src/components/EditVenueDIalog";
 import { useUserContext } from "../../src/contexts/UserContext";
 
@@ -63,8 +62,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
 };
 
-const useStyles = makeStyles(style);
-
 interface VenueDetailsProps {
   venue: Venue;
   productions: Production[];
@@ -72,7 +69,6 @@ interface VenueDetailsProps {
 }
 
 const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
-  const classes = useStyles();
   const router = useRouter();
 
   const [isClaimed, setIsClaimed] = useState(venue.isClaimed);
@@ -109,10 +105,10 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
       <Head>
         <title>{venueRef.title} | Theatrica</title>
       </Head>
-      <div className={`pageWrapper ${classes.pageWrapper}`}>
-        <div className={classes.imageGridWrapper}>
-          <div className={classes.imageGrid}>
-            <div className={classes.imageBlur}>
+      <div className="pageWrapper">
+        <div className="flex justify-center items-center relative overflow-hidden">
+          <div className="grid grid-cols-3">
+            <div className="opacity-50 blur-sm">
               <Image src="/TheaterImage.jpg" alt="Header image" layout="fill" />
             </div>
             <Image
@@ -121,15 +117,12 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
               width={575}
               height={420}
             />
-            <div className={classes.imageBlur}>
+            <div className="opacity-50 blur-sm">
               <Image src="/TheaterImage.jpg" alt="Header image" layout="fill" />
             </div>
           </div>
         </div>
-        <div
-          className={`pageContent ${classes.content}`}
-          style={{ maxWidth: 1250 }}
-        >
+        <div className="pageContent" style={{ maxWidth: 1250 }}>
           <div style={{ marginTop: -100, marginBottom: "5em" }}>
             <Typography variant="h2" component="h1">
               {venueRef.title}
@@ -160,16 +153,16 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
             ) : null}
           </div>
           <section>
-            <Typography className={classes.sectionTitle} variant="h3">
+            <Typography className="relative pl-3 mt-5" variant="h3">
               Πληροφορίες
             </Typography>
-            <Typography className={classes.paragraph} variant="body1">
+            <Typography className="mb-2" variant="body1">
               Το θέατρο βρίσκεται στην περιοχή του «Ψυρρή», επί της οδού Σαρρή.
               Η περιοχή πήρε το όνομά της από το παρατσούκλι του φερώνυμου
               καταπατητή της παλιάς Αθήνας και αποτελούσε κέντρο συγκέντρωσης
               βιοτεχνικών μονάδων κατά την περίοδο 1950 – 1970.
             </Typography>
-            <Typography className={classes.paragraph} variant="body1">
+            <Typography className="mb-2" variant="body1">
               Η περιοχή του «Ψυρρή», είναι ένα κλασικό παράδειγμα ανάπλασης, στο
               πλαίσιο της λογικής που συνδέει την ανάπτυξη κέντρων διασκέδασης,
               εστιατορίων και χώρων πολιτισμού, όπου ξεκίνησε στις αρχές της
@@ -178,7 +171,7 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
               του «Ψυρρή», αλλά και στην ευρύτερη περιοχή του λεγόμενου
               ιστορικού κέντρου της πόλης.
             </Typography>
-            <Typography className={classes.paragraph} variant="body1">
+            <Typography className="mb-2" variant="body1">
               Θεατρικοί χώροι, αίθουσες τέχνης, εστιατόρια, καφενεία και
               μπαράκια ήρθαν να εγκατασταθούν στους δρόμους της περιοχής του
               «Ψυρρή» αντικαθιστώντας παλιά σπίτια και βιοτεχνικές μονάδες.
@@ -188,17 +181,22 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
             <ContentSlider title="Παραστάσεις" decoratedTitle>
               {productions?.map((item) => (
                 <ShowCard
+                  key={item.id}
                   id={item.id}
                   title={item.title}
-                  media={item.mediaUrl}
-                  key={item.id}
+                  mediaUrl={item.mediaUrl}
+                  description={item.description}
+                  duration={item.duration}
+                  organizerId={item.organizerId.toString()}
+                  producer={item.producer}
+                  url={item.url}
                 />
               ))}
             </ContentSlider>
           </section>
           {location && (
             <section>
-              <Typography className={classes.sectionTitle} variant="h3">
+              <Typography className="relative pl-3 mt-5" variant="h3">
                 Χάρτης
               </Typography>
               <iframe
@@ -212,16 +210,16 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
             </section>
           )}
           <section>
-            <Typography variant="h3" className={classes.sectionTitle}>
+            <Typography variant="h3" className="relative pl-3 mt-5">
               Επικοινωνία
             </Typography>
-            <div className={classes.socialContainer}>
+            <div className="flex flex-wrap pb-5 sm:p-5 sm:pt-0">
               {/* TODO - edw prepei sta dedomena poy pernoyme apo to api na exei kai links efoson uparxoun gia ta socials kai na ta xrhsimopoioun parakatw */}
               <a
                 href="https://www.facebook.com"
-                className={`linksNoDecoration ${classes.social}`}
+                className={`linksNoDecoration flex items-center p-4 mr-[6%]`}
               >
-                <div className={classes.socialLogo}>
+                <div className="mr-3 w-8 h-8">
                   <Image
                     src="/FacebookLogo.svg"
                     width={32}
@@ -233,9 +231,9 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
               </a>
               <a
                 href="https://www.instagram.com"
-                className={`linksNoDecoration ${classes.social}`}
+                className={`linksNoDecoration flex items-center p-4 mr-[6%]`}
               >
-                <div className={classes.socialLogo}>
+                <div className="mr-3 w-8 h-8">
                   <Image
                     src="/InstagramLogo.svg"
                     width={32}
@@ -245,8 +243,10 @@ const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
                 </div>
                 <Typography variant="body1">Instagram</Typography>
               </a>
-              <div className={`linksNoDecoration ${classes.social}`}>
-                <div className={classes.socialLogo}>
+              <div
+                className={`linksNoDecoration flex items-center p-4 mr-[6%]`}
+              >
+                <div className="mr-3 w-8 h-8">
                   <PhoneIcon fontSize="large" />
                 </div>
                 <Typography variant="body1">211 000 0000</Typography>
