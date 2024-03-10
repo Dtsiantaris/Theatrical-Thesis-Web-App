@@ -70,7 +70,8 @@ interface VenueDetailsProps {
 
 const VenueDetails = ({ venue, productions, location }: VenueDetailsProps) => {
   const router = useRouter();
-
+  // TODO: to venue.isClaimed prepei na min douleuei sto useState. Mallon thelei useEffect
+  // TODO: kapoio fancy animation gia tin eikona sto page load??
   const [isClaimed, setIsClaimed] = useState(venue.isClaimed);
   const [venueRef, setVenueRef] = useState(venue);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);

@@ -2,7 +2,7 @@ export interface Transaction {
   userId: number;
   creditAmount: number;
   reason: string;
-  dataCreated: Date;
+  dateCreated: Date;
   transactionId: string;
   accountNumber: string;
   accountType: string;

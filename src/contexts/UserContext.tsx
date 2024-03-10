@@ -86,13 +86,15 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
 
   // // In the user context
   // useEffect(() => {
+  //   console.log("mesa sto useeffect");
   //   const authToken = localStorage.getItem("authToken");
   //   const authExpirationString = localStorage.getItem("authTokenExpiration");
 
   //   if (authToken && authExpirationString) {
   //     const expirationTime = parseInt(authExpirationString);
   //     const now = Date.now();
-
+  //     console.log("now", now);
+  //     console.log("expirationTIme", expirationTime);
   //     if (now >= expirationTime) {
   //       // Token has expired, clear user and auth data
   //       localStorage.removeItem("authToken");

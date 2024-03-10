@@ -6,8 +6,6 @@ import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 // components
 import LoadingScene from "../LoadingScene";
 import ContentSlider from "../ContentSlider";
-import Link from "next/link";
-import ShowCard from "../ShowCard";
 import VenueCard from "../VenueCard";
 
 export const TheatricalUserInfoTab = () => {
@@ -25,7 +23,7 @@ export const TheatricalUserInfoTab = () => {
         <Divider color="white" />
         {/* Content */}
         {/* Claimed Events */}
-        <ContentSlider title="Venues" description="Venues">
+        <ContentSlider title="Θεατρικοί χώροι" decoratedTitle>
           {user.claimedVenues.map((venue, index) => (
             <VenueCard key={index} {...venue} />
           ))}

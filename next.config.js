@@ -7,6 +7,8 @@ module.exports = {
       "image.tmdb.org",
       "res.cloudinary.com",
       "cdn.discordapp.com",
+      "cdn.pixabay.com",
+      "media.istockphoto.com",
     ],
   },
 };

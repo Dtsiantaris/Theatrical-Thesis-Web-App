@@ -37,9 +37,12 @@ export const GeneralUserInfoTab = () => {
   const { user } = useUserContext();
 
   const { fetchUserInfo, loading } = useUserQueries();
-  const { toggle2FA, updateSocial,loading: loadingMutation } = useUserMutations();
+  const {
+    toggle2FA,
+    updateSocial,
+    loading: loadingMutation,
+  } = useUserMutations();
 
- 
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false);
 
@@ -65,7 +68,7 @@ export const GeneralUserInfoTab = () => {
     }
   }, [user]);
 
-   // Check if there have been changes to the input fields
+  // Check if there have been changes to the input fields
   useEffect(() => {
     setChangesMade(
       initialFacebookLink !== facebookLink ||
@@ -141,7 +144,7 @@ export const GeneralUserInfoTab = () => {
 
   return (
     <>
-      <div className="relative shadow-2xl flex flex-col gap-3 w-full h-full rounded-2xl p-10  text-white bg-gradient-to-br from-primary to-indigo-900">
+      <div className="relative shadow-2xl flex flex-col gap-3 w-full h-full md:h-[40rem] rounded-2xl p-10  text-white bg-gradient-to-br from-primary to-indigo-900">
         {/* Title */}
         <div className="flex gap-2 items-center text-xl md:text-4xl font-bold">
           Γενικές Πληροφορίες
@@ -211,17 +214,21 @@ export const GeneralUserInfoTab = () => {
                 secondary={`€${user.balance.toFixed(2)}`}
               />
               <ListItemText className="!flex !justify-end">
-                <Tooltip 
+                <Tooltip
                   slotProps={{
-                  tooltip: {className: '!bg-secondary'},
-                  arrow: {className: '!text-secondary'},
+                    tooltip: { className: "!bg-secondary" },
+                    arrow: { className: "!text-secondary" },
                   }}
-                  title='Προσθήκη πόντων'
+                  title="Προσθήκη πόντων"
                   placement="bottom"
                   arrow
                 >
-                  <IconButton onClick={handleOpenPaymentDialog} className="!text-white hover:!opacity-80 !bg-secondary" disabled={loadingMutation || loading}>
-                    <AddCard/>
+                  <IconButton
+                    onClick={handleOpenPaymentDialog}
+                    className="!text-white hover:!opacity-80 !bg-secondary"
+                    disabled={loadingMutation || loading}
+                  >
+                    <AddCard />
                   </IconButton>
                 </Tooltip>
               </ListItemText>
@@ -231,18 +238,20 @@ export const GeneralUserInfoTab = () => {
           <List className="space-y-2 !py-0 border-l-4 border-secondary rounded-md">
             <div className="bg-secondary rounded-t-md text-white p-2 px-3 text-lg italic flex justify-between items-center">
               <span>Επικοινωνία</span>
-              <Tooltip 
+              <Tooltip
                 slotProps={{
-                  tooltip: {className: '!bg-secondary'},
-                  arrow: {className: '!text-secondary'},
-                  }}
-                title={'Αποθήκευση αλλαγών'}
+                  tooltip: { className: "!bg-secondary" },
+                  arrow: { className: "!text-secondary" },
+                }}
+                title={"Αποθήκευση αλλαγών"}
                 placement="bottom"
                 arrow
               >
                 <IconButton
                   size="small"
-                  className={`!text-primary ${!changesMade && '!text-opacity-70'}`}
+                  className={`!text-primary ${
+                    !changesMade && "!text-opacity-70"
+                  }`}
                   disabled={!changesMade}
                   onClick={handleSave}
                 >
@@ -251,60 +260,79 @@ export const GeneralUserInfoTab = () => {
               </Tooltip>
             </div>
             <ListItem>
-                <ListItemIcon>
-                  <FacebookIcon className="text-white"/>
-                </ListItemIcon>
-                <TextField
-                  label="Facebook"
-                  variant="outlined"
-                  value={facebookLink}
-                  onChange={(e) => setFacebookLink(e.target.value)}
-                  fullWidth
-                  inputProps={{
-                    className: '!text-white',
-                  }}
-                  InputLabelProps={{
-                    className: '!text-gray-400',
-                  }}
-                  
+              <ListItemIcon>
+                <FacebookIcon className="text-white" />
+              </ListItemIcon>
+              <TextField
+                label="Facebook"
+                variant="outlined"
+                value={facebookLink}
+                onChange={(e) => setFacebookLink(e.target.value)}
+                fullWidth
+                inputProps={{
+                  className: "!text-white",
+                }}
+                InputLabelProps={{
+                  className: "!text-gray-400",
+                }}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <InstagramIcon className="text-white" />
+              </ListItemIcon>
+              <TextField
+                label="Instagram"
+                variant="outlined"
+                value={instagramLink}
+                onChange={(e) => setInstagramLink(e.target.value)}
+                fullWidth
+                inputProps={{
+                  className: "!text-white",
+                }}
+                InputLabelProps={{
+                  className: "!text-gray-400",
+                }}
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemIcon>
+                <YouTubeIcon className="text-white" />
+              </ListItemIcon>
+              <TextField
+                label="YouTube"
+                variant="outlined"
+                value={youtubeLink}
+                onChange={(e) => setYoutubeLink(e.target.value)}
+                fullWidth
+                inputProps={{
+                  className: "!text-white",
+                }}
+                InputLabelProps={{
+                  className: "!text-gray-500",
+                }}
+              />
+            </ListItem>
+          </List>
+          <List className="!py-0 border-l-4 border-secondary rounded-md w-full">
+            <div className="bg-secondary rounded-t-md text-white p-2 px-3 text-lg italic">
+              Συναλλαγές
+            </div>
+            {user.transactions?.map((transaction, index) => (
+              <ListItem key={index} className="border-b border-gray-300">
+                <ListItemText
+                  primary={transaction.reason}
+                  secondaryTypographyProps={{ color: "wheat" }}
+                  secondary={new Date(transaction.dateCreated).toLocaleString()}
                 />
+                <ListItemText className="!flex !justify-end">
+                  <span className="text-white">
+                    {transaction.creditAmount > 0 ? "+" : "-"}€
+                    {Math.abs(transaction.creditAmount).toFixed(2)}
+                  </span>
+                </ListItemText>
               </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <InstagramIcon className="text-white"/>
-                </ListItemIcon>
-                <TextField
-                  label="Instagram"
-                  variant="outlined"
-                  value={instagramLink}
-                  onChange={(e) => setInstagramLink(e.target.value)}
-                  fullWidth
-                  inputProps={{
-                    className: '!text-white',
-                  }}
-                  InputLabelProps={{
-                    className: '!text-gray-400',
-                  }}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <YouTubeIcon className="text-white"/>
-                </ListItemIcon>
-                <TextField
-                  label="YouTube"
-                  variant="outlined"
-                  value={youtubeLink}
-                  onChange={(e) => setYoutubeLink(e.target.value)}
-                  fullWidth
-                  inputProps={{
-                    className: '!text-white',
-                  }}
-                  InputLabelProps={{
-                    className: '!text-gray-500',
-                  }}
-                />
-              </ListItem>
+            ))}
           </List>
         </div>
       </div>
