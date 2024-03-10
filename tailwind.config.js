@@ -22,9 +22,9 @@ module.exports = {
         shake: "shake 0.5s ease-in-out",
       },
       colors: {
-        primary: "#0d3266",
+        primary: "var(--primary-color)",
         "secondary-light": "#F5C518",
-        secondary: "#F98D67",
+        secondary: "var(--secondary-color)",
       },
       transitionProperty: {
         width: "width",

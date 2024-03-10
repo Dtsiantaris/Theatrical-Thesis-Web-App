@@ -1,3 +1,8 @@
+:root {
+  --primary-color: #0d3266;
+  --secondary-color: #f98d67;
+}
+
 .linksNoDecoration {
   color: inherit;
   text-decoration: inherit;

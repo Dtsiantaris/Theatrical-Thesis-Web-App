@@ -144,7 +144,7 @@ export const GeneralUserInfoTab = () => {
 
   return (
     <>
-      <div className="relative shadow-2xl flex flex-col gap-3 w-full h-full md:h-[40rem] rounded-2xl p-10  text-white bg-gradient-to-br from-primary to-indigo-900">
+      <div className="relative shadow-2xl flex flex-col gap-3 w-full h-full md:h-[45rem] rounded-2xl p-10  text-white bg-gradient-to-br from-primary to-indigo-900">
         {/* Title */}
         <div className="flex gap-2 items-center text-xl md:text-4xl font-bold">
           Γενικές Πληροφορίες
@@ -152,7 +152,7 @@ export const GeneralUserInfoTab = () => {
         </div>
         <Divider color="white" />
         {/* Content */}
-        <div className="flex p-3 rounded-2xl flex-col md:flex-row gap-5 md:gap-20">
+        <div className="flex p-3 rounded-2xl flex-col flex-wrap md:flex-row gap-5 md:gap-20">
           <List className="space-y-2 !py-0 border-l-4 border-secondary rounded-md">
             <div className="bg-secondary rounded-t-md text-white p-2 px-3 text-lg italic">
               Λογαριασμός
@@ -314,6 +314,7 @@ export const GeneralUserInfoTab = () => {
               />
             </ListItem>
           </List>
+          {/* Transactions */}
           <List className="!py-0 border-l-4 border-secondary rounded-md w-full">
             <div className="bg-secondary rounded-t-md text-white p-2 px-3 text-lg italic">
               Συναλλαγές

@@ -6,47 +6,62 @@ import {
   Button,
 } from "@mui/material";
 import { useState, useContext } from "react";
-import style from "../src/assets/jss/layouts/colorPageStyle";
 import { HexColorPicker } from "react-colorful";
 import { colord } from "colord";
 import { ThemeContext } from "../src/contexts/ThemeContext";
 import Head from "next/head";
 
-const useStyles = makeStyles(style);
-
 const ColorPage = () => {
-  const classes = useStyles();
+  const [mainColor, setMainColor] = useState("#fff");
+  const [secondaryColor, setSecondaryColor] = useState("#fff");
+  const {
+    setMainColor: setThemeMainColor,
+    setSecondaryColor: setThemeSecondaryColor,
+  } = useContext(ThemeContext);
 
-  const [color, setColor] = useState("#fff");
-  const { setSecondaryColor } = useContext(ThemeContext);
-
-  const handleChange = (color) => {
-    setColor(color);
+  const handleMainColorChange = (color: string) => {
+    setMainColor(color);
   };
 
-  const handleTextFieldChange = (event) => {
-    const input = event.target.value;
-    if (/^#[0-9a-f]{0,6}$/.test(input)) {
-      setColor(input);
-    }
+  const handleSecondaryColorChange = (color: string) => {
+    setSecondaryColor(color);
   };
 
   const handleClick = () => {
-    const chosenColor = colord(color).toHsl();
+    const chosenMainColor = colord(mainColor).toHsl();
+    const chosenSecondaryColor = colord(secondaryColor).toHsl();
 
-    const lightColor = chosenColor;
-    const darkColor = chosenColor;
+    const lightMainColor = chosenMainColor;
+    const darkMainColor = chosenMainColor;
 
-    lightColor.l += 20;
-    darkColor.l -= 20;
+    lightMainColor.l += 20;
+    darkMainColor.l -= 20;
 
-    const colorObject = {
-      light: colord(lightColor).toHex(),
-      main: colord(chosenColor).toHex(),
-      dark: colord(darkColor).toHex(),
+    const mainColorObject = {
+      light: colord(lightMainColor).toHex(),
+      main: colord(chosenMainColor).toHex(),
+      dark: colord(darkMainColor).toHex(),
     };
 
-    setSecondaryColor(colorObject);
+    const lightSecondaryColor = chosenSecondaryColor;
+    const darkSecondaryColor = chosenSecondaryColor;
+
+    lightSecondaryColor.l += 20;
+    darkSecondaryColor.l -= 20;
+
+    const secondaryColorObject = {
+      light: colord(lightSecondaryColor).toHex(),
+      main: colord(chosenSecondaryColor).toHex(),
+      dark: colord(darkSecondaryColor).toHex(),
+    };
+
+    setThemeMainColor(mainColorObject);
+    document.documentElement.style.setProperty("--primary-color", mainColor);
+    setThemeSecondaryColor(secondaryColorObject);
+    document.documentElement.style.setProperty(
+      "--secondary-color",
+      secondaryColor
+    );
   };
 
   return (
@@ -54,27 +69,46 @@ const ColorPage = () => {
       <Head>
         <title>Χρώματα | Theatrica</title>
       </Head>
-      <div className="pageWrapper">
+      <div className="pageWrapper mt-20">
         <div className="pageContent">
           <Typography variant="h2" component="h1">
             Διαλέξτε Χρώμα
           </Typography>
-          <Paper className={classes.paper} elevation={3}>
-            <TextField
-              value={color}
-              onChange={handleTextFieldChange}
-              label="HEX"
-              variant="outlined"
-              color="secondary"
-            />
-            <HexColorPicker
-              color={color}
-              onChange={handleChange}
-              style={{ width: "100%", height: 400 }}
-            />
+          <Paper className="flex flex-col  gap-[50px] mt-7 p-5" elevation={3}>
+            <div className="flex gap-2 lg:flex-nowrap flex-wrap">
+              <div className="w-full">
+                <Typography
+                  variant="h2"
+                  component="h2"
+                  className="!font-medium !mb-4"
+                >
+                  Κύριο Χρώμα
+                </Typography>
+                <HexColorPicker
+                  color={mainColor}
+                  onChange={handleMainColorChange}
+                  style={{ width: "400px", height: "400px" }}
+                />
+              </div>
+              <div>
+                <Typography
+                  variant="h2"
+                  component="h2"
+                  className="!font-medium !mb-4"
+                >
+                  Δευτερεύον Χρώμα
+                </Typography>
+                <HexColorPicker
+                  color={secondaryColor}
+                  onChange={handleSecondaryColorChange}
+                  style={{ width: "400px", height: "400px" }}
+                />
+              </div>
+            </div>
             <Button
               onClick={handleClick}
-              variant="outlined"
+              variant="contained"
+              className="hover:!bg-secondary"
               color="secondary"
               style={{ alignSelf: "flex-end" }}
             >

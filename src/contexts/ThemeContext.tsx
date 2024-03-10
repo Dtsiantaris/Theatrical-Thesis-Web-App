@@ -10,16 +10,23 @@ const ThemeProvider = dynamic(
 
 export interface ThemeContextData {
   secondaryColor: CustomColor | undefined; // Use 'CustomColor' type here instead of 'string'
+  mainColor: CustomColor | undefined;
   setSecondaryColor: (color: CustomColor | undefined) => void; // Use 'CustomColor' type here instead of 'string'
+  setMainColor: (color: CustomColor | undefined) => void;
 }
 
 export const ThemeContext = createContext<ThemeContextData>({
   secondaryColor: undefined,
+  mainColor: undefined,
   setSecondaryColor: () => {},
+  setMainColor: () => {},
 });
 
 export function ThemeContextProvider(props: { children: React.ReactNode }) {
   const [secondaryColor, setSecondaryColor] = useState<CustomColor | undefined>(
+    undefined
+  );
+  const [mainColor, setMainColor] = useState<CustomColor | undefined>(
     undefined
   );
 
@@ -30,18 +37,23 @@ export function ThemeContextProvider(props: { children: React.ReactNode }) {
       ) as CustomColor; // Parse the value as 'CustomColor'
       setSecondaryColor(color);
     }
+    if (localStorage.getItem("mainColor") !== null) {
+      const color = JSON.parse(
+        localStorage.getItem("mainColor") || "null"
+      ) as CustomColor; // Parse the value as 'CustomColor'
+      setMainColor(color);
+    }
   }, []);
 
-  useEffect(() => {
-    if (secondaryColor) {
-      localStorage.setItem("secondaryColor", JSON.stringify(secondaryColor));
-    }
-  }, [secondaryColor]);
-
-  const context: ThemeContextData = { secondaryColor, setSecondaryColor };
+  const context: ThemeContextData = {
+    secondaryColor,
+    mainColor,
+    setSecondaryColor,
+    setMainColor,
+  };
 
   return (
-    <ThemeProvider theme={DarkTheme(secondaryColor)}>
+    <ThemeProvider theme={DarkTheme(mainColor)}>
       <ThemeContext.Provider value={context}>
         {props.children}
       </ThemeContext.Provider>
