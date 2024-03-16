@@ -69,6 +69,7 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
   const handleLogout = () => {
     // Clear the authToken and reset the user state
     localStorage.removeItem("authToken");
+    localStorage.removeItem("authTokenExpiration");
     localStorage.removeItem("user");
     sessionStorage.removeItem("emailVerificationToastShown");
     setIsLoggedIn(false);
@@ -85,40 +86,40 @@ export const UserContextProvider: React.FC<UserProviderProps> = ({
   }, [isLoggedIn, user]);
 
   // // In the user context
-  // useEffect(() => {
-  //   console.log("mesa sto useeffect");
-  //   const authToken = localStorage.getItem("authToken");
-  //   const authExpirationString = localStorage.getItem("authTokenExpiration");
+  useEffect(() => {
+    console.log("mesa sto useeffect");
+    const authToken = localStorage.getItem("authToken");
+    const authExpirationString = localStorage.getItem("authTokenExpiration");
 
-  //   if (authToken && authExpirationString) {
-  //     const expirationTime = parseInt(authExpirationString);
-  //     const now = Date.now();
-  //     console.log("now", now);
-  //     console.log("expirationTIme", expirationTime);
-  //     if (now >= expirationTime) {
-  //       // Token has expired, clear user and auth data
-  //       localStorage.removeItem("authToken");
-  //       localStorage.removeItem("user");
-  //     } else {
-  //       // Token is still valid, refresh it if needed
-  //       const timeUntilExpiration = expirationTime - now;
+    if (authToken && authExpirationString) {
+      const expirationTime = parseInt(authExpirationString);
+      const now = Date.now();
+      console.log("now", now);
+      console.log("expirationTIme", expirationTime);
+      if (now >= expirationTime) {
+        // Token has expired, clear user and auth data
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("user");
+      } else {
+        // Token is still valid, refresh it if needed
+        const timeUntilExpiration = expirationTime - now;
 
-  //       // Refresh the token a few minutes before it expires
-  //       if (timeUntilExpiration > 5 * 60 * 1000) {
-  //         // Check if more than 5 minutes left before expiration
-  //         const refreshTimeout = setTimeout(() => {
-  //           mainAxios.get("User/refresh-token");
-  //         }, timeUntilExpiration - 5 * 60 * 1000);
+        // Refresh the token a few minutes before it expires
+        if (timeUntilExpiration > 5 * 60 * 1000) {
+          // Check if more than 5 minutes left before expiration
+          const refreshTimeout = setTimeout(() => {
+            mainAxios.get("User/refresh-token");
+          }, timeUntilExpiration - 5 * 60 * 1000);
 
-  //         return () => clearTimeout(refreshTimeout); // Clear timeout on unmount
-  //       }
-  //     }
-  //   } else {
-  //     // No auth data found, clear localStorage
-  //     localStorage.removeItem("authToken");
-  //     localStorage.removeItem("user");
-  //   }
-  // }, []);
+          return () => clearTimeout(refreshTimeout); // Clear timeout on unmount
+        }
+      }
+    } else {
+      // No auth data found, clear localStorage
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
+    }
+  }, []);
 
   const contextValue: UserContextData = {
     isLoggedIn,
