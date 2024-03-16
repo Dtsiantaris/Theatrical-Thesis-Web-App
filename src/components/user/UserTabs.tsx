@@ -5,12 +5,14 @@ import InfoIcon from "@mui/icons-material/Info";
 import TheaterComedyIcon from "@mui/icons-material/TheaterComedy";
 import PermMediaIcon from "@mui/icons-material/PermMedia";
 import ImportContactsIcon from "@mui/icons-material/ImportContacts";
+import ContrastIcon from "@mui/icons-material/Contrast";
 // components
 import { DynamicTab, DynamicTabs } from "./DynamicTabs";
 import { GeneralUserInfoTab } from "./GeneralUserInfoTab";
 import { TheatricalUserInfoTab } from "./TheatricalUserInfoTab";
 import { MediaUserInfoTab } from "./MediaUserInfoTab";
 import { ContactUserInfoTab } from "./ContactUserInfoTab";
+import { ThemeSelectionTab } from "./ThemeSelectionTab";
 import UserProfilePhoto from "./UserProfilePhoto";
 // utils
 import { cn } from "../../utils/cn";
@@ -44,6 +46,12 @@ export function UserTabs() {
       value: "contact",
       content: <ContactUserInfoTab />,
     },
+    {
+      title: "Theme",
+      titleIcon: <ContrastIcon />,
+      value: "theme",
+      content: <ThemeSelectionTab />,
+    },
   ];
 
   return (
@@ -58,9 +66,7 @@ export function UserTabs() {
         tabs={tabs}
         vertical={isVertical}
         activeTabClassName="!bg-primary"
-        aboveTitlesSlot={
-          <UserProfilePhoto />
-        }
+        aboveTitlesSlot={<UserProfilePhoto />}
       />
     </div>
   );

@@ -9,6 +9,7 @@ module.exports = {
       "cdn.discordapp.com",
       "cdn.pixabay.com",
       "media.istockphoto.com",
+      "swiperjs.com",
     ],
   },
 };
