@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useRef, useState } from "react";
 import { createNoise3D } from "simplex-noise";
 import { cn } from "../../utils/cn";
@@ -63,11 +62,11 @@ export const WavyBackground = ({
   };
 
   const waveColors = colors ?? [
-    "#38bdf8",
-    "#818cf8",
-    "#c084fc",
-    "#e879f9",
-    "#22d3ee",
+    "#ff7c43",
+    "#ff9b21",
+    "#ffbc43",
+    "#ffa600",
+    "#ff6e40",
   ];
   const drawWave = (n: number) => {
     nt += getSpeed();
@@ -99,7 +98,7 @@ export const WavyBackground = ({
       cancelAnimationFrame(animationId);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [backgroundFill]);
+  }, [backgroundFill, colors]);
 
   const [isSafari, setIsSafari] = useState(false);
   useEffect(() => {

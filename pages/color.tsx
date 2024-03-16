@@ -1,16 +1,13 @@
-import {
-  Typography,
-  makeStyles,
-  Paper,
-  TextField,
-  Button,
-} from "@mui/material";
 import { useState, useContext } from "react";
+// next
+import Head from "next/head";
+// mui
+import { Typography, Paper, Button } from "@mui/material";
+// theme
+import { ThemeContext } from "../src/contexts/ThemeContext";
+// utils
 import { HexColorPicker } from "react-colorful";
 import { colord } from "colord";
-import { ThemeContext } from "../src/contexts/ThemeContext";
-import Head from "next/head";
-import { WavyBackground } from "../src/components/common/WavyBackground";
 
 const ColorPage = () => {
   const [mainColor, setMainColor] = useState("#fff");
@@ -70,7 +67,7 @@ const ColorPage = () => {
       <Head>
         <title>Χρώματα | Theatrica</title>
       </Head>
-      {/* <div className="pageWrapper mt-20">
+      <div className="pageWrapper mt-20">
         <div className="pageContent">
           <Typography variant="h2" component="h1">
             Διαλέξτε Χρώμα
@@ -117,17 +114,7 @@ const ColorPage = () => {
             </Button>
           </Paper>
         </div>
-      </div> */}
-      <WavyBackground className="max-w-full">
-        <div className="pageWrapper">
-          <p className="text-2xl md:text-4xl lg:text-7xl text-white font-bold inter-var text-center">
-            Hero waves are cool
-          </p>
-          <p className="text-base md:text-lg mt-4 text-white font-normal inter-var text-center">
-            Leverage the power of canvas to create a beautiful hero section
-          </p>
-        </div>
-      </WavyBackground>
+      </div>
     </>
   );
 };
