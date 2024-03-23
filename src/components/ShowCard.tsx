@@ -48,7 +48,7 @@ const ShowCard: React.FC<ShowCardProps> = ({
       className="relative hover:scale-105 hover:border-secondary transition-transform"
     >
       <Link href={`/shows/${id}`}>
-        <Card className="flex flex-col !rounded-[4%] h-96 bg-gray-400 overflow-hidden shadow-sm border-2 border-transparent hover:border-secondary hover:shadow-md transition-all">
+        <Card className="flex flex-col !rounded-[4%] h-96 !bg-paper overflow-hidden shadow-sm border-2 border-transparent hover:border-secondary hover:shadow-md transition-all">
           <CardMedia className="relative w-full h-[70%] max-h-[70%]">
             <div className="relative h-full">
               <Image

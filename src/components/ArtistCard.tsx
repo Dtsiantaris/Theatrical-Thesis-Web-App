@@ -23,10 +23,10 @@ const ArtistCard: React.FC<ArtistCardProps> = ({
     <React.Fragment>
       <div
         style={width ? { width: width } : undefined}
-        className="relative hover:scale-105 hover:border-secondary transition-transform  text-center p-2 bg-gray-400 rounded-md border-2 border-transparent"
+        className="relative hover:scale-105 hover:border-secondary transition-transform  text-center p-2 bg-paper rounded-md border-2 border-transparent"
       >
         <Link href={`/artists/${id}`}>
-          <div className="flex gap-4 text-center p-2 bg-gray-400 h-40">
+          <div className="flex gap-4 text-center p-2 bg-paper h-40">
             {/* Avatar Column */}
             <div className="flex-shrink-0 flex items-center">
               <Avatar

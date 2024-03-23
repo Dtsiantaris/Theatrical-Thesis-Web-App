@@ -33,7 +33,7 @@ interface EventsCardProps {
 const EventsCard: React.FC<EventsCardProps> = ({ show }) => {
   return (
     <Link href={`/shows/${show.id}`}>
-      <div className="flex flex-col bg-gray-400 px-0 py-1 border border-transparent rounded-md hover:scale-105 hover:border-secondary transition-transform">
+      <div className="flex flex-col bg-paper px-0 py-1 border border-transparent rounded-md hover:scale-105 hover:border-secondary transition-transform">
         <div className="flex justify-between items-center px-4 py-3">
           <Typography variant="h5" className="!font-medium">
             {show.title}
@@ -73,7 +73,7 @@ const EventsCard: React.FC<EventsCardProps> = ({ show }) => {
               </div>
               <div className="flex flex-col gap-2">
                 <Link href={`/venues/${event.venue.id}`}>
-                  <div className="rounded-md p-2 border border-transparent  hover:border-gray-600 hover:bg-gray-500 transition-all">
+                  <div className="rounded-md p-2 border border-transparent  hover:border-gray-600 hover:bg-opacity-90 transition-all">
                     <Typography variant="body1" className="!font-medium">
                       {event.venue.title}
                     </Typography>

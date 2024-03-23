@@ -1,7 +1,11 @@
 :root {
   --primary-color: #0d3266;
   --secondary-color: #f98d67;
+  --paper-color: #abb9c7; /* medium gray */
+  --paper-bg-color: #838e97; /* light gray */
 }
+
+/* "Theater Noir" */
 
 .linksNoDecoration {
   color: inherit;

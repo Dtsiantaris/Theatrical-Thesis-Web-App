@@ -2,12 +2,19 @@ import { createTheme, responsiveFontSizes, Theme } from "@mui/material";
 
 // Define interface for custom color object used in the theme
 export interface CustomColor {
-  light: string;
   main: string;
-  dark: string;
 }
 
-const DarkTheme = (secondaryColor?: CustomColor): Theme => {
+export interface CustomBackground {
+  default: string;
+  paper: string;
+}
+
+const DarkTheme = (
+  mainColor?: CustomColor,
+  secondaryColor?: CustomColor,
+  backgroundObj?: { default: string; paper: string }
+): Theme => {
   let theme = createTheme({
     breakpoints: {
       values: {
@@ -19,19 +26,15 @@ const DarkTheme = (secondaryColor?: CustomColor): Theme => {
       },
     },
     palette: {
-      background: {
-        default: "#6b7280", // Slightly lighter than before
-        paper: "#9ca3af", // Slightly lighter than before
+      background: backgroundObj || {
+        default: "#838e97", // Slightly lighter than before
+        paper: "#838e97", // Slightly lighter than before
       },
       primary: {
-        light: "#424242", // Slightly lighter than before
-        main: "#2B2B2B", // Slightly lighter than before
-        dark: "#292929", // Slightly lighter than before
+        main: mainColor ? mainColor.main : "#0d3266", // Slightly lighter than before
       },
       secondary: {
-        light: secondaryColor ? secondaryColor.light : "#BBFFFF", // Slightly lighter than before
-        main: secondaryColor ? secondaryColor.main : "#F98D67", // Slightly lighter than before
-        dark: secondaryColor ? secondaryColor.dark : "#3EDCDC", // Slightly lighter than before
+        main: secondaryColor ? secondaryColor.main : "#f98d67", // Slightly lighter than before
       },
     },
     typography: {

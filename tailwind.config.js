@@ -23,8 +23,10 @@ module.exports = {
       },
       colors: {
         primary: "var(--primary-color)",
-        "secondary-light": "#F5C518",
         secondary: "var(--secondary-color)",
+        paper: "var(--paper-color)",
+        "paper-bg": "var(--paper-bg-color)",
+        "secondary-light": "#F5C518",
       },
       transitionProperty: {
         width: "width",
