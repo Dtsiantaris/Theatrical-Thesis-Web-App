@@ -4,16 +4,25 @@ import PersonIcon from "@mui/icons-material/Person";
 import LocationCityIcon from "@mui/icons-material/LocationCity";
 import BookmarksIcon from "@mui/icons-material/Bookmarks";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import ContactMailIcon from "@mui/icons-material/ContactMail";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import PaletteIcon from "@mui/icons-material/Palette";
 import { MapOutlined, MasksTwoTone } from "@mui/icons-material";
 
+export interface Subitems {
+  path: string;
+  name: string;
+  icon?: JSX.Element;
+}
 export interface Route {
   path: string;
   name: string;
   icon: JSX.Element;
   pathOnClick?: string;
   condition?: (isLoggedIn: boolean) => boolean;
+  subitems?: Subitems[];
 }
 
 const routes: Route[] = [
@@ -66,6 +75,24 @@ const routes: Route[] = [
     path: "/color",
     name: "Χρώματα",
     icon: <PaletteIcon fontSize="small" />,
+  },
+  {
+    path: "/dashboard",
+    name: "Admin dashboard",
+    icon: <DashboardIcon fontSize="small" />,
+    //condition: (isLoggeddIn) => isLoggeddIn, //edw na allajw to condition meta wste na blepei an einai logged in admin user oxi apla logged user
+    subitems: [
+      {
+        path: "/dashboard/editusers",
+        name: "Edit users",
+        icon: <ManageAccountsIcon fontSize="small" />,
+      },
+      {
+        path: "/dashboard/edittheatre",
+        name: "Edit theatre",
+        icon: <ContactMailIcon fontSize="small" />,
+      },
+    ],
   },
 ];
 

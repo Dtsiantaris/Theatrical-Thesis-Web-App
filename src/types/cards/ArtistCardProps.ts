@@ -13,4 +13,7 @@ export interface ArtistCardProps {
   roles?: string[];
   isClaimed?: boolean;
   width?: number;
+
+  birthdate?: string;
+  height?: string;
 }

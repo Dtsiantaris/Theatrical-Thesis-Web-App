@@ -10,7 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import { Tooltip } from "@mui/material";
+import { Collapse, Tooltip } from "@mui/material";
 //icons
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -19,6 +19,7 @@ import { DrawerContext } from "../../contexts/DrawerContext";
 import { useUserContext } from "../../contexts/UserContext";
 // routes
 import routes, { Route } from "../../routes";
+import { ExpandLess, ExpandMore, StarBorder } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
@@ -84,6 +85,12 @@ const Sidebar = () => {
   const theme = useTheme();
   const { drawerOpen, closeDrawer } = React.useContext(DrawerContext);
 
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
   return (
     <Drawer variant="permanent" open={drawerOpen}>
       <DrawerHeader>
@@ -97,60 +104,169 @@ const Sidebar = () => {
       </DrawerHeader>
       <List className="bg-primary h-full">
         {filteredRoutes.map((route: Route) => (
-          <Link href={route.pathOnClick || route.path} key={route.name}>
-            <Tooltip
-              slotProps={{
-                tooltip: {
-                  className: "!bg-secondary",
-                },
-                arrow: {
-                  className: "!text-secondary",
-                },
-              }}
-              title={route.name}
-              placement="right"
-              arrow
-              disableHoverListener={drawerOpen}
-            >
-              <ListItemButton
-                className={
-                  (
-                    route.path === "/"
-                      ? router.pathname === "/"
-                      : router.pathname.startsWith(route.path)
-                  )
-                    ? "!text-secondary"
-                    : "!text-white"
-                }
-                sx={{
-                  color: "white",
-                  minHeight: 48,
-                  justifyContent: drawerOpen ? "initial" : "center",
-                  px: 2.5,
-                }}
-                selected={
-                  route.path === "/"
-                    ? router.pathname === "/"
-                    : router.pathname.startsWith(route.path)
-                }
-              >
-                <ListItemIcon
-                  sx={{
-                    color: "inherit",
-                    minWidth: 0,
-                    mr: drawerOpen ? 3 : "auto",
-                    justifyContent: "center",
+          <React.Fragment key={route.name}>
+            {route.path !== "/dashboard" ? (
+              <Link href={route.pathOnClick || route.path} key={route.name}>
+                <Tooltip
+                  slotProps={{
+                    tooltip: {
+                      className: "!bg-secondary",
+                    },
+                    arrow: {
+                      className: "!text-secondary",
+                    },
                   }}
+                  title={route.name}
+                  placement="right"
+                  arrow
+                  disableHoverListener={drawerOpen}
                 >
-                  {route.icon}
-                </ListItemIcon>
-                <ListItemText
-                  primary={route.name}
-                  sx={{ opacity: drawerOpen ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </Tooltip>
-          </Link>
+                  <ListItemButton
+                    className={
+                      (
+                        route.path === "/"
+                          ? router.pathname === "/"
+                          : router.pathname.startsWith(route.path)
+                      )
+                        ? "!text-secondary"
+                        : "!text-white"
+                    }
+                    sx={{
+                      color: "white",
+                      minHeight: 48,
+                      justifyContent: drawerOpen ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                    selected={
+                      route.path === "/"
+                        ? router.pathname === "/"
+                        : router.pathname.startsWith(route.path)
+                    }
+                  >
+                    <ListItemIcon
+                      sx={{
+                        color: "inherit",
+                        minWidth: 0,
+                        mr: drawerOpen ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {route.icon}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={route.name}
+                      sx={{ opacity: drawerOpen ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                </Tooltip>
+              </Link>
+            ) : (
+              <React.Fragment>
+                <Link href={route.pathOnClick || route.path} key={route.name}>
+                  <Tooltip
+                    slotProps={{
+                      tooltip: {
+                        className: "!bg-secondary",
+                      },
+                      arrow: {
+                        className: "!text-secondary",
+                      },
+                    }}
+                    title={route.name}
+                    placement="right"
+                    arrow
+                    disableHoverListener={drawerOpen}
+                  >
+                    <ListItemButton
+                      onClick={handleClick}
+                      className={
+                        router.pathname.startsWith(route.path)
+                          ? "!text-secondary"
+                          : "!text-white"
+                      }
+                      sx={{
+                        color: "white",
+                        minHeight: 48,
+                        justifyContent: drawerOpen ? "initial" : "center",
+                        px: 2.5,
+                      }}
+                      selected={router.pathname.startsWith(route.path)}
+                    >
+                      <ListItemIcon
+                        sx={{
+                          color: "inherit",
+                          minWidth: 0,
+                          mr: drawerOpen ? 3 : "auto",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {route.icon}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={route.name}
+                        sx={{ opacity: drawerOpen ? 1 : 0 }}
+                      />
+                      {open ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                  </Tooltip>
+                </Link>
+                <Collapse in={open} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {route.subitems?.map((subitem) => (
+                      <Link href={subitem.path} key={subitem.name}>
+                        <Tooltip
+                          slotProps={{
+                            tooltip: {
+                              className: "!bg-secondary",
+                            },
+                            arrow: {
+                              className: "!text-secondary",
+                            },
+                          }}
+                          title={subitem.name}
+                          placement="right"
+                          arrow
+                          disableHoverListener={drawerOpen}
+                        >
+                          <ListItemButton
+                            className={
+                              router.pathname.startsWith(subitem.path)
+                                ? "!text-secondary"
+                                : "!text-white"
+                            }
+                            sx={{
+                              color: "white",
+                              minHeight: 48,
+                              justifyContent: drawerOpen ? "initial" : "center",
+                              px: 5,
+                            }}
+                            selected={router.pathname.startsWith(subitem.path)}
+                          >
+                            {/* Render the icon for the subitem if needed */}
+                            {/* Render the name of the subitem */}
+                            <ListItemIcon
+                              sx={{
+                                color: "inherit",
+                                minWidth: 0,
+                                mr: drawerOpen ? 3 : "auto",
+                                justifyContent: "center",
+                              }}
+                            >
+                              {subitem.icon}
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={subitem.name}
+                              sx={{ opacity: drawerOpen ? 1 : 0 }}
+                            />
+                          </ListItemButton>
+                        </Tooltip>
+                      </Link>
+                    ))}
+                  </List>
+                </Collapse>
+              </React.Fragment>
+            )}
+          </React.Fragment>
         ))}
       </List>
     </Drawer>
